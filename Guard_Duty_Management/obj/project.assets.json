@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ADMIN\\source\\repos\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
+      "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
       "projectName": "Guard_Duty_Management",
-      "projectPath": "C:\\Users\\ADMIN\\source\\repos\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
+      "projectPath": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ADMIN\\source\\repos\\Guard_Duty_Management\\Guard_Duty_Management\\obj\\",
+      "outputPath": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

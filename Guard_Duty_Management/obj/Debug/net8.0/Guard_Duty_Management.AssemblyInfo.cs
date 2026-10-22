@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Guard_Duty_Management")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dce19d30b59c4915342765ab453c06a0e828444e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Guard_Duty_Management")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Guard_Duty_Management")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
