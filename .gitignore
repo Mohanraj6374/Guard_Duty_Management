@@ -73,3 +73,7 @@ publish/
 *.ldf
 *.sqlite
 *.db
+/Guard_Duty_Management/obj/Debug/net8.0/apphost.exe
+/Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.AssemblyInfo.cs
+/Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.AssemblyInfoInputs.cache
+/Guard_Duty_Management/obj/Debug/net8.0/rpswa.dswa.cache.json
