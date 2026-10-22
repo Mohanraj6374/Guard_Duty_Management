@@ -1,6 +1,8 @@
+wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\js\common.js
 wwwroot\js\Dashboard-Components\DashboardView.js
+wwwroot\lib\axios\axios@1.12.2.js
 wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\css\bootstrap-grid.min.css
@@ -45,5 +47,6 @@ wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\js\bootstrap.js
 wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\js\bootstrap.js.map
 wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\js\bootstrap.min.js
 wwwroot\lib\bootstrap\bootstrap-5.3.8-dist\js\bootstrap.min.js.map
+wwwroot\lib\jquery\jquery-4.0.0.min.js
+wwwroot\lib\linq-js\linq.js4.0.3.js
 wwwroot\lib\vue-js\vue@2.7.16.js
-wwwroot\css\site.css
