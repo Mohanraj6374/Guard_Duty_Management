@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37806.7 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12306.391
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guard_Duty_Management", "Guard_Duty_Management\Guard_Duty_Management.csproj", "{D3838C60-D8F8-452D-BCC7-57AD8B448376}"
 EndProject
