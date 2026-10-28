@@ -1,0 +1,145 @@
+﻿[v-cloak] {
+    display: none !important;
+}
+body {
+}
+
+.security-bg {
+    background: #D93643;
+    color: #FFFFFF;
+}
+
+    .security-bg:hover {
+        background: #9c2932;
+        color: #FFFFFF;
+    }
+
+.security-text {
+    color: #D93643;
+}
+.muted-gold-border{
+    border-color: #C8AD6B;
+}
+.muted-gold {
+    color: #C8AD6B;
+}
+
+.font-size-9 {
+    font-size: 0.9rem;
+}
+.font-size-8 {
+    font-size: 0.8rem;
+}
+.font-size-7 {
+    font-size: 0.7rem;
+}
+
+.rounded-4{
+    border-radius: 1rem;
+}
+
+.phone-input:focus-within {
+    border-color: #D93643;
+    box-shadow: 0 0 0 3px rgba(217, 54, 67, 0.10);
+}
+
+.country-code-select {
+    width: 70px;
+    padding: 0 1px;
+    border: 1px solid #dee2e6;
+    border-left: none;
+    outline: none;
+    background: #FAFAFA;
+    color: #171717;
+    cursor: pointer;
+}
+    .country-code-select:focus-visible {
+        outline: 0.1px solid #C8AD6B;
+        outline-offset: -2px;
+    }
+.verifyPhoneBtn {
+    background: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: 0;
+}
+    .verifyPhoneBtn:focus{
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+    .verifyPhoneBtn :active {
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+    .verifyPhoneBtn:hover{
+        color: #000;
+    }
+    /*OTP Verification Window*/
+    .otp-inputs {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin: 20px 0;
+    }
+
+.otp-box {
+    width: 2.8rem;
+    height: 3rem;
+    text-align: center;
+    font-size: 1.5rem;
+    border-radius: 0.8rem;
+    border: 2px solid #dee2e6;
+    outline: none;
+}
+    .otp-box:focus {
+        border: 1px solid #C8AD6B;
+        box-shadow: 0 0 0 3px #c8ad6b99;
+    }
+/*.edit-btn{
+    background: none;
+    border:none;
+    outline: none;
+    color: #D93643;
+    text-decoration: underline;
+}
+    .edit-btn:focus{
+        border: none;
+        outline: none;
+
+    }
+*/
+.resendOtpBtn{
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+}
+    .resendOtpBtn:focus {
+        outline: none;
+        box-shadow: none;
+    }
+    @media(max-width: 500px) {
+        .otp-inputs {
+            gap: 9px;
+        }
+
+        .otp-box {
+            width: 2.5rem;
+            height: 2.7rem;
+        }
+    }
+@media(max-width: 400px) {
+    .otp-inputs {
+        gap: 8px;
+    }
+
+    .otp-box {
+        width: 2.2rem;
+        height: 2.4rem;
+    }
+}
