@@ -1,0 +1,123 @@
+﻿body {
+}
+/* CSS for DashboardView view */
+
+.bg-main {
+    background-color: #F3F4F6;
+}
+
+.bg-custom-on {
+    background-color: #47d9360f;
+}
+
+.bg-custom-off {
+    background-color: #D936430f;
+}
+
+.bg-header {
+    background-color: #ebeef5;
+}
+
+.bg-custom-light {
+    background-color: #ecf2feff;
+}
+
+.bg-custom-blur {
+    background-color: #ffffff0c;
+    backdrop-filter: blur(5px);
+}
+.dropdown-btn{
+    color: #fff;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+    .dropdown-btn:focus{
+        outline: none;
+        box-shadow: none;
+    }
+        .dropdown-btn:active{
+            border: none;
+        }
+        /*.popup-form {
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1050 !important;
+}*/
+        .card {
+            background: rgba(255, 255, 255);
+            border-radius: 16px;
+        }
+
+.rounded-5 {
+    border-radius: 10%;
+}
+
+.rounded-50 {
+    min-height: 60px;
+    min-width: 60px;
+    border-radius: 50%;
+}
+
+.body-text-color {
+    color: #202124;
+}
+
+
+.clock-in-icon {
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+    .clock-in-icon.clock-in-running {
+        animation: clockInRotate 1.2s linear infinite;
+    }
+
+@keyframes clockInRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+.disable-btn svg {
+    fill: currentColor;
+}
+
+.disable-btn {
+    color: #979797;
+}
+
+.security-bg {
+    background: #D93643;
+    color: #FFFFFF;
+}
+
+    .security-bg:hover {
+        background: #9c2932;
+        color: #FFFFFF;
+    }
+
+.security-text {
+    color: #D93643;
+}
+
+.muted-gold {
+    color: #C8AD6B;
+}
+
+.font-size-7 {
+    font-size: 0.8rem;
+}
+
+.font-size-8 {
+    font-size: 0.7rem;
+}
+
+    

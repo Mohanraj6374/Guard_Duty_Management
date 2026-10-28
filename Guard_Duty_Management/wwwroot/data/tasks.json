@@ -1,0 +1,32 @@
+[
+  {
+    "taskId": 1,
+    "siteName": "Admin Test 1 for ANU",
+    "taskName": "Site Patrolling",
+    "estimatedStartDateTime": "2026-10-17T12:27:00",
+    "estimatedEndDateTime": "2026-10-17T14:27:00",
+    "status": "Assigned",
+    "instructions": "Patrol the assigned premises and report any unusual activity.",
+    "updates": []
+  },
+  {
+    "taskId": 2,
+    "siteName": "Main Security Gate",
+    "taskName": "Gate Monitoring",
+    "estimatedStartDateTime": "2026-10-21T18:00:00",
+    "estimatedEndDateTime": "2026-10-21T22:00:00",
+    "status": "Assigned",
+    "instructions": "Monitor entry and exit and maintain the visitor register.",
+    "updates": []
+  },
+  {
+    "taskId": 3,
+    "siteName": "Parking Area A",
+    "taskName": "Parking Inspection",
+    "estimatedStartDateTime": "2026-10-22T08:00:00",
+    "estimatedEndDateTime": "2026-10-22T10:00:00",
+    "status": "Assigned",
+    "instructions": "Inspect the parking area and report any safety concerns.",
+    "updates": []
+  }
+]
