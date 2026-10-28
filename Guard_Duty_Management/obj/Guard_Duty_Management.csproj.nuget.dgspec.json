@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\KnowledgeFlex\\vue\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {}
+    "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {}
   },
   "projects": {
-    "F:\\KnowledgeFlex\\vue\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {
+    "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\KnowledgeFlex\\vue\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
+        "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
         "projectName": "Guard_Duty_Management",
-        "projectPath": "F:\\KnowledgeFlex\\vue\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
-        "packagesPath": "C:\\Users\\acer\\.nuget\\packages\\",
-        "outputPath": "F:\\KnowledgeFlex\\vue\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management\\obj\\",
+        "projectPath": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -30,7 +30,6 @@
         },
         "frameworks": {
           "net8.0": {
-            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {}
           }
@@ -45,11 +44,10 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.400"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "imports": [
             "net461",
@@ -70,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.319/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
