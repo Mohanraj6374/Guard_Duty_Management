@@ -77,3 +77,6 @@ publish/
 /Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.AssemblyInfo.cs
 /Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.AssemblyInfoInputs.cache
 /Guard_Duty_Management/obj/Debug/net8.0/rpswa.dswa.cache.json
+/Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.assets.cache
+/Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.GlobalUsings.g.cs
+/Guard_Duty_Management/obj/Debug/net8.0/Guard_Duty_Management.GeneratedMSBuildEditorConfig.editorconfig
