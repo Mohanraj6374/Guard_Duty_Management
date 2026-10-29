@@ -105,17 +105,17 @@ namespace Guard_Duty_Management.Controllers
 
         public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request)
         {
-            if(request == null || String.IsNullOrWhiteSpace(request.CountryCode) || String.IsNullOrWhiteSpace(request.PhoneNumber) || String.IsNullOrWhiteSpace(request.Otp))
+            if(request == null || string.IsNullOrWhiteSpace(request.CountryCode) || string.IsNullOrWhiteSpace(request.PhoneNumber) || string.IsNullOrWhiteSpace(request.Otp))
             {
                 return BadRequest(new
                 {
                     status = false,
-                    message = "Country Code, Phone Number, Otp are required"
+                    message = "Country Code, Phone Number, and Otp are required"
                 });
             }
             try
             {
-                var apiUrl = $"https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserOtp";
+                var apiUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserOtp";
 
                 var response = await _httpClient.PostAsJsonAsync(apiUrl, new
                 {
@@ -130,7 +130,7 @@ namespace Guard_Duty_Management.Controllers
                     return StatusCode((int)response.StatusCode, new
                     {
                         status = false,
-                        message = "Otp verification failed."
+                        message = "Otp verification service returned an error."
                     });
                 }
 
@@ -151,17 +151,28 @@ namespace Guard_Duty_Management.Controllers
                 }
 
 
-                var getUrl = $"https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserDetails?mobileNo=8310561649";
-                var userData = await _httpClient.GetAsync(getUrl);
+                var getUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserDetails?mobileNo=8310561649";
+                var userResponse = await _httpClient.GetAsync(getUrl);
 
-                userData.EnsureSuccessStatusCode();
+                
 
-                var userResult = await userData.Content.ReadAsStringAsync();
+                var userResult = await userResponse.Content.ReadAsStringAsync();
+
+                if (!userResponse.IsSuccessStatusCode)
+                {
+                    return StatusCode(502, new
+                    {
+                        success = false,
+                        message = "Unable to retrieve user details"
+                    });
+                }
                 using var userDocument = JsonDocument.Parse(userResult);
                 var userRoot = userDocument.RootElement;
 
-                var guardId = userRoot.GetProperty("id").GetString();
-                var email = userRoot.GetProperty("email").GetString();
+                var userData = userRoot.GetProperty("data");
+
+                var guardId = userData.GetProperty("id").ToString();
+                var email = userData.GetProperty("emailId").GetString();
 
                 if (string.IsNullOrWhiteSpace(guardId) || string.IsNullOrWhiteSpace(email))
                 {
@@ -199,7 +210,7 @@ namespace Guard_Duty_Management.Controllers
                 return StatusCode(502, new
                 {
                     status = false,
-                    message = "Unable to send otp, api exception found"
+                    message = "An unexpected error occurred during OTP verification."
                 });
             }
         }
