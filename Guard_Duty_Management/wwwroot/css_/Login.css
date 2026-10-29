@@ -7,11 +7,29 @@ body {
 .security-bg {
     background: #D93643;
     color: #FFFFFF;
+    min-height: 34px;
+    background-color: #D93643;
+    border: 1px solid #D93643;
+    color: #FFFFFF;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
 }
+
 
     .security-bg:hover {
         background: #9c2932;
         color: #FFFFFF;
+    }
+
+        .security-bg:hover:not(:disabled) {
+            background-color: #BE2935;
+            border-color: #BE2935;
+        }
+
+    .security-bg:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        color:#fff;
     }
 
 .security-text {
@@ -57,7 +75,7 @@ body {
         outline: 0.1px solid #C8AD6B;
         outline-offset: -2px;
     }
-.verifyPhoneBtn {
+/*.verifyPhoneBtn {
     background: transparent;
     text-decoration: underline;
     cursor: pointer;
@@ -78,7 +96,7 @@ body {
     }
     .verifyPhoneBtn:hover{
         color: #000;
-    }
+    }*/
     /*OTP Verification Window*/
     .otp-inputs {
         display: flex;

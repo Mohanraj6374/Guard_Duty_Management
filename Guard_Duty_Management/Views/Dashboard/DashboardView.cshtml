@@ -5,31 +5,513 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css_/dashboardview.css" rel="stylesheet"/>
+    <link href="~/css_/header.css" rel="stylesheet"/>
+
+    
+    
 
 </head>
 
 <body>
+    <div class="container-fluid bg-main p-0" id="DashboardView" v-cloak>
+        <app-header></app-header>
 
-    <div class="container-fluid" id="DashboardView" v-cloak>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <button class="btn btn-danger">Sample Button</button>
-                    <div>Message : {{ message }}</div>
+        <!-- NAVIGATION / ACTION BAR -->
+        <nav class="navbar navbar-expand-lg px-3 py-2"
+             style="background-color: #F5F7FA;">
+
+            <div class="container-fluid p-0">
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-light"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#headerNavigation"
+                        aria-controls="headerNavigation"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="headerNavigation">
+
+                    <!-- Left Actions -->
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+
+                        <a href="/Dashboard/DashboardView"
+                           class="btn disable-btn fw-semibold px-3 py-2">
+
+                            <div class="d-flex align-items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="bi bi-clipboard-minus" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                                </svg>
+                                Task
+                            </div>
+                        </a>
+
+                        <a href="/Dashboard/IncidentView"
+                           class="btn btn-light fw-semibold px-3 py-2">
+                            Incident
+                        </a>
+
+                        <button type="button"
+                                class="btn security-bg fw-semibold px-3 py-2"
+                                id="addTaskButton" v-on:click="showAddTaskForm = true">
+                            Add Task
+                        </button>
+
+                    </div>
+
+                    <!-- Right Controls -->
+                    <div class="d-flex flex-wrap align-items-center gap-3 ms-lg-auto mt-3 mt-lg-0">
+
+                        <!-- Date Picker -->
+                        <div class="input-group bg-white shadow-sm rounded"
+                             style="width: 210px;">
+
+                            <input type="date"
+                                   class="form-control border-0 rounded"                                   
+                                   v-model="selectedDate"
+                                   aria-label="Select date" />
+
+                        </div>
+
+                        <!-- Clock-In Toggle -->
+                        <div class="d-flex align-items-center gap-2 bg-white rounded px-3 py-2 shadow-sm"
+                             style="min-width: 265px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+                            </svg>
+
+                            <span class="fw-semibold text-secondary text-nowrap">
+                                ClockIn:
+                            </span>
+
+                            <span id="clockInStatus"
+                                  class="fw-semibold text-nowrap">
+                                OFF
+                            </span>
+
+                            <div class="form-check form-switch mb-0 ms-auto">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       role="switch"
+                                       id="clockInSwitch"
+                                       aria-label="Toggle Clock-In"
+                                       style="cursor: pointer;">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    
+
+
+        <div v-if="showClockInForm" class="container-fluid d-flex align-items-center popup-form bg-custom-blur position-fixed start-0 top-0 py-3 mb-2">
+            <div class="row justify-content-center align-items-center w-100 h-100">
+                <div class="col-md-4 col-12">
+                    <div class="mt-5 text-dark card bg-grad rounded-3 shadow-lg px-3">
+                        <div class="card-body border-0">
+                            <button class="btn-close btn-icon btn-close-dark position-absolute top-0 end-0 m-3" v-on:click="showAddForm = false"></button>
+
+                            <div class="row gap-3">
+                                <div class="col-12">
+                                    <div class="mb-2">
+                                        <span class="fs-4 fw-bold">Clock In</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Site</label>
+                                        <select class="form-select">
+                                            <option value="0">Select Site</option>
+                                            @* @foreach (var service in activeServices)
+                                            {
+                                                <option value="@service.ServiceId">
+                                                    @service.ServiceName
+                                                </option>
+                                            } *@
+                                        </select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Shift</label>
+                                        <select class="form-select">
+                                            <option value="0">Select Shift</option>
+                                            @* @foreach (var service in activeServices)
+                                            {
+                                                <option value="@service.ServiceId">
+                                                    @service.ServiceName
+                                                </option>
+                                            } *@
+
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">Guard Post</label>
+                                        <select class="form-select">
+                                            <option value="0">Select Guard Post</option>
+                                            @* @foreach (var service in activeServices)
+                                            {
+                                                <option value="@service.ServiceId">
+                                                    @service.ServiceName
+                                                </option>
+                                            } *@
+
+                                        </select>
+                                    </div>
+
+                                    <div class="my-3 d-flex justify-content-end gap-3">
+                                        @* <button type="button" @onclick ="ClockIn" class="btn btn-secondary">Clock In</button>
+                                        <button type="button" @onclick ="()=>showClockInForm=false" class="btn btn-danger">Close</button> *@
+                                        <button type="button" class="btn btn-secondary">Clock In</button>
+                                        <button type="button" class="btn btn-danger" v-on:click="showClockInForm = false">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div v-if="showAddTaskForm" class="container-fluid d-flex align-items-center popup-form bg-custom-blur position-fixed start-0 top-0 py-3 mb-2">
+            <div class="row justify-content-center align-items-center w-100 h-100">
+                <div class="col-md-4 col-12">
+                    <div class="mt-5 text-dark card bg-grad rounded-3 shadow-lg px-3">
+                        <div class="card-body border-0">
+                            <button class="btn-close btn-icon btn-close-dark position-absolute top-0 end-0 m-3" v-on:click="showAddTaskForm = false"></button>
+
+                            <div class="row gap-3">
+                                <div class="col-12">
+                                    <div class="mb-2">
+                                        <span class="fs-4 fw-bold">Clock In</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Site</label>
+                                        <select class="form-select">
+                                            <option value="0">Select Site</option>
+                                            @* @foreach (var service in activeServices)
+                                            {
+                                                <option value="@service.ServiceId">
+                                                    @service.ServiceName
+                                                </option>
+                                            } *@
+                                        </select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Shift</label>
+                                        <select class="form-select">
+                                            <option value="0">Select Shift</option>
+                                            @* @foreach (var service in activeServices)
+                                            {
+                                                <option value="@service.ServiceId">
+                                                    @service.ServiceName
+                                                </option>
+                                            } *@
+
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="form-label">Guard Post</label>
+                                        <select class="form-select">
+                                            <option value="0">Select Guard Post</option>
+                                            @* @foreach (var service in activeServices)
+                                            {
+                                                <option value="@service.ServiceId">
+                                                    @service.ServiceName
+                                                </option>
+                                            } *@
+
+                                        </select>
+                                    </div>
+
+                                    <div class="my-3 d-flex justify-content-end gap-3">
+                                        @* <button type="button" @onclick ="ClockIn" class="btn btn-secondary">Clock In</button>
+                                        <button type="button" @onclick ="()=>showClockInForm=false" class="btn btn-danger">Close</button> *@
+                                        <button type="button" class="btn security-bg">Clock In</button>
+                                        <button type="button" class="btn btn-dark" v-on:click="showAddTaskForm = false">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid vh-100 main body-text-color">
+            <div class="row mt-2 g-2 align-items-stretch h-100">
+            <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center">
+                <div class="card w-100 h-100 bg-white text-black">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#C8AD6B" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                            </svg>
+                            <p class="m-0 fs-5 fw-semibold">
+                                Tasks
+                            </p>
+                        </div>
+                        <div class="search-group mt-2">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" class="icon">
+                                <g>
+                                    <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+                                </g>
+                            </svg>
+                            <input title="search" class="input" type="search" placeholder="Search" v-model="searchText" v-on:input="currentPage=1" />
+                        </div>
+                        <div class="h-auto mt-2">
+                            <div class="empty-illustration">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="180" height="160" viewBox="0 0 180 160"
+                                     fill="none" aria-hidden="true">
+
+                                    <!-- Soft background -->
+                                        <circle cx="76" cy="80" r="50" fill="#8993a144" />
+                                    @* <circle cx="115" cy="112" r="28" fill="#F4F5F7" /> *@
+
+                                    <!-- Document -->
+                                    <rect x="48" y="39" width="60" height="70"
+                                          rx="10" fill="#FFFFFF"
+                                          stroke="#8993A1" stroke-width="3" />
+
+                                    
+
+                                    <!-- List items -->
+                                    <circle cx="58" cy="58" r="2.5" fill="#8993A1" />
+                                    <path d="M70 58 H98"
+                                          stroke="#8993A1" stroke-width="3"
+                                          stroke-linecap="round" />
+
+                                    <circle cx="58" cy="76" r="2.5" fill="#8993A1" />
+                                    <path d="M70 76 H98"
+                                          stroke="#8993A1" stroke-width="3"
+                                          stroke-linecap="round" />
+
+                                    <circle cx="58" cy="94" r="2.5" fill="#8993A1" />
+                                    <path d="M70 94 H98"
+                                          stroke="#8993A1" stroke-width="3"
+                                          stroke-linecap="round" />
+
+                                    @* <circle cx="63" cy="112" r="2.5" fill="#8993A1" />
+                                    <path d="M73 112 H106"
+                                          stroke="#8993A1" stroke-width="3.5"
+                                          stroke-linecap="round" /> *@
+
+                                    <!-- Gold decorative strokes -->
+                                    <path d="M140 28 L145 19
+                                    M150 37 L159 34
+                                    M153 47 L163 48"
+                                          stroke="#C8AD6B" stroke-width="2.5"
+                                          stroke-linecap="round" />
+
+                                    
+                                </svg>
+
+                            </div>
+                            <p class="m-0 text-center fs-5 fw-semibold">Not task available</p>
+                            <p class=" text-center fw-normal text-muted">There is no task assigned</p>
+
+                            <div class="card">
+                                <div class="card-body">
+                                        <p class="mb-1">
+                                        <span>Site name:</span> 
+                                        (Admin Test 1 for ANU)
+                                    </p>
+                                        <p class="mb-1">
+                                        <span>Task:</span> 
+                                        (Site Patrolling)
+                                    </p>
+                                        <p class="mb-1">
+                                        <span>Estimated Start Date Time:</span>
+                                        17-10-2026 12:27
+                                    </p>
+                                    <p class="mb-1">
+                                        <span>Estimated Start Date Time:</span>
+                                        17-10-2026 12:27
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center">
+                    <div class="card w-100 h-100 d-flex align-items-center justify-content-center">
+                    <div class="card-body">
+                        <div class="p-2 d-flex flex-column align-items-center justify-content-center">
+
+                            <div class="empty-illustration">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="180" height="160" viewBox="0 0 180 160"
+                                     fill="none" aria-hidden="true">
+
+                                    <!-- Soft background -->
+                                    <circle cx="85" cy="85" r="62" fill="#F7F2E8" />
+                                    <circle cx="115" cy="112" r="28" fill="#F4F5F7" />
+
+                                    <!-- Document -->
+                                    <rect x="48" y="39" width="80" height="86"
+                                          rx="10" fill="#FFFFFF"
+                                          stroke="#8993A1" stroke-width="3.5" />
+
+                                    <!-- Document header -->
+                                    <path d="M49 58 H127"
+                                          stroke="#8993A1" stroke-width="3.5" />
+
+                                    <!-- List items -->
+                                    <circle cx="63" cy="76" r="2.5" fill="#8993A1" />
+                                    <path d="M73 76 H106"
+                                          stroke="#8993A1" stroke-width="3.5"
+                                          stroke-linecap="round" />
+
+                                    <circle cx="63" cy="94" r="2.5" fill="#8993A1" />
+                                    <path d="M73 94 H106"
+                                          stroke="#8993A1" stroke-width="3.5"
+                                          stroke-linecap="round" />
+
+                                    <circle cx="63" cy="112" r="2.5" fill="#8993A1" />
+                                    <path d="M73 112 H106"
+                                          stroke="#8993A1" stroke-width="3.5"
+                                          stroke-linecap="round" />
+
+                                    <!-- Gold decorative strokes -->
+                                    <path d="M140 28 L145 19
+                                    M150 37 L159 34
+                                    M153 47 L163 48"
+                                          stroke="#C8AD6B" stroke-width="2.5"
+                                          stroke-linecap="round" />
+
+                                    <!-- Mouse cursor -->
+                                    <path d="M112 89 L119 125 L129 115
+                                    L142 129 L150 121 L137 108
+                                    L149 103 Z"
+                                          fill="#566170" stroke="#566170"
+                                          stroke-width="2" stroke-linejoin="round" />
+                                </svg>
+
+                            </div>
+                            <p class="m-0 fs-5 fw-semibold">Please Select Task First</p>
+                            <p class="m-0 fs-6 fw-normal text-muted">Choose a task from the left panel to view details, instructions and updates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center">
+                <div class="card px-3 py-2 w-100 h-100 bg-light text-black">
+                    <div class="card-body overflowx-auto">
+                        <div class="row align-items-center">
+                            @* <div class="col-3">
+                                <div class="w-100 h-100 rounded-circle d-flex align-items-center justify-content-center bg-danger-subtle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#D93643" class="bi bi-clock" viewBox="0 0 16 16">
+                                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                    </svg>
+                                </div>
+
+                            </div> *@
+                                <div class="col-2 p-0 d-flex justify-content-end align-items-center">
+                                    <div class="p-3 bg-danger-subtle rounded-50">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#D93643" class="bi bi-clock" viewBox="0 0 16 16">
+                                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            <div class="col-9">
+                                <div class="">
+                                    <p class="font-size-7 lh-1 mb-2">You are currently</p>
+                                    <p class="mb-2 fs-5 fw-semibold lh-1">Clocked Out</p>
+                                    <p class="mb-1 lh-1 font-size-7 text-muted">Start your shift to began receiving tasks and updates.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn security-bg w-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                              <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                            </svg>
+                             Clock In
+                        </button>
+                        <div>
+                           
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg>
+                            <span>
+                                Clocked In 
+                            </span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                            <span>Clocked Out</span>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
     </div>
 
+
+
+
+
+
+
+
+    <script>
+
+            
+
+            // Default date picker to today's local date
+            // const dateInput = document.getElementById('headerDate');
+            // const today = new Date();
+            // const localDate = [
+            //     today.getFullYear(),
+            //     String(today.getMonth() + 1).padStart(2, '0'),
+            //     String(today.getDate()).padStart(2, '0')
+            // ].join('-');
+
+            // dateInput.value = localDate;
+
+            // Clock-In switch display
+            // const clockInSwitch = document.getElementById('clockInSwitch');
+            // const clockInStatus = document.getElementById('clockInStatus');
+
+            // clockInSwitch.addEventListener('change', function () {
+            //     clockInStatus.textContent = this.checked ? 'ON' : 'OFF';
+            // });
+
+
+
+            // showClockInForm = false;
+    </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="~/lib/vue-js/vue@2.7.16.js"></script>
     <script src="~/lib/axios/axios@1.12.2.js"></script>
     <script src="~/lib/linq-js/linq.js4.0.3.js"></script>
     <script src="~/lib/jquery/jquery-4.0.0.min.js"></script>
-    <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
-
+    <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/header.js"></script>
     <script src="~/js/dashboard-components/dashboardview.js"></script>
 
 </body>

@@ -1,1 +1,164 @@
-﻿
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <title>Login</title>
+        <link href="@Url.Content("~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css")" rel="stylesheet" />
+        <link href="/css_/login.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@latest/build/css/intlTelInput.css" />
+    </head>
+    <body>
+        <div class="container-fluid vh-100 bg-main d-flex align-items-center" id="Login" v-cloak>
+
+            <div class="row align-items-center justify-content-center vw-100">
+                <div class="col-md-4 col-11">
+                    <div v-if="!showOtpWindow" class="card shadow-lg rounded-4 px-2 py-3 muted-gold-border">
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-5">
+                                    <div class="p-2">
+                                        <img src="https://anzrocc.azurewebsites.net/images/IOPS.png" class="img-fluid" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 text-center">
+                                        <h4>Welcome Back</h4>
+                                        <p class="m-0 font-size-8 text-muted fw-normal">Sign in with your registered mobile number</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2">
+                                        <div class="mb-2">
+                                            <label class="form-label font-size-9 ms-1 fw-semibold">Mobile Number</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#979797" class="bi bi-phone" viewBox="0 0 16 16">
+                                                        <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                                        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+                                                    </svg>
+                                                </span>
+                                                <select v-model="selectedCountryCode" v-on:change="phoneVerified = false" class="country-code-select font-size-8 fw-normal">
+                                                    <option v-for="country in countries" :key="country.code" :value="country.dialCode"> {{country.flag}} {{country.dialCode}}</option>
+                                                </select>
+                                                
+                                                <input type="tel" id="phone" maxlength="10" v-model="phone" v-on:input="resetPhoneVerification" autocomplete="on" inputmode="numeric" class="form-control phone-input" placeholder="Enter your phone number" required />                                                    
+                                            </div>
+                                            <div class="phone-status w-100 mt-1" style="min-height: 18px;">
+                                                <p v-if="isCheckingPhone" class="form-text font-size-7 security-text mb-0">Checking mobile number...</p>
+                                                <p v-else-if="phoneVerified" class="form-text font-size-7 text-success mb-0">Mobile number verified</p>
+                                                <p v-else-if="phoneError" class="form-text font-size-7 text-danger mb-0">{{phoneError}}</p>
+                                            </div>
+                                            
+                                            @* <button v-else type="button" class="mb-2 verifyPhoneBtn text-decoration-underline security-text font-size-8" v-on:click="checkPhoneNumber" v-bind:disabled="isCheckingPhone">{{ isCheckingPhone ? 'Verifying...' : 'Verify Phone Number' }}</button> *@
+                                        </div>
+                                            <button v-show="!phoneVerified" type="button" class="btn security-bg w-100" v-on:click="checkPhoneNumber">
+                                                {{ isCheckingPhone ? 'Verifying...' : 'Verify Phone Number' }}
+                                            </button>
+                                            <button v-show="phoneVerified" type="button" id="sendOtpButton" class="btn security-bg w-100" v-on:click="sendOtp">
+                                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                                    <span>{{isSendingOtp ? 'Sending OTP...' : 'Send OTP'}}</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                                                    </svg>
+                                                </div>
+                                            </button>
+                                            <p v-if="otpError" class="text-danger mt-2 font-size-7">{{ otpError }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 d-flex align-items-center justify-content-center gap-2 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="#C8AD6B" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
+                                        </svg>
+                                        <span class="font-size-7 text-muted">Secure Login with OTP</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div v-else class="card shadow-lg rounded-4 p-2 muted-gold-border">
+                        <div class="card-body">
+                            <div class="row justify-content-center">
+                                <div class="col-5">
+                                    <div class="p-2">
+                                        <img src="https://anzrocc.azurewebsites.net/images/IOPS.png" class="img-fluid" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 text-center">
+                                        <h5>Enter OTP</h5>
+                                        <p class="m-0 font-size-8 text-muted fw-normal">We have sent a 6-digit code to</p>
+                                        <span>{{getSelectedCountry.flag}}</span>
+                                        <span>{{selectedCountryCode}}</span>
+                                        <span>{{phone}}</span>
+                                        
+                                        @* <a href="#" v-on:click.prevent="showOtpWindow = false" class="edit-btn ms-3 font-size-9">Edit</a> *@
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2">                                       
+                                            <div class="otp-inputs" id="otpInputsContainer">
+                                                <input type="text" maxlength="1" v-on:input="handleOtpInput(0, $event)" v-on:keydown.backspace="handleOtpBackspace(0)" v-on:paste="handleOtpPaste($event)" class="otp-box" required/>
+                                                <input type="text" maxlength="1" v-on:input="handleOtpInput(1, $event)" v-on:keydown.backspace="handleOtpBackspace(1)" class="otp-box" required/>
+                                                <input type="text" maxlength="1" v-on:input="handleOtpInput(2, $event)" v-on:keydown.backspace="handleOtpBackspace(2)" class="otp-box" required/>
+                                                <input type="text" maxlength="1" v-on:input="handleOtpInput(3, $event)" v-on:keydown.backspace="handleOtpBackspace(3)" class="otp-box" required/>
+                                                <input type="text" maxlength="1" v-on:input="handleOtpInput(4, $event)" v-on:keydown.backspace="handleOtpBackspace(4)" class="otp-box" required/>
+                                                <input type="text" maxlength="1" v-on:input="handleOtpInput(5, $event)" v-on:keydown.backspace="handleOtpBackspace(5)" class="otp-box" required/> 
+                                            </div>
+                                            <p class="form-text font-size-8 text-muted text-center">OTP expires in <u class="security-text">{{formatOtpTime()}}</u></p>
+                                            
+                                            <p class="form-text font-size-9 text-muted text-center">Didn't received the code? 
+                                                <button type="button" class="btn resendOtpBtn security-text" v-if="otpTimeLeft === 0" v-on:click="sendOtp">
+                                                    <span>{{isSendingOtp ? 'Resending...' : 'Resend'}}</span>
+                                                </button>
+                                                <span v-else class="text-decoration-underline security-text font-size-8">Resend</span>
+                                            </p>
+                                            
+                                            <button type="button" v-on:click="verifyOtp()" class="btn security-bg w-100">
+                                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                                    <span>{{isVerifyingOtp ? 'Verifying...': 'Verify'}}</span>
+                                                    <svg v-if="!isVerifyingOtp" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                                                    </svg>
+                                                </div>
+                                            </button>
+                                            <p v-if="otpError" class="text-danger text-center font-size-8">{{ otpError }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="p-2 d-flex align-items-center justify-content-center gap-2 mt-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="#C8AD6B" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
+                                        </svg>
+                                        <span class="font-size-7 text-muted">Secure Login with OTP</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Load dependencies first -->
+        <script src="@Url.Content("~/lib/jquery/jquery-4.0.0.min.js")"></script>
+        <script src="~/lib/select2/js/select2.min.js"></script>
+        <script src="@Url.Content("~/lib/vue-js/vue@2.7.16.js")"></script>
+        <script src="@Url.Content("~/lib/axios/axios@1.12.2.js")"></script>
+        <script src="@Url.Content("~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js")"></script>
+
+        <!-- Register the header component before mounting the Login Vue instance -->
+    <script src="~/js/dashboard-components/Select2Component.js"></script>
+        <script src="~/js/login-components/login.js"></script>
+
+    
+    </body>
+</html>
+
+
+
+

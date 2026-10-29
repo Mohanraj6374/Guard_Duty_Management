@@ -28,6 +28,15 @@
         otpTimeLeft: 300,
         otpTimer: null
     },
+    watch: {
+        selectedCountryCode() {
+            this.phoneVerified = false;
+        },
+
+        phone() {
+            this.phoneVerified = false;
+        }
+    },
     mounted() {
 
     },
@@ -50,7 +59,7 @@
 
 
             this.phoneVerified = false;
-            phoneError = '';
+            this.phoneError = '';
 
             if(!mobileNo){              
                 this.phoneVerified = false;
@@ -62,16 +71,12 @@
                 return;
             }
 
-            // if(!/^(\d)\1{9}$/.test(mobileNo)){
-            //     this.phoneError = "Enter a valid phone number.";
-            //     return;
-            // }
-
-            if(this.lastCheckedPhone === mobileNo && this.  phoneVerified){
+            if(this.lastCheckedPhone === mobileNo && this.phoneVerified){
                 return;
             }
 
             this.isCheckingPhone = true;
+            this.otpError = '';
             try{
 
                 const response = await axios.get(
@@ -88,21 +93,25 @@
                 if(result.statusCode === 200 && result.statusMessage === 'Success' && result.data && result.data.phoneNumber === mobileNo)
                 {
                     this.phoneVerified = true;
-                    this.phoneError='';
+                    this.phoneError = '';
+                    this.lastCheckedPhone = mobileNo;
                 }else{
                     this.phoneError = "Invalid phone number.";
                     console.log("Invalid phone number entered.");
                 }
             }catch(error){
-                console.error("Phone number verification failed: ", error );
+                console.error("Phone number verification failed: ", error.message );
                 this.phoneError = "Unable to verify mobile number. Please try again.";
             }finally{
                 this.isCheckingPhone = false;
             }
         },
-        async sendOtp(){
+        async sendOtp() {
+
+            if (this.isSendingOtp) return;
+
             if(!this.phone.trim()){
-                alert("Enter phone number.")
+                this.phoneError = "Enter phone number.";
                 return;
             }
             if(!this.phoneVerified){
@@ -110,8 +119,9 @@
                 return;
             }
 
+
             this.isSendingOtp = true;
-            this.otpError='';
+
 
             try{
                 const response = await axios.post("/Login/SendOtp",
@@ -138,7 +148,11 @@
 
 
         },
-        async verifyOtp(){
+        async verifyOtp() {
+
+            if (this.isVerifyingOtp) {
+                return;
+            }
             const inputs = this.getOtpInputs();
 
             const otp = Array.from(inputs).map(input=>input.value).join('');
@@ -190,7 +204,7 @@
         },
 
         handleOtpInput(index, browserEvent){
-            const input = event.target;
+            const input = browserEvent.target;
 
             const digit = input.value.replace(/\D/g,"").slice(-1);
 
@@ -272,5 +286,8 @@
         }
         
 
-    }
+    },
+    beforeDestroy() {
+        this.stopOtpTimer();
+    },
 });
