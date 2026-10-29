@@ -5,111 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css_/dashboardview.css" />
-    <link href="~/css_/header.css" />
+    <link href="~/css_/dashboardview.css" rel="stylesheet"/>
+    <link href="~/css_/header.css" rel="stylesheet"/>
 
-    <style>
-            .bg-main{
-                background-color: #F3F4F6;
-            }
-            
-            .bg-custom-blur {
-                background-color: #ffffff0c;
-                backdrop-filter: blur(5px);
-            }
-
-            .popup-form {
-                width: 100vw;
-                height: 100vh;
-                overflow-y: auto;
-                z-index: 1050 !important;
-            }
-
-            .card {
-                background: rgba(255, 255, 255);
-                border-radius: 16px;
-            }
-            .rounded-50{
-                min-height: 60px;
-                min-width: 60px;
-                border-radius: 50%;
-            }
-            .body-text-color{
-                color: #202124;
-            }
-            .disable-btn svg{
-                fill:currentColor;
-            }
-            .disable-btn{
-                color: #979797;
-            }
-            .security-bg{
-                background: #D93643;
-                color: #FFFFFF;
-            }
-
-            .security-bg:hover{
-                background: #D93643;
-                color: #FFFFFF;
-            }
-            .muted-gold{
-                color: #C8AD6B;
-            }
-            .font-size-7{
-                font-size: 0.8rem;
-            }
-            .search-group {
-                display: flex;
-                line-height: 28px;
-                align-items: center;
-                position: relative;
-               
-            }
-
-                 .search-group .input {
-                    width: 100%;
-                    height: 30px;
-                    line-height: 28px;
-                    padding: 0 1rem;
-                    padding-left: 2.5rem;
-                    border: 1px solid #dfdede;
-                    border-radius: 8px;
-                    outline: none;
-                    background-color: #f3f3f4;
-                    color: #0d0c22;
-                    transition: 0.3s ease;
-                }
-
-                    .search-group .input::placeholder {
-                        color: #9e9ea7;
-                    }
-
-                    .search-group .input:focus,
-                    .search-group input:hover {
-                        outline: none;
-                        border-color: rgba(247, 127, 0, 0.4);
-                        background-color: #fff;
-                        box-shadow: 0 0 0 4px rgb(247 127 0 / 10%);
-                    }
-
-                .search-group .icon {
-                    position: absolute;
-                    left: 1rem;
-                    fill: #8f8f95;
-                    width: 1rem;
-                    height: 1rem;
-                }
-
-            .empty-illustration {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin: 24px auto;
-            }
-    </style>
+    
+    
 
 </head>
 
@@ -173,9 +74,9 @@
                              style="width: 210px;">
 
                             <input type="date"
-                                   class="form-control border-0 rounded"
-                                   id="headerDate"
-                                   aria-label="Select date">
+                                   class="form-control border-0 rounded"                                   
+                                   v-model="selectedDate"
+                                   aria-label="Select date" />
 
                         </div>
 
@@ -577,43 +478,26 @@
 
     <script>
 
-            function updateHeaderDateTime() {
-                const now = new Date();
-
-                const formatted = now.toLocaleString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: '2-digit',
-                    year: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
-                });
-
-                document.getElementById('headerDateTime').textContent = formatted;
-            }
-
-            updateHeaderDateTime();
-            setInterval(updateHeaderDateTime, 60000);
+            
 
             // Default date picker to today's local date
-            const dateInput = document.getElementById('headerDate');
-            const today = new Date();
-            const localDate = [
-                today.getFullYear(),
-                String(today.getMonth() + 1).padStart(2, '0'),
-                String(today.getDate()).padStart(2, '0')
-            ].join('-');
+            // const dateInput = document.getElementById('headerDate');
+            // const today = new Date();
+            // const localDate = [
+            //     today.getFullYear(),
+            //     String(today.getMonth() + 1).padStart(2, '0'),
+            //     String(today.getDate()).padStart(2, '0')
+            // ].join('-');
 
-            dateInput.value = localDate;
+            // dateInput.value = localDate;
 
             // Clock-In switch display
-            const clockInSwitch = document.getElementById('clockInSwitch');
-            const clockInStatus = document.getElementById('clockInStatus');
+            // const clockInSwitch = document.getElementById('clockInSwitch');
+            // const clockInStatus = document.getElementById('clockInStatus');
 
-            clockInSwitch.addEventListener('change', function () {
-                clockInStatus.textContent = this.checked ? 'ON' : 'OFF';
-            });
+            // clockInSwitch.addEventListener('change', function () {
+            //     clockInStatus.textContent = this.checked ? 'ON' : 'OFF';
+            // });
 
 
 
@@ -621,12 +505,12 @@
     </script>
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="~/lib/vue-js/vue@2.7.16.js"></script>
     <script src="~/lib/axios/axios@1.12.2.js"></script>
     <script src="~/lib/linq-js/linq.js4.0.3.js"></script>
     <script src="~/lib/jquery/jquery-4.0.0.min.js"></script>
-    <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
-
+    <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/header.js"></script>
     <script src="~/js/dashboard-components/dashboardview.js"></script>
 
