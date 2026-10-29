@@ -89,3 +89,5 @@ publish/
 /Guard_Duty_Management/obj/Guard_Duty_Management.csproj.nuget.dgspec.json
 /Guard_Duty_Management/obj/Guard_Duty_Management.csproj.nuget.g.props
 /Guard_Duty_Management/obj/project.assets.json
+/Guard_Duty_Management/obj/Debug/net8.0/ref/Guard_Duty_Management.dll
+/Guard_Duty_Management/obj/Debug/net8.0/refint/Guard_Duty_Management.dll
