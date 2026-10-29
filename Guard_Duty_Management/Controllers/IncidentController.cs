@@ -8,5 +8,7 @@ namespace Guard_Duty_Management.Controllers
         {
             return View("IncidentView");
         }
+
+        //testing comment
     }
 }
