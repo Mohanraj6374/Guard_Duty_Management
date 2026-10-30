@@ -1,7 +1,7 @@
 ﻿Vue.component('app-header', {
     data(){
         return{
-            username: window.GuardUserEmail || 'GuardUserName',
+            username: window.GuardUserEmail || 'Guard',
 
 
             currentDateTime: '',
@@ -41,9 +41,12 @@
                                     {{ currentDateTime }}
                                 </span>
                             </div>
+                            <!-- Guard Name -->
+                            
 
                             <!-- Guard Profile -->
                             <div class="dropdown">
+                                
                                 <button class="dropdown-toggle dropdown-btn fw-semibold"
                                         type="button"
                                         data-bs-toggle="dropdown"
@@ -56,16 +59,16 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end px-2">
                                     <li>
-                                        <div class="d-flex flex-row">
-                                            <div class="d-flex align-items-center justify-content-center rounded-circle bg-danger-subtle">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
+                                        <div class="d-flex flex-row gap-2 align-items-center">
+                                            <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 48px; height: 48px; background: #F5EBD0;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#80652B" class="bi bi-person-check" viewBox="0 0 16 16">
                                                   <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
                                                   <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
                                                 </svg>
                                             </div>
-                                            <div class="py-1">
+                                            <div class="p-1">
                                                 <p class="mb-0 font-size-8">SIGNED IN AS</p>
-                                                <p class="mb-0 p-2">{{username}}</p>
+                                                <p class="mb-0 py-2 fs-6 fw-semibold lh-1">{{ username }}</p>
                                             </div>
                                         </div>
                                         
@@ -102,6 +105,12 @@
                                         </button>
                                     </li>
                                 </ul>
+
+                                <div class="d-none d-sm-flex align-items-sm-center gap-2 me-n3">
+                                    <span id="headerDateTime" class="fw-semibold  align-middle text-nowrap font-size-7">
+                                        {{ username.split('@')[0] }}
+                                    </span>
+                                </div>
                             </div>
 
                         </div>

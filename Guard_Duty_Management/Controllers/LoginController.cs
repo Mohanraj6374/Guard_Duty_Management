@@ -186,9 +186,14 @@ namespace Guard_Duty_Management.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, guardId),
-                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Name, string.IsNullOrWhiteSpace(email)?request.PhoneNumber.Trim():email),                   
                     new Claim(ClaimTypes.MobilePhone, request.PhoneNumber)
                 };
+
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    claims.Add(new Claim(ClaimTypes.Email, email));
+                }
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -215,7 +220,29 @@ namespace Guard_Duty_Management.Controllers
             }
         }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return Ok(new
+                {
+                    success = true,
+                    message = "Logged out successfully.",
+                    redirectUrl = Url.Action("Login", "Login")
+                });
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unexpected error."
+                });
+            }
+        }
         public class SendOtpRequest
         {
             public string CountryCode { get; set; } = string.Empty;
