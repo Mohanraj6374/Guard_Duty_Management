@@ -8,10 +8,6 @@
     <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css_/dashboardview.css" rel="stylesheet"/>
     <link href="~/css_/header.css" rel="stylesheet"/>
-
-    
-    
-
 </head>
 
 <body>
@@ -27,90 +23,84 @@
 
             <div class="container-fluid p-0">
 
-                <!-- Mobile Toggle -->
-                <button class="navbar-toggler border-light"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#headerNavigation"
-                        aria-controls="headerNavigation"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="headerNavigation">
+                <div class="row-cols-2">
 
                     <!-- Left Actions -->
-                    <div class="d-flex flex-wrap align-items-center gap-3">
+                    <div class="col">
+                        <div class="d-flex flex-wrap align-items-center gap-3">
 
-                        <a href="/Dashboard/DashboardView"
-                           class="btn disable-btn fw-semibold px-3 py-2">
+                            <a href="/Dashboard/DashboardView"
+                               class="btn disable-btn fw-semibold px-3 py-2">
 
-                            <div class="d-flex align-items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="bi bi-clipboard-minus" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
-                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
-                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
-                                </svg>
-                                Task
-                            </div>
-                        </a>
+                                <div class="d-flex align-items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="bi bi-clipboard-minus" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
+                                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                                        <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                                    </svg>
+                                    Task
+                                </div>
+                            </a>
 
-                        <a href="/Dashboard/IncidentView"
-                           class="btn btn-light fw-semibold px-3 py-2">
-                            Incident
-                        </a>
+                            <a href="/Dashboard/IncidentView"
+                               class="btn btn-light fw-semibold px-3 py-2">
+                                Incident
+                            </a>
 
-                        <button type="button"
-                                class="btn security-bg fw-semibold px-3 py-2"
-                                id="addTaskButton" v-on:click="showAddTaskForm = true">
-                            Add Task
-                        </button>
+                            <button type="button"
+                                    class="btn security-bg fw-semibold px-3 py-2"
+                                    id="addTaskButton" v-on:click="showAddTaskForm = true">
+                                Add Task
+                            </button>
 
+                        </div>
                     </div>
+                    
 
                     <!-- Right Controls -->
-                    <div class="d-flex flex-wrap align-items-center gap-3 ms-lg-auto mt-3 mt-lg-0">
+                    <div class="col">                    
+                        <div class="d-flex flex-wrap align-items-center gap-3 ms-lg-auto mt-3 mt-lg-0">
 
-                        <!-- Date Picker -->
-                        <div class="input-group bg-white shadow-sm rounded"
-                             style="width: 210px;">
+                            <!-- Date Picker -->
+                            <div class="input-group bg-white shadow-sm rounded"
+                                 style="width: 210px;">
 
-                            <input type="date"
-                                   class="form-control border-0 rounded"                                   
-                                   v-model="selectedDate"
-                                   aria-label="Select date" />
+                                <input type="date"
+                                       class="form-control border-0 rounded"                                   
+                                       v-model="selectedDate"
+                                       aria-label="Select date" />
 
-                        </div>
+                            </div>
 
-                        <!-- Clock-In Toggle -->
-                        <div class="d-flex align-items-center gap-2 bg-white rounded px-3 py-2 shadow-sm"
-                             style="min-width: 265px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
-                                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
-                            </svg>
+                            <!-- Clock-In Toggle -->
+                            <div class="d-flex align-items-center gap-2 bg-white rounded px-3 py-2 shadow-sm"
+                                 style="min-width: 265px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+                                </svg>
 
-                            <span class="fw-semibold text-secondary text-nowrap">
-                                ClockIn:
-                            </span>
+                                <span class="fw-semibold text-secondary text-nowrap">
+                                    ClockIn:
+                                </span>
 
-                            <span id="clockInStatus"
-                                  class="fw-semibold text-nowrap">
-                                OFF
-                            </span>
+                                <span id="clockInStatus"
+                                      class="fw-semibold text-nowrap">
+                                    OFF
+                                </span>
 
-                            <div class="form-check form-switch mb-0 ms-auto">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       role="switch"
-                                       id="clockInSwitch"
-                                       aria-label="Toggle Clock-In"
-                                       style="cursor: pointer;">
+                                <div class="form-check form-switch mb-0 ms-auto">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           role="switch"
+                                           id="clockInSwitch"
+                                           aria-label="Toggle Clock-In"
+                                           style="cursor: pointer;">
+                                </div>
+
                             </div>
 
                         </div>
-
                     </div>
                 </div>
             </div>
