@@ -1,4 +1,4 @@
-﻿Vue.component('app-header', {
+﻿Vue.component('app-header', {                        
     data(){
         return{
             username: window.GuardUserEmail || 'Guard',
