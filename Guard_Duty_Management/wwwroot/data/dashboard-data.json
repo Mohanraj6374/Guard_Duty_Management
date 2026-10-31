@@ -1,0 +1,81 @@
+{
+  "sites": [
+    {
+      "siteId": 1,
+      "siteName": "Site 1"
+    },
+    {
+      "siteId": 2,
+      "siteName": "Site 2"
+    },
+    {
+      "siteId": 3,
+      "siteName": "Site 3"
+    },
+    {
+      "siteId": 4,
+      "siteName": "Site 4"
+    }
+  ],
+
+  "tasks": [
+    {
+      "taskId": 1,
+      "taskName": "Task 1"
+    },
+    {
+      "taskId": 2,
+      "taskName": "Task 2"
+    },
+    {
+      "taskId": 3,
+      "taskName": "Task 3"
+    },
+    {
+      "taskId": 4,
+      "taskName": "Task 4"
+    }
+  ],
+
+  "shifts": [
+    {
+      "shiftId": 1,
+      "shiftTime": "06:00 - 18:00"
+    },
+    {
+      "shiftId": 2,
+      "shiftTime": "18:00 - 06:00"
+    },
+    {
+      "shiftId": 1,
+      "shiftTime": "00:00 - 11:59"
+    },
+    {
+      "shiftId": 1,
+      "shiftTime": "12:00 - 28:59"
+    }  
+
+  ],
+  "guardposts": [
+    {
+      "guardpostId": 1,
+      "guardpostName": "Test Post1"
+    },
+    {
+      "guardpostId": 2,
+      "guardpostName": "Test Post2"
+    },
+    {
+      "guardpostId": 3,
+      "guardpostName": "Test Post3"
+    },
+    {
+      "guardpostId": 4,
+      "guardpostName": "Test Post4"
+    },
+    {
+      "guardpostId": 5,
+      "guardpostName": "Test Post5"
+    }
+  ]
+}
