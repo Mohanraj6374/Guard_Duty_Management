@@ -25,6 +25,8 @@
         otpError:'',
         isVerifyingOtp: false,
 
+        showOtp: false,
+
         otpTimeLeft: 300,
         otpTimer: null
     },
@@ -157,7 +159,7 @@
 
             const otp = Array.from(inputs).map(input=>input.value).join('');
 
-            if(otp.length != 6 || isNaN(otp)){
+            if (otp.length !== 6 || !/^\d{6}$/.test(otp)){
                 this.otpError = "Please enter the complete 6-digit OTP.";
                 return;
             }

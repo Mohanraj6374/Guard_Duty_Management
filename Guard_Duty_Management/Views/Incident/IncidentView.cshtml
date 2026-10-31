@@ -1,1 +1,134 @@
-﻿
+﻿<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/css_/dashboardview.css" rel="stylesheet"/>
+        <link href="~/css_/header.css" rel="stylesheet"/>
+    </head>
+
+    <body>
+        @Html.AntiForgeryToken()
+
+        <div class="container-fluid bg-main p-0" id="IncidentView" v-cloak>
+            <app-header></app-header>
+            <!-- NAVIGATION / ACTION BAR -->
+            <div class="container-fluid nav-controls py-2">
+                <div class="row align-items-center g-1">
+                    <!-- Left Actions -->
+                    <div class="col-lg-4 col-md-6 col-12 left-nav-controls px-2 py-2">
+                        <div class="d-flex flex-nowrap align-items-center justify-content-md-start justify-content-between gap-1">
+                            <div class="d-flex flex-nowrap align-items-center gap-1">
+                                <a href="/Dashboard/DashboardView"
+                                   class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "DashboardView" ? "active-tab" : "")">
+
+                                    <div class="d-flex align-items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard-minus" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
+                                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                                        </svg>
+                                        Task
+                                    </div>
+                                </a>
+
+                                <a href="/Incident/IncidentView"
+                                   class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "IncidentView" ? "active-tab" : "")">
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24"
+                                             fill="none"
+                                             stroke="currentColor"
+                                             stroke-width="1.8"
+                                             stroke-linecap="round"
+                                             stroke-linejoin="round">
+
+                                            <rect x="4" y="2.5" width="16" height="19" rx="2" />
+                                            <path d="M8 8h8M8 12h8M8 16h5" />
+
+                                        </svg>
+
+                                        Incident
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Right Controls -->
+                    <div class="col-lg-8 col-md-6 col-12">
+                        <div class="row align-items-center justify-content-md-end justify-content-center">
+                            <div class="col-lg-6 col-12">
+                                <div class="d-flex flex-sm-nowrap flex-wrap align-items-center gap-3 ms-lg-auto mt-3 mt-md-0 mb-3 mb-md-0 justify-content-end">
+
+                                    <!-- Date Picker -->
+                                    <div class="input-group d-flex align-items-center justify-content-center gap-2 bg-white shadow-sm rounded px-3 py-2">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="p-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#C8AD6B" class="bi bi-calendar" viewBox="0 0 16 16">
+                                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <input type="date"
+                                               class="border-0 form-control p-0 rounded fw-semibold"
+                                               v-model="selectedDate"
+                                               aria-label="Select date" />
+                                    </div>
+
+                                    <!-- Clock-In Toggle -->
+                                    <div class="d-flex align-items-center gap-2 bg-white rounded px-3 py-2 shadow-sm w-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                                            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+                                        </svg>
+
+                                        <span class="fw-semibold text-secondary text-nowrap">
+                                            ClockIn:
+                                        </span>
+
+                                        <span id="clockInStatus"
+                                              class="fw-semibold text-nowrap">
+                                            {{clockInStatus ? 'ON':'OFF'}}
+                                        </span>
+
+                                        <div class="form-check form-switch mb-0 ms-auto">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   role="switch"
+                                                   id="clockInSwitch"
+                                                   v-model="clockInSwitch"
+                                                   v-on:change="handleClockInToggle"
+                                                   aria-label="Toggle Clock-In"
+                                                   style="cursor: pointer;">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+        <script src="~/lib/vue-js/vue@2.7.16.js"></script>
+        <script src="~/lib/axios/axios@1.12.2.js"></script>
+        <script src="~/lib/linq-js/linq.js4.0.3.js"></script>
+        <script src="~/lib/jquery/jquery-4.0.0.min.js"></script>
+        <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/header.js"></script>
+        <script src="~/js/incident-components/IncidentView.js"></script>
+
+    </body>
+
+</html>
