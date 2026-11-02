@@ -19,7 +19,9 @@
         showOtpWindow:false,
         isCheckingPhone:false,
 
-        lastCheckedPhone:'',
+        lastCheckedPhone: '',
+
+        rememberMe:false,
 
         isSendingOtp: false,
         otpError:'',
@@ -169,7 +171,8 @@
                 const response = await axios.post('/Login/VerifyOtp', {
                     countryCode: String(this.selectedCountryCode).replace('+',''),
                     phoneNumber: this.phone.trim(),
-                    otp: otp
+                    otp: otp,
+                    remember: this.rememberMe
                 });
 
                 const result = response.data;

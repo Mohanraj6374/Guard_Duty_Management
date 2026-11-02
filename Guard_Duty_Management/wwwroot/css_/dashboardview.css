@@ -109,12 +109,12 @@
     color: #979797;
 }
 
-.security-bg {
+.security-btn {
     background: #D93643;
     color: #FFFFFF;
 }
 
-    .security-bg:hover {
+    .security-btn:hover {
         background: #9c2932;
         color: #FFFFFF;
     }
@@ -214,13 +214,18 @@
         height: 36px;
     }
 
-
-@media (max-width: 576px){
+.date-picker:not(:valid){
+    color: #939393ff;
+}
+.date-picker:valid {
+    color: #212529;
+}
+@media (max-width: 576px) {
     .left-nav-controls {
         border-bottom: #c3d7ffff !important; /* equivalent to .shadow */
     }
+
     .nav-controls {
-        
     }
 }
 

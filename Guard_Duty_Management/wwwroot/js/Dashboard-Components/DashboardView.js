@@ -58,7 +58,8 @@ var vm = new Vue({
 
                 this.siteOptions = data.sites.map(site => ({
                     id: site.siteId,
-                    text: site.siteName
+                    text: site.siteName,
+                    address: site.siteAddress
                 }));
 
                 this.taskOptions = data.tasks.map(task => ({
@@ -102,6 +103,7 @@ var vm = new Vue({
                 assignmentId: Date.now(),
                 siteId: this.addTask.siteId,
                 siteName: selectedSite.text,
+                siteAddress: selectedSite.address,
 
                 taskId: this.addTask.taskId,
                 taskName: selectedTask.text,
@@ -169,14 +171,6 @@ var vm = new Vue({
             this.showAddTaskForm = false;
 
         }
-    },
-    mounted() {
-
-        // $('.select2-dropdown').select2({
-        //     placeholder: "Select an option",
-        //     allowClear: true,
-        //     width: '100%'
-        // });
-
     }
+    
 });

@@ -170,14 +170,14 @@
 }
 
 .select2-container--default .select2-selection--single {
-  background-color: #fff;
-  border: 1px solid #aaa;
-  border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #DEE2E6;
+    border-radius: 0.375rem;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   color: #444;
-  line-height: 28px;
+  line-height: 37px;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__clear {

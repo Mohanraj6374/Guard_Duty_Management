@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Guard_Duty_Management.Controllers
 {
@@ -19,8 +20,16 @@ namespace Guard_Duty_Management.Controllers
             _httpClient.DefaultRequestHeaders.Add("Token", "997e3faeb3cb8cf58ae7330616f8e4d02b11361bc892b5de5e14a6d9e7e16390");
 
         }
+
+        [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity?.IsAuthenticated==true)
+            {
+
+                return RedirectToAction(
+                    "DashboardView", "Dashboard");
+            }
             return View("Login");
         }
 
@@ -199,7 +208,20 @@ namespace Guard_Duty_Management.Controllers
 
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent=request.RememberMe,
+                    AllowRefresh = true
+                };
+                if (request.RememberMe)
+                {
+                    authProperties.ExpiresUtc = DateTimeOffset.UtcNow.AddDays(2);
+                }
+                else
+                {
+                    authProperties.ExpiresUtc = DateTimeOffset.UtcNow.AddHours(4);
+                }
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
 
                 return Ok(new
                 {
@@ -222,6 +244,7 @@ namespace Guard_Duty_Management.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize] 
         public async Task<IActionResult> Logout()
         {
             try
@@ -253,6 +276,7 @@ namespace Guard_Duty_Management.Controllers
             public string CountryCode { get; set; } = string.Empty;
             public string PhoneNumber { get; set; } = string.Empty;
             public string Otp { get; set; } = string.Empty;
+            public bool RememberMe { get; set; }
         }
     }
 }

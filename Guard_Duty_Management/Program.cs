@@ -10,9 +10,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.LoginPath = "/Login/Login";
+        options.LogoutPath = "/Login/Login";
         options.AccessDeniedPath = "/Login/AccessDeniedPath";
+
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Lax;
         options.Cookie.Name = "GuardDutyAuth";
-        options.ExpireTimeSpan = TimeSpan.FromHours(4);
+        options.ExpireTimeSpan = TimeSpan.FromDays(3);
         options.SlidingExpiration=true;
     });
 
