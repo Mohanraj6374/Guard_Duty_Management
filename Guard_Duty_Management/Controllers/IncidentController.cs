@@ -45,7 +45,7 @@ namespace Guard_Duty_Management.Controllers
             try
             {
                 // Read the token from configuration / User Secrets
-                var token = _configuration["IncidentApi:Token"];
+                var token = "c0262e33492a4d389a8e20549eeebcd0";
 
                 if (string.IsNullOrWhiteSpace(token))
                 {
@@ -186,7 +186,7 @@ namespace Guard_Duty_Management.Controllers
                 }
 
                 // 2. Get the SAS Token API URL from configuration
-                var sasApiUrl = _configuration["IncidentApi:SasTokenUrl"];
+                 var sasApiUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/GetSASToken_R";
 
                 if (string.IsNullOrWhiteSpace(sasApiUrl))
                 {
@@ -198,8 +198,8 @@ namespace Guard_Duty_Management.Controllers
                 // 3. Call the SAS Token API
                 //using var sasResponse = await client.GetAsync(sasApiUrl);
                 //var sasJson = await sasResponse.Content.ReadAsStringAsync();
-                var token = _configuration["IncidentApi:Token"];
-
+                //var token = _configuration["IncidentApi:Token"];
+                var token = "c0262e33492a4d389a8e20549eeebcd0";
                 using var sasRequest = new HttpRequestMessage(
                     HttpMethod.Get,
                     sasApiUrl);
@@ -219,8 +219,7 @@ namespace Guard_Duty_Management.Controllers
 
                 var sasRoot = JsonNode.Parse(sasJson);
 
-                var sasTokenUrl =
-                    sasRoot?["data"]?["sasToken"]?.GetValue<string>();
+                var sasTokenUrl = sasRoot?["data"]?["sasToken"]?.GetValue<string>();
 
                 if (string.IsNullOrWhiteSpace(sasTokenUrl) ||
                     !Uri.TryCreate(sasTokenUrl, UriKind.Absolute, out var sasUri))
