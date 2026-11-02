@@ -37,8 +37,8 @@
                                     </div>
                                 </a>
 
-                                <a href="/Incident/IncidentView"
-                                   class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "IncidentView" ? "active-tab" : "")">
+                                <a href="/Incident/IncidentManagementView" target="_blank"
+                               class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "IncidentManagementView" ? "active-tab" : "")">
                                     <div class="d-flex align-items-center gap-2">
 
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +189,7 @@
                                     </div>
                                     
                                     <div class="mb-2">
-                                        <label class="form-label">Site</label>
+                                        <label class="form-label">Site<span class="text-danger">*</span></label>
 
                                         <select2 v-model="addTask.siteId"
                                                  :options="siteOptions"
@@ -197,7 +197,7 @@
                                         </select2>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label">Task</label>
+                                        <label class="form-label">Task<span class="text-danger">*</span></label>
 
                                         <select2 v-model="addTask.taskId"
                                                  :options="taskOptions"
@@ -209,18 +209,27 @@
                                         <label class="form-label">Date<span class="text-danger">*</span></label>
                                         <input type="date" v-model="addTask.date" class="form-control" required />
                                     </div>
-                                    <div class="mb-2">
+                                    @* <div class="mb-2">
                                         <label class="form-label">Start Time<span class="text-danger">*</span></label>
                                         <input type="time" v-model="addTask.startTime" class="form-control" required/>
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-label">End Time<span class="text-danger">*</span></label>
                                         <input type="time" v-model="addTask.endTime" class="form-control" required />
+                                    </div> *@
+                                    <div class="mb-2 row row-cols-2 align-items-center">
+                                        <div class="col d-flex flex-column align-items-start">                                            
+                                            <label class="form-label">Start Time<span class="text-danger">*</span></label>
+                                            <input type="time" v-model="addTask.startTime" class="form-control" required />
+                                        </div>
+                                        <div class="col d-flex flex-column align-items-start">
+                                            <label class="form-label">End Time<span class="text-danger">*</span></label>
+                                            <input type="time" v-model="addTask.endTime" class="form-control" required />
+                                        </div>
                                     </div>
-
-                                    <div class="mt-3">
+                                    @* <div class="mt-3">
                                         <pre>{{ addTask }}</pre>
-                                    </div> 
+                                    </div>  *@
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
                                         <button type="button" class="btn security-bg" v-on:click="assignTask">Add Task</button>

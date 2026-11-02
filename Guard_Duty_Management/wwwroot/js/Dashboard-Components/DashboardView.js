@@ -24,7 +24,7 @@ var vm = new Vue({
                 taskId: '',
                 date: '',
                 startTime: '',
-                endTime: ''
+                endTime: ''                
             },
 
             siteOptions: [],
