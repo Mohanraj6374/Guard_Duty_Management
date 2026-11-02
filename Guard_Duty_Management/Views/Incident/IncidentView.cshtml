@@ -1,1 +1,514 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Incident Details";
+}
+<html>
+    <head>
+        @* <link rel="stylesheet" href="~/css/IncidentView.css" /> *@
+
+        <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
+    <link rel="stylesheet " href="~/css_/header.css" />
+   
+         
+        <style>
+        
+/* ================================
+   GENERAL PAGE DESIGN
+================================ */
+
+[v-cloak] {
+    display: none;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: #e9edf1;
+    color: #333333;
+    font-family: Arial, sans-serif;
+}
+
+.incident-details-page {
+    width: 90%;
+    max-width: 1200px;
+    margin: 25px auto;
+    padding: 25px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* ================================
+   REPORT HEADING
+================================ */
+
+.report-heading {
+    text-align: center;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+}
+
+    .report-heading h3 {
+        margin: 0 0 5px;
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    .report-heading p {
+        margin: 3px 0;
+        font-size: 13px;
+    }
+
+/* ================================
+   MAP
+================================ */
+
+.incident-map {
+    width: 100%;
+    height: 280px;
+    margin-bottom: 15px;
+}
+
+    .incident-map iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+/* ================================
+   SECTION HEADING
+================================ */
+
+.section-heading {
+    margin: 15px 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ================================
+   INCIDENT DETAILS GRID
+================================ */
+
+.incident-grid {
+    display: grid;
+    /*
+       Four columns:
+       Label | Value | Label | Value
+    */
+    grid-template-columns: 15% 35% 15% 35%;
+    width: 100%;
+    border-top: 1px solid #e5e7eb;
+    border-left: 1px solid #e5e7eb;
+}
+
+/* All grid cells */
+
+.grid-label,
+.grid-value {
+    min-width: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Label cells */
+
+.grid-label {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+/* Value cells */
+
+.grid-value {
+    background-color: #ffffff;
+    font-weight: 400;
+}
+
+/* FULL-WIDTH ROWS*/
+
+/*
+   The full-label occupies column 1.
+
+   The full-value occupies columns 2, 3 and 4.
+
+   This prevents narrative and image content
+   from appearing in the wrong columns.
+*/
+
+.grid-label.full-label {
+    grid-column: 1;
+}
+
+.grid-value.full-value {
+    grid-column: 2 / 5;
+    display: block;
+    min-width: 0;
+    width: 100%;
+}
+
+/* Narrative content */
+
+.full-value {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/*  ATTENDANCE CHECKBOXES */
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+    .checkbox-list label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 400;
+    }
+
+    .checkbox-list input {
+        margin: 0;
+    }
+
+/* INCIDENT IMAGES */
+
+.incident-images {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+    .incident-images img {
+        display: block;
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border: 1px solid #e5e7eb;
+        border-radius: 5px;
+    }
+
+/* ================================
+   WHO / WHAT / WHEN / WHERE / WHY
+================================ */
+
+.incident-summary {
+    width: 100%;
+    margin-top: 30px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    border-top: 1px solid #555555;
+}
+
+.summary-item {
+    margin-bottom: 15px;
+}
+
+    .summary-item strong {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .summary-item p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+@@media screen and (max-width: 768px) {
+
+    .incident-details-page {
+        width: 100%;
+        margin: 0;
+        padding: 12px;
+        border-radius: 0;
+    }
+
+    .incident-map {
+        height: 220px;
+    }
+
+    .incident-grid {
+        /*
+           Keep four columns on small screens.
+           The labels and values remain aligned.
+        */
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+
+    .grid-label,
+    .grid-value {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .incident-images img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .incident-summary {
+        padding: 12px;
+    }
+}
+
+    </style>
+    </head>
+   
+    <body>
+
+        <div id="IncidentDetailsApp"
+     class="incident-details-page"
+     v-cloak>
+
+     <app-header></app-header>
+    <!-- Report Heading -->
+    <div class="report-heading">
+        <h3>{{ incident.reportTitle }}</h3>
+        <p>{{ incident.reportReference }}</p>
+        <p>{{ incident.reportDate }}</p>
+    </div>
+
+    <!-- Map Section -->
+    <div class="incident-map">
+        <iframe title="Incident Location Map"
+                :src="mapUrl"
+                loading="lazy">
+        </iframe>
+    </div>
+
+    <h4 class="section-heading">Incident Details</h4>
+
+    <!-- Incident Details Grid -->
+    <div class="incident-grid">
+
+        <!-- ID and Status -->
+        <div class="grid-label">Id</div>
+        <div class="grid-value">{{ incident.id }}</div>
+
+        <div class="grid-label">Status</div>
+        <div class="grid-value">{{ incident.status }}</div>
+
+        <!-- Client and Region -->
+        <div class="grid-label">Client</div>
+        <div class="grid-value">{{ incident.client }}</div>
+
+        <div class="grid-label">Region</div>
+        <div class="grid-value">{{ incident.region }}</div>
+
+        <!-- Branch and Raised By -->
+        <div class="grid-label">Branch</div>
+        <div class="grid-value">{{ incident.branch }}</div>
+
+        <div class="grid-label">Raised By</div>
+        <div class="grid-value">{{ incident.raisedBy }}</div>
+
+        <!-- Employee and Date -->
+        <div class="grid-label">Employee No</div>
+        <div class="grid-value">{{ incident.employeeNo }}</div>
+
+        <div class="grid-label">Date and Time</div>
+        <div class="grid-value">{{ incident.dateTime }}</div>
+
+        <!-- GPS and Site -->
+        <div class="grid-label">Open GPS Location</div>
+        <div class="grid-value">{{ incident.openGpsLocation }}</div>
+
+        <div class="grid-label">Site Name</div>
+        <div class="grid-value">{{ incident.siteName }}</div>
+
+        <!-- Location and Type -->
+        <div class="grid-label">Location Name</div>
+        <div class="grid-value">{{ incident.locationName }}</div>
+
+        <div class="grid-label">Type</div>
+        <div class="grid-value">{{ incident.type }}</div>
+
+        <!-- Category and Subcategory -->
+        <div class="grid-label">Category</div>
+        <div class="grid-value">{{ incident.category }}</div>
+
+        <div class="grid-label">Subcategory</div>
+        <div class="grid-value">{{ incident.subcategory }}</div>
+
+        <!-- Conducted On and Assigned To -->
+        <div class="grid-label">Conducted On</div>
+        <div class="grid-value">{{ incident.conductedOn }}</div>
+
+        <div class="grid-label">Assigned To</div>
+        <div class="grid-value">{{ incident.assignedTo }}</div>
+
+        <!-- Attendance -->
+        <div class="grid-label">
+            Did the following attend the site?
+        </div>
+
+        <div class="grid-value">
+            <div class="checkbox-list">
+                <label v-for="attendee in incident.attendees"
+                       :key="attendee.name">
+                    <input type="checkbox"
+                           :checked="attendee.checked"
+                           disabled />
+                    {{ attendee.name }}
+                </label>
+            </div>
+        </div>
+
+        <!-- Role and Guard Post -->
+        <div class="grid-label">Role</div>
+        <div class="grid-value">{{ incident.role }}</div>
+
+        <div class="grid-label">Guard Post</div>
+        <div class="grid-value">{{ incident.guardPost }}</div>
+
+        <!-- Managers and OPS Post -->
+        <div class="grid-label">Assigned Managers</div>
+        <div class="grid-value">{{ incident.assignedManagers }}</div>
+
+        <div class="grid-label">OPS Post</div>
+        <div class="grid-value">{{ incident.opsPost }}</div>
+
+        <!-- Emails and Closed GPS -->
+        <div class="grid-label">Emails</div>
+        <div class="grid-value">{{ incident.emails }}</div>
+
+        <div class="grid-label">Closed GPS Location</div>
+        <div class="grid-value">{{ incident.closedGpsLocation }}</div>
+
+        <!-- Closed Date and Closed By -->
+        <div class="grid-label">Closed Date and Time</div>
+        <div class="grid-value">{{ incident.closedDateTime }}</div>
+
+        <div class="grid-label">Closed By</div>
+        <div class="grid-value">{{ incident.closedBy }}</div>
+
+        <!-- FULL-WIDTH ROWS -->
+        <!-- Each row has 1 label + 1 value spanning 3 columns -->
+
+        <div class="grid-label full-label">
+            Other Location Remarks
+        </div>
+        <div class="grid-value full-value">
+             {{ formatNarrative(incident.otherLocationRemarks) }}
+        </div>
+
+        <div class="grid-label full-label">
+            Open Narrative
+        </div>
+        <div class="grid-value full-value">
+            {{ formatNarrative(incident.openNarrative)}}
+        </div>
+
+        <div class="grid-label full-label">
+            Closed Narrative
+        </div>
+        <div class="grid-value full-value">
+             {{ formatNarrative(incident.closedNarrative) }}
+        </div>
+
+        <!-- Open Images -->
+        <div class="grid-label full-label">
+            Open Images
+        </div>
+
+        <div class="grid-value full-value">
+            <div class="incident-images">
+                <img v-for="(image, index) in incident.openImages"
+                     :key="'open-' + index"
+                     :src="image"
+                     :alt="'Incident image ' + (index + 1)" />
+            </div>
+
+            <span v-if="incident.openImages.length === 0">--</span>
+        </div>
+
+        <!-- Closed Images -->
+        <div class="grid-label full-label">
+            Closed Images
+        </div>
+
+        <div class="grid-value full-value">
+            <div class="incident-images">
+                <img v-for="(image, index) in incident.closedImages"
+                     :key="'closed-' + index"
+                     :src="image"
+                     :alt="'Closed incident image ' + (index + 1)" />
+            </div>
+
+            <span v-if="incident.closedImages.length === 0">--</span>
+        </div>
+
+    </div>
+
+    <!-- Who / What / When / Where / Why -->
+    <div class="incident-summary">
+
+        <div class="summary-item">
+            <strong>Who:</strong>
+            <p>{{ incident.summary.who }}</p>
+        </div>
+
+        <div class="summary-item">
+            <strong>What:</strong>
+            <p>{{ formatNarrative(incident.summary.what) }}</p>
+        </div>
+
+        <div class="summary-item">
+            <strong>When:</strong>
+            <p>{{ incident.summary.when }}</p>
+        </div>
+
+        <div class="summary-item">
+            <strong>Where:</strong>
+            <p>{{ incident.summary.where }}</p>
+        </div>
+
+        <div class="summary-item">
+            <strong>Why:</strong>
+            <p>{{ incident.summary.why }}</p>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Vue 2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+@* Header componets *@
+<script src="~/js/header.js"></script>
+
+<!-- Incident Details JavaScript -->
+<script src="~/js/Incident-Components/IncidentView.js"></script>
+    </body>
+
+</html>
+
+
+
+

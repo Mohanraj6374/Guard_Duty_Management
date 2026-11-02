@@ -1,0 +1,1440 @@
+﻿@{
+    ViewData["Title"] = "Incident Management";
+}
+
+<html>
+<head>
+    @* <link rel="stylesheet" href="~/css/Incident.css" />
+    <link rel="stylesheet" href="~/css/IncidentPagination.css" />
+    <link rel="stylesheet" href="~/css/IncidentTableDesign.css" />
+    <link rel="stylesheet" href="~/css/IncidentDashboard.css?v=3" /> *@
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+
+    <!-- Date Range Picker CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
+    <link rel="stylesheet " href="~/css_/header.css" />
+   
+    
+    <style>
+
+            /* =========================================
+               INCIDENT DASHBOARD - FILTER DESIGN
+            ========================================= */
+
+            #IncidentApp .dashboard-filters {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 18px 22px;
+                align-items: end;
+                width: 100%;
+                margin: 0 0 20px;
+                box-sizing: border-box;
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+            }
+
+            #IncidentApp .filter-group {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                min-width: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+
+            #IncidentApp .filter-group label {
+                margin-bottom: 7px;
+                font-size: 14px;
+                font-weight: 600;
+                color: #475569;
+            }
+
+            #IncidentApp .filter-group input,
+            #IncidentApp .filter-group select {
+                width: 100% !important;
+                max-width: 100%;
+                height: 39px;
+                padding: 7px 10px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                background: #ffffff;
+                color: #334155;
+                font-size: 14px;
+                box-sizing: border-box;
+            }
+
+            /* Select2 */
+
+            #IncidentApp .dashboard-filters .select2-container {
+                width: 100% !important;
+            }
+
+            #IncidentApp .dashboard-filters .select2-selection {
+                min-height: 39px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+            }
+
+            #IncidentApp .dashboard-filters .select2-selection__rendered {
+                line-height: 37px;
+            }
+
+            #IncidentApp .dashboard-filters .select2-selection__arrow {
+                height: 37px;
+            }
+
+            #IncidentApp .subcategory-filter {
+                grid-column: auto !important;
+                grid-row: auto !important;
+            }
+
+            /* Add Incident Button */
+
+            #IncidentApp .add-incident-group {
+                grid-column: 1 / -1 !important;
+                grid-row: auto !important;
+                justify-self: end;
+                align-items: flex-end;
+            }
+
+            #IncidentApp .add-incident-group .add-button {
+                height: 39px;
+                padding: 0 18px;
+                border: none;
+                border-radius: 6px;
+                background: #609fa0;
+                color: #ffffff;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            #IncidentApp .add-incident-group .add-button:hover {
+                background: #4c8586;
+            }
+
+
+            /* =========================================
+               CHART SECTION
+            ========================================= */
+
+             #IncidentApp .charts-container {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 18px;
+                width: 100%;
+                margin: 8px 0 12px;
+            }
+
+            #IncidentApp .chart-panel {
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+                height: 350px;
+                padding: 15px;
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                box-sizing: border-box;
+            }
+
+            #IncidentApp .chart-panel h3 {
+                margin: 0 0 12px;
+                text-align: left;
+                font-size: 16px;
+                font-weight: 600;
+                color: #334155;
+            }
+
+            #IncidentApp .chart-content {
+                position: relative;
+                width: 100%;
+                height: 290px;
+                min-width: 0;
+            }
+
+            #IncidentApp .chart-canvas {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                min-width: 0;
+            }
+
+            #IncidentApp .chart-canvas canvas {
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+
+            /* =========================================
+               EMPTY CHART MESSAGE
+            ========================================= */
+
+            #IncidentApp .chart-empty-state {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                min-height: 280px;
+                color: #64748b;
+                font-size: 18px;
+                text-align: center;
+            }
+
+
+            /* =========================================
+               TABLE AND TOOLBAR SPACING
+            ========================================= */
+
+            #IncidentApp .incident-toolbar {
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+
+            #IncidentApp .table-container {
+                width: 100%;
+                overflow-x: auto;
+                border: 1px solid #e2e8f0;
+                border-radius: 7px;
+                background: #ffffff;
+            }
+
+
+            /* =========================================
+               RESPONSIVE DESIGN
+            ========================================= */
+
+            @@media screen and (max-width: 900px) {
+
+                #IncidentApp .dashboard-filters {
+                    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                }
+
+                #IncidentApp .charts-container {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+
+            @@media screen and (max-width: 600px) {
+
+                #IncidentApp .dashboard-filters {
+                    grid-template-columns: 1fr !important;
+                }
+
+                #IncidentApp .charts-container {
+                    grid-template-columns: 1fr;
+                }
+
+                #IncidentApp .chart-panel {
+                    height: 320px;
+                }
+
+                #IncidentApp .add-incident-group {
+                    grid-column: 1 !important;
+                }
+            }
+
+            
+            /* =========================================
+               HEADER AND INCIDENT MANAGEMENT ALIGNMENT
+            ========================================= */
+
+            /* Main dashboard container */
+            #IncidentApp {
+                width: 100%;
+                min-height: 100vh;
+                box-sizing: border-box;
+            }
+
+            /* Header component */
+            #IncidentApp app-header {
+                display: block;
+                width: 100%;
+                margin: 0 0 10px 0;
+                padding: 0;
+            }
+
+            /* Incident Management heading */
+            #IncidentApp .dashboard-heading {
+                width: 100%;
+                margin: 0 0 12px 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            #IncidentApp .dashboard-heading h3 {
+                margin: 0;
+                padding: 0;
+                font-size: 27px;
+                font-weight: 600;
+                line-height: 1.3;
+                color: #343a40;
+                text-align: left;
+            }
+
+            /* Filter card alignment */
+            #IncidentApp .dashboard-filters {
+                margin-top: 0;
+                margin-bottom: 20px;
+                padding:10px 20px;
+            }
+
+            /* Incident Pagination  */
+
+            
+                /* Pagination Footer */
+                #IncidentApp .incident-pagination {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    justify-content: space-between !important;
+                    align-items: center !important;
+                    width: 100% !important;
+                    min-height: 60px;
+                    padding: 12px 8px;
+                    margin: 0;
+                    box-sizing: border-box;
+                    background-color: #f4f5f9;
+                    color: #788ba7;
+                    font-family: Arial, sans-serif;
+                    font-size: 18px;
+                }
+
+                /* Total Records - Left */
+                #IncidentApp .total-records {
+                    flex: 0 0 auto;
+                    white-space: nowrap;
+                    color: #788ba7;
+                    font-size: 18px;
+                }
+
+                /* Dropdown and Page Number - Right */
+                #IncidentApp .pagination-controls {
+                    display: flex !important;
+                    flex-direction: row !important;
+                    align-items: center !important;
+                    justify-content: flex-end !important;
+                    gap: 24px;
+                    margin-left: auto !important;
+                    white-space: nowrap;
+                    color: #788ba7;
+                    font-size: 18px;
+                }
+
+                    /* Page Size Dropdown */
+                    #IncidentApp .pagination-controls select {
+                        width: 68px;
+                        min-width: 68px;
+                        height: 30px;
+                        padding: 3px 5px;
+                        border: 1px solid #999;
+                        border-radius: 2px;
+                        background-color: #fff;
+                        color: #222;
+                        font-size: 16px;
+                        cursor: pointer;
+                    }
+
+            /* Responsive Layout */
+            @@media screen and (max-width: 600px) {
+                #IncidentApp .incident-pagination {
+                    flex-wrap: wrap;
+                    gap: 12px;
+                }
+
+                #IncidentApp .total-records,
+                #IncidentApp .pagination-controls {
+                    font-size: 15px;
+                }
+
+                #IncidentApp .pagination-controls {
+                    gap: 12px;
+                }
+            }
+
+
+
+            
+            /* ==========================================
+               INCIDENT TABLE PAGE
+            ========================================== */
+
+            .incident-app {
+                width: 100%;
+                min-height: 100vh;
+                box-sizing: border-box;
+                background: #f3f4f8;
+                font-family: Arial, Helvetica, sans-serif;
+                color: #444;
+                overflow-x: hidden;
+            }
+
+            /* ==========================================
+               TOP TOOLBAR
+            ========================================== */
+
+            .incident-toolbar {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                width: 100%;
+                min-height: 52px;
+                margin-bottom: 12px;
+                padding: 0 8px;
+                box-sizing: border-box;
+            }
+
+            .toolbar-right {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 20px;
+            }
+
+            .toolbar-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                padding: 6px 4px;
+                border: none;
+                background: transparent;
+                color: #788ba7;
+                font-size: 13px;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+                .toolbar-button:hover {
+                    color: #365f9d;
+                }
+
+            .search-icon {
+                color: #ff9800;
+                font-size: 21px;
+            }
+
+            .download-icon {
+                font-size: 17px;
+            }
+
+            .fullscreen-button {
+                font-size: 21px;
+            }
+
+            /* Search input */
+
+            .incident-search {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+                .incident-search input {
+                    width: 220px;
+                    padding: 7px 10px;
+                    border: 1px solid #d5dbe5;
+                    border-radius: 3px;
+                    outline: none;
+                }
+
+                    .incident-search input:focus {
+                        border-color: #829cc2;
+                    }
+
+            .clear-search {
+                border: none;
+                background: transparent;
+                color: #777;
+                font-size: 20px;
+                cursor: pointer;
+            }
+
+            /* ==========================================
+               TABLE CONTAINER AND HORIZONTAL SCROLL
+            ========================================== */
+
+            .table-container {
+                display: block;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto !important;
+                overflow-y: hidden;
+                background: #fff;
+                border: 1px solid #e0e4eb;
+                border-radius: 6px 6px 0 0;
+                box-sizing: border-box;
+            }
+
+                /* Always make the table wider than the container */
+
+                .table-container .incident-table {
+                    width: 1900px !important;
+                    min-width: 1900px !important;
+                    table-layout: fixed;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    background: #fff;
+                    font-size: 12px;
+                }
+
+                /* Horizontal scrollbar - Chrome and Edge */
+
+                .table-container::-webkit-scrollbar {
+                    height: 13px;
+                    width: 13px;
+                }
+
+                .table-container::-webkit-scrollbar-track {
+                    background: #e5e5e5;
+                    border-radius: 8px;
+                }
+
+                .table-container::-webkit-scrollbar-thumb {
+                    background: #505050;
+                    border: 1px solid #d0d0d0;
+                    border-radius: 8px;
+                }
+
+                    .table-container::-webkit-scrollbar-thumb:hover {
+                        background: #404040;
+                    }
+
+            /* Firefox scrollbar */
+
+            .table-container {
+                scrollbar-width: auto;
+                scrollbar-color: #505050 #e5e5e5;
+            }
+
+            /* ==========================================
+               TABLE HEADERS
+            ========================================== */
+
+            .incident-table thead th {
+                height: 36px;
+                padding: 8px;
+                border-right: 1px solid #e2e6ed;
+                border-bottom: 1px solid #dce1e9;
+                background: #f0f2f7;
+                color: #788ba7;
+                text-align: left;
+                vertical-align: middle;
+                font-weight: 400;
+                white-space: nowrap;
+            }
+
+            .incident-table th.sortable {
+                cursor: pointer;
+                user-select: none;
+            }
+
+                .incident-table th.sortable:hover {
+                    background: #e6eaf2;
+                }
+
+            .sort-icon {
+                margin-left: 2px;
+                color: #788ba7;
+                font-size: 11px;
+            }
+
+            .incident-table .type-incident-column {
+                white-space: nowrap;
+            }
+
+            .incident-table .header-text {
+                display: inline;
+            }
+
+            /* ==========================================
+               TABLE BODY
+            ========================================== */
+
+            .incident-table tbody td {
+                height: 54px;
+                padding: 9px 8px;
+                border-right: 1px solid #e2e6ed;
+                border-bottom: 1px solid #e2e6ed;
+                color: #454545;
+                text-align: left;
+                vertical-align: top;
+                line-height: 1.5;
+                overflow-wrap: anywhere;
+                word-break: normal;
+            }
+
+            .incident-table th:last-child,
+            .incident-table td:last-child {
+                border-right: none;
+            }
+
+            /* Alternate row colors */
+
+            .incident-table tbody tr:nth-child(even) {
+                background: #f7f9fc;
+            }
+
+            .incident-table tbody tr:nth-child(odd) {
+                background: #fff;
+            }
+
+            .incident-table tbody tr:hover {
+                background: #eef3f9;
+            }
+
+            /* No records */
+
+            .incident-table .no-records {
+                padding: 24px;
+                text-align: center;
+                color: #788ba7;
+            }
+
+            /* ==========================================
+               ACTION BUTTON
+            ========================================== */
+
+            .incident-table .action-cell {
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .view-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 22px;
+                height: 22px;
+                padding: 0;
+                border: none;
+                background: transparent;
+                color: #3977ff;
+                font-size: 20px;
+                cursor: pointer;
+            }
+
+                .view-button:hover {
+                    color: #174fbd;
+                }
+
+            /* ==========================================
+               PAGINATION FOOTER
+            ========================================== */
+
+            .incident-pagination {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                min-height: 46px;
+                gap: 12px;
+                padding: 8px 4px;
+                margin: 0;
+                box-sizing: border-box;
+                background: #f3f4f8;
+                color: #788ba7;
+                font-size: 17px;
+            }
+
+            .total-records {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                color: #788ba7;
+            }
+
+            .pagination-controls {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 24px;
+                margin-left: auto;
+                white-space: nowrap;
+                color: #788ba7;
+            }
+
+                .pagination-controls select {
+                    width: 68px;
+                    min-width: 68px;
+                    height: 30px;
+                    padding: 3px 5px;
+                    border: 1px solid #999;
+                    border-radius: 2px;
+                    background: #fff;
+                    color: #222;
+                    font-size: 15px;
+                    cursor: pointer;
+                }
+
+
+
+                /* Pagination navigation buttons */
+
+                .pagination-controls .page-button {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 22px;
+                    height: 28px;
+                    padding: 0 3px;
+                    border: none;
+                    background: transparent;
+                    color: #788ba7;
+                    font-size: 23px;
+                    line-height: 1;
+                    cursor: pointer;
+                }
+
+                    .pagination-controls .page-button:hover:not(:disabled) {
+                        color: #285da8;
+                    }
+
+                    .pagination-controls .page-button:disabled {
+                        color: #c5cad2;
+                        cursor: not-allowed;
+                        opacity: 0.65;
+                    }
+
+
+            /* ==========================================
+               RESPONSIVE DESIGN
+            ========================================== */
+
+            @@media screen and (max-width: 768px) {
+                .incident-toolbar {
+                    padding: 0 4px;
+                }
+
+                .toolbar-right {
+                    gap: 12px;
+                }
+
+                .incident-pagination {
+                    flex-wrap: wrap;
+                    font-size: 14px;
+                }
+
+                .total-records {
+                    font-size: 14px;
+                }
+
+                .pagination-controls {
+                    gap: 12px;
+                    font-size: 14px;
+                }
+
+                .incident-search input {
+                    width: 160px;
+                }
+            }
+
+
+    </style>
+
+</head>
+<body>
+
+    <!-- =====================================================
+     INCIDENT MANAGEMENT VUE APPLICATION
+===================================================== -->
+
+    <div id="IncidentApp" class="dashboard-page incident-app">
+        <app-header></app-header>
+        <div style="padding:15px 25px">
+            <!-- ================= INCIDENT DASHBOARD ================= -->
+
+            <div class="dashboard-heading">
+                <h3>Incident Management</h3>
+            </div>
+
+
+            <!-- ================= FILTERS ================= -->
+
+            <div class="dashboard-filters">
+
+                <!-- Date Range -->
+
+                <div class="filter-group">
+
+                    <label for="incidentDateRange">Date Picker</label>
+
+                    <input type="text"
+                           id="incidentDateRange"
+                           class="form-control"
+                           placeholder="Select date range"
+                           readonly />
+
+                </div>
+
+
+                <!-- Site -->
+
+                <div class="filter-group">
+
+                    <label for="siteFilter">Site</label>
+
+                    <select id="siteFilter"
+                            class="form-control"
+                            v-model="filters.site">
+
+                        <option value="">All</option>
+
+                        <option v-for="item in filterOptions.sites"
+                                :key="item"
+                                :value="item">
+                            {{ item }}
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <div class="filter-group">
+
+                    <label for="locationFilter">Location</label>
+
+                    <select id="locationFilter"
+                            class="form-control"
+                            v-model="filters.location">
+
+                        <option value="">All</option>
+
+                        <option v-for="item in filterOptions.locations"
+                                :key="item"
+                                :value="item">
+                            {{ item }}
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Incident Type -->
+
+                <div class="filter-group">
+
+                    <label for="typeFilter">Type</label>
+
+                    <select id="typeFilter"
+                            class="form-control"
+                            v-model="filters.type">
+
+                        <option value="">All</option>
+
+                        <option v-for="item in filterOptions.types"
+                                :key="item"
+                                :value="item">
+                            {{ item }}
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="filter-group">
+
+                    <label for="categoryFilter">Category</label>
+
+                    <select id="categoryFilter"
+                            class="form-control"
+                            v-model="filters.category">
+
+                        <option value="">All</option>
+
+                        <option v-for="item in filterOptions.categories"
+                                :key="item"
+                                :value="item">
+                            {{ item }}
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Sub Category -->
+
+                <div class="filter-group subcategory-filter">
+
+                    <label for="subCategoryFilter">Sub Category</label>
+
+                    <select id="subCategoryFilter"
+                            class="form-control"
+                            v-model="filters.subCategory">
+
+                        <option value="">All</option>
+
+                        <option v-for="item in filterOptions.subCategories"
+                                :key="item"
+                                :value="item">
+                            {{ item }}
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Add Incident -->
+
+                <div class="filter-group add-incident-group">
+
+                    <button type="button"
+                            class="add-button"
+                            v-on:click="addIncident">
+
+                        ＋ Add Incident
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= CHARTS ================= -->
+            <!-- CHARTS -->
+            <div class="charts-container"
+                 v-show="!loading && filteredIncidents.length > 0">
+
+                <div class="chart-panel">
+                    <h3>Incident Type</h3>
+                    <div class="chart-content">
+                        <div class="chart-canvas">
+                            <canvas id="incidentTypeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-panel">
+                    <h3>Category</h3>
+                    <div class="chart-content">
+                        <div class="chart-canvas">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-panel">
+                    <h3>SubCategory</h3>
+                    <div class="chart-content">
+                        <div class="chart-canvas">
+                            <canvas id="subCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- EMPTY MESSAGE -->
+            <div class="chart-empty-state"
+                 v-if="!loading && filteredIncidents.length === 0">
+
+                No data to display graphs
+
+            </div>
+
+            <!-- ================= GRID TOOLBAR ================= -->
+
+            <div class="incident-toolbar">
+
+                <div class="toolbar-right">
+
+                    <!-- Search Toggle -->
+
+                    <button type="button"
+                            class="toolbar-button search-toggle"
+                            title="Search"
+                            v-if="!showSearch"
+                            v-on:click="toggleSearch">
+
+                        <span class="search-icon">⌕</span>
+
+                    </button>
+
+
+                    <!-- Search Input -->
+
+                    <div class="incident-search"
+                         v-if="showSearch"
+                         v-cloak>
+
+                        <input type="text"
+                               v-model="searchText"
+                               placeholder="Search..."
+                               ref="searchInput"
+                               v-on:keyup.esc="closeSearch" />
+
+                        <button type="button"
+                                class="search-close-button"
+                                title="Close"
+                                v-on:click="closeSearch">
+
+                            ×
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- PDF Download -->
+
+                    <button type="button"
+                            class="toolbar-button"
+                            v-on:click="downloadPdf">
+
+                        <span class="download-icon">⇩</span>
+                        PDF
+
+                    </button>
+
+
+                    <!-- Excel Download -->
+
+                    <button type="button"
+                            class="toolbar-button"
+                            v-on:click="downloadExcel">
+
+                        <span class="download-icon">⇩</span>
+                        Excel
+
+                    </button>
+
+
+                    <!-- Fullscreen -->
+
+                    <button type="button"
+                            class="toolbar-button fullscreen-button"
+                            title="Fullscreen"
+                            v-on:click="toggleFullscreen">
+
+                        ⛶
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= INCIDENT GRID ================= -->
+
+            <div class="table-container">
+
+                <table class="incident-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>S.No</th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('incidentNo')">
+
+                                Incident No
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('incidentNo') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('state')">
+
+                                State
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('state') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('territory')">
+
+                                Territory
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('territory') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('client')">
+
+                                Client
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('client') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('site')">
+
+                                Site
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('site') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('location')">
+
+                                Location
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('location') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('guardPost')">
+
+                                Guard Post
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('guardPost') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable type-incident-column"
+                                v-on:click="sortBy('type')">
+
+                                <span class="header-text">
+                                    Type of Incident
+                                </span>
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('type') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('category')">
+
+                                Category
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('category') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('subCategory')">
+
+                                SubCategory
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('subCategory') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('createdBy')">
+
+                                Created By
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('createdBy') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('assignedTo')">
+
+                                Assigned To
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('assignedTo') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('closedBy')">
+
+                                Closed By
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('closedBy') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('status')">
+
+                                Status
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('status') }}
+                                </span>
+
+                            </th>
+
+
+                            <th class="sortable"
+                                v-on:click="sortBy('reportedDate')">
+
+                                Reported Date
+
+                                <span class="sort-icon">
+                                    {{ sortIndicator('reportedDate') }}
+                                </span>
+
+                            </th>
+
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr v-for="(incident, index) in paginatedIncidents"
+                            :key="incident.id">
+
+                            <td>
+                                {{ (currentPage - 1) * pageSize + index + 1 }}
+                            </td>
+
+                            <td>{{ incident.incidentNo }}</td>
+
+                            <td>{{ incident.state }}</td>
+
+                            <td>{{ incident.territory }}</td>
+
+                            <td>{{ incident.client }}</td>
+
+                            <td>{{ incident.site }}</td>
+
+                            <td>{{ incident.location }}</td>
+
+                            <td>{{ incident.guardPost }}</td>
+
+                            <td>{{ incident.type }}</td>
+
+                            <td>{{ incident.category }}</td>
+
+                            <td>{{ incident.subCategory }}</td>
+
+                            <td>{{ incident.createdBy }}</td>
+
+                            <td>{{ incident.assignedTo }}</td>
+
+                            <td>{{ incident.closedBy }}</td>
+
+                            <td>{{ incident.status }}</td>
+
+                            <td>{{ formatDate(incident.reportedDate) }}</td>
+
+
+                            <!-- View Incident -->
+
+                            <td class="action-cell">
+
+                                <button type="button"
+                                        class="view-button"
+                                        title="View incident"
+                                        v-on:click="viewIncident(incident)">
+
+                                    ◎
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <!-- No Records -->
+
+                        <tr v-if="paginatedIncidents.length === 0">
+
+                            <td colspan="17" class="no-records">
+                                No incidents found.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ================= PAGINATION ================= -->
+
+            <div class="incident-pagination">
+
+                <!-- Total Records -->
+
+                <div class="total-records">
+
+                    Total Records: {{ startRecord }} - {{ endRecord }}
+
+                </div>
+
+
+                <!-- Pagination Controls -->
+
+                <div class="pagination-controls">
+
+                    <select v-model.number="pageSize">
+
+                        <option :value="10">10</option>
+                        <option :value="25">25</option>
+                        <option :value="50">50</option>
+                        <option :value="100">100</option>
+
+                    </select>
+
+
+                    <span>
+                        Pg No. {{ currentPage }} Out of {{ totalPages }}
+                    </span>
+
+
+                    <!-- First Page -->
+
+                    <button type="button" class="page-button" v-on:click="goToFirstPage" v-bind:disabled="currentPage === 1" title="First page">
+                        &laquo;
+                    </button>
+
+
+                    <!-- Previous Page -->
+
+                    <button type="button"
+                            class="page-button"
+                            v-on:click="goToPreviousPage"
+                            v-bind:disabled="currentPage === 1"
+                            title="Previous page">
+
+                        &lsaquo;
+
+                    </button>
+
+
+                    <!-- Next Page -->
+
+                    <button type="button"
+                            class="page-button"
+                            v-on:click="goToNextPage"
+                            v-bind:disabled="currentPage >= totalPages"
+                            title="Next page">
+
+                        &rsaquo;
+
+                    </button>
+
+
+                    <!-- Last Page -->
+
+                    <button type="button"
+                            class="page-button"
+                            v-on:click="goToLastPage"
+                            v-bind:disabled="currentPage >= totalPages"
+                            title="Last page">
+
+                        &raquo;
+
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+   
+    <!-- =====================================================
+     JAVASCRIPT LIBRARIES
+===================================================== -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Moment.js -->
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- Date Range Picker -->
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Vue 2 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
+
+    <!-- Axios -->
+    <script src="~/lib/axios/axios@1.12.2.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- PDFMake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js"></script>
+
+    <!-- Excel / SheetJS -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <!-- =====================================================
+     INCIDENT MANAGEMENT VUE JAVASCRIPT
+===================================================== -->
+    <script src="~/js/header.js"></script>
+
+    <script src="~/js/incident-components/incidentmanagement.js"></script>
+</body>
+</html>
+<!-- ================= CSS FILES ================= -->
+
+
+
+<!-- ================= INLINE DASHBOARD CSS ================= -->
+
+
