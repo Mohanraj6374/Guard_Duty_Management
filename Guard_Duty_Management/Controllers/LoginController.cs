@@ -68,7 +68,7 @@ namespace Guard_Duty_Management.Controllers
             {
                 return BadRequest(new {
                     status = false,
-                    message = "Country Code, Phone Number are required"
+                    message = "Country Code and Phone Number are required"
                 });
             }
 

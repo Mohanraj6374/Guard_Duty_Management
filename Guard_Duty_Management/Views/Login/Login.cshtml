@@ -43,7 +43,7 @@
                                                     <option v-for="country in countries" :key="country.code" :value="country.dialCode"> {{country.flag}} {{country.dialCode}}</option>
                                                 </select>
                                                 
-                                                <input type="tel" id="phone" maxlength="10" v-model="phone" v-on:input="resetPhoneVerification" autocomplete="on" inputmode="numeric" class="form-control phone-input" placeholder="Enter your phone number" required />                                                    
+                                                <input type="tel" id="phone" v-model="phone" v-on:input="resetPhoneVerification" autocomplete="on" inputmode="numeric" class="form-control phone-input" placeholder="Enter your phone number" required />                                                    
                                             </div>
                                             <div class="phone-status w-100 mt-1" style="min-height: 18px;">
                                                 <p v-if="isCheckingPhone" class="form-text font-size-7 security-text mb-0">Checking mobile number...</p>
