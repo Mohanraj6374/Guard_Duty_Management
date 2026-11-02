@@ -16,6 +16,7 @@
 
 .bg-header {
     background-color: #ebeef5;
+    
 }
 .bg-custom-light {
     background-color: #ecf2feff;
@@ -25,6 +26,31 @@
     backdrop-filter: blur(5px);
 }
 
+/*Navigation*/
+.nav-link {
+    position: relative;
+    color: #212121;
+    border: none !important;
+    border-radius: 0 !important;
+}
+    .nav-link.active-tab {
+        color: #D93643;
+    }
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 12px;
+        right: 12px;
+        height: 3px;
+        border-radius: 5px;
+        background-color: transparent;
+        transition: background-color 0.2s ease;
+    }
+    .nav-link.active-tab::after {
+        background-color: #D93643;
+    }
+/*Popup forms*/
 .popup-form {
     width: 100vw;
     height: 100vh;
@@ -53,11 +79,14 @@
 
 
 .clock-in-icon {
-    
     transform-origin: center;
     transform-box: fill-box;
+    fill: #D93643;
+    stroke: #D93643;
 }
     .clock-in-icon.clock-in-running {
+        fill: #198754;
+        stroke: #198754;
         animation: clockInRotate 1.2s linear infinite;
     }
     @keyframes clockInRotate {
@@ -147,6 +176,7 @@
         height: 1rem;
     }
 
+
 .empty-illustration {
     display: flex;
     justify-content: center;
@@ -154,3 +184,48 @@
     margin: 24px auto;
 }
 
+.clock-red {
+    fill: #D93643;
+}
+.clock-green {
+    fill: #198754;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+    height: 38px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}
+
+    .select2-container--default .select2-selection--single
+    .select2-selection__rendered {
+        line-height: 36px;
+/*        padding-left: 12px;*/
+        color: #212529;
+    }
+
+    .select2-container--default .select2-selection--single
+    .select2-selection__arrow {
+        height: 36px;
+    }
+
+
+@media (max-width: 576px){
+    .left-nav-controls {
+        border-bottom: #c3d7ffff !important; /* equivalent to .shadow */
+    }
+    .nav-controls {
+        
+    }
+}
+
+@media (min-width: 577px) {
+    .nav-controls {
+        background: #ebeef5!important;
+        box-shadow: 0 .2rem 0.5rem rgba(0, 0, 0, .15) !important; /* equivalent to .shadow */
+    }
+}
