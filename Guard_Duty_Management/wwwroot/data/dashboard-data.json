@@ -47,12 +47,12 @@
       "shiftTime": "18:00 - 06:00"
     },
     {
-      "shiftId": 1,
+      "shiftId": 3,
       "shiftTime": "00:00 - 11:59"
     },
     {
-      "shiftId": 1,
-      "shiftTime": "12:00 - 28:59"
+      "shiftId": 4,
+      "shiftTime": "12:00 - 23:59"
     }  
 
   ],
