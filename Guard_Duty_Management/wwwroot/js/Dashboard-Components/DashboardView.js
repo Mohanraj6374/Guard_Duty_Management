@@ -21,7 +21,10 @@ var vm = new Vue({
 
             addTask: {
                 siteId: '',
-                taskId: ''
+                taskId: '',
+                date: '',
+                startTime: '',
+                endTime: ''
             },
 
             siteOptions: [],
@@ -29,7 +32,12 @@ var vm = new Vue({
             taskOptions: [],
 
             shiftOptions: [],
-            guardPostOptions: []
+            guardPostOptions: [],
+
+            assignedTaskList: [],
+
+            selectedExecutionTask: null
+            
 
         };
     },
@@ -72,6 +80,61 @@ var vm = new Vue({
                 console.error("Error loading dashboard data:", error);
             }
 
+        },
+
+        assignTask() {
+
+            if (!this.addTask.siteId || !this.addTask.taskId || !this.addTask.date || !this.addTask.startTime || !this.addTask.endTime) {
+                alert('Please fill all required fields.')
+                return;
+            }
+
+            selectedSite = this.siteOptions.find(site => site.id == this.addTask.siteId);
+            selectedTask = this.taskOptions.find(task => task.id == this.addTask.taskId);
+
+            if (!selectedSite || !selectedTask) {
+                alert('Invalid Site or Task selection.')
+                return;
+            }
+
+
+            const task = {
+                assignmentId: Date.now(),
+                siteId: this.addTask.siteId,
+                siteName: selectedSite.text,
+
+                taskId: this.addTask.taskId,
+                taskName: selectedTask.text,
+
+                date: this.addTask.date,
+                startTime: this.addTask.startTime,
+                endTime: this.addTask.endTime,
+
+                guardTaskStartTime: null,
+                guardTaskEndTime: null,
+                totalDuration: 0
+
+            }
+            this.assignedTaskList.push(task);
+            console.log("Task Assigned");
+
+
+            //reset form
+            this.addTask = {
+                siteId: '',
+                taskId: '',
+                date: '',
+                startTime: '',
+                endTime:''
+            }
+
+            this.showAddTaskForm = false;
+
+        },
+
+        selectExecutionTask(task) {
+            this.selectedExecutionTask = task;
+            
         },
 
         confirmClockIn  () {
