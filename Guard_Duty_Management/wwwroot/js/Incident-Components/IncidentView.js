@@ -13,9 +13,16 @@ var incidentDetailsApp = new Vue({
             loading: false,
             errorMessage: "",
 
+            isGeneratingPdf: false,
+
             incidentId: new URLSearchParams(
                 window.location.search
             ).get("IncidentId"),
+
+             encodedId: new URLSearchParams(window.location.search).get('IncidentId'),
+            
+
+           
 
             incident: {
 
@@ -92,6 +99,34 @@ var incidentDetailsApp = new Vue({
     },
 
 
+    //Created 
+    created: function () {
+
+    try {
+
+        if (!this.encodedId) {
+            this.errorMessage = "Incident ID is missing.";
+            return;
+        }
+
+        // Decode Base64 ID
+        this.incidentId = atob(this.encodedId);
+
+        console.log("Encoded ID:", this.encodedId);
+        console.log("Decoded Incident ID:", this.incidentId);
+
+        // Call API once
+        this.getIncident();
+
+    } catch (error) {
+
+        this.errorMessage = "Invalid Incident ID.";
+        console.error(error);
+
+    }
+
+},
+
     // ==========================================
     // 2. COMPUTED PROPERTIES
     // ==========================================
@@ -157,7 +192,7 @@ var incidentDetailsApp = new Vue({
 
         console.log("Incident ID:", this.incidentId);
 
-        this.getIncident();
+        // this.getIncident();
     },
 
 
@@ -484,6 +519,60 @@ console.log("Closed Image URL:", result.closeImgUri);
 
         },
 
+        //DownlaodPdf
+
+        downloadPdf: function () {
+
+    var element = document.getElementById("incidentPdfContent");
+
+    if (!element) {
+        alert("Incident report content not found.");
+        return;
+    }
+
+    this.isGeneratingPdf = true;
+
+    var options = {
+        margin: 8,
+        filename: "Incident_Report_" + this.incident.id + ".pdf",
+
+        image: {
+            type: "jpeg",
+            quality: 0.98
+        },
+
+        html2canvas: {
+            scale: 2,
+            useCORS: true
+        },
+
+        jsPDF: {
+            unit: "mm",
+            format: "a4",
+            orientation: "portrait"
+        },
+
+        pagebreak: {
+            mode: ["css", "legacy"]
+        }
+    };
+
+    html2pdf()
+        .set(options)
+        .from(element)
+        .save()
+        .then(() => {
+            console.log("PDF downloaded successfully");
+        })
+        .catch((error) => {
+            console.error("PDF generation error:", error);
+            alert("Unable to generate PDF.");
+        })
+        .finally(() => {
+            this.isGeneratingPdf = false;
+        });
+}
+,
 
         // --------------------------------------
         // Retry API Request

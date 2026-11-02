@@ -27,6 +27,16 @@
                INCIDENT DASHBOARD - FILTER DESIGN
             ========================================= */
 
+
+            html,
+            body {
+                width: 100%;
+                min-height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
             #IncidentApp .dashboard-filters {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -1391,14 +1401,10 @@
     </div>
 
    
-    <!-- =====================================================
-     JAVASCRIPT LIBRARIES
-===================================================== -->
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- Moment.js -->
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     <!-- Date Range Picker -->
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -1419,16 +1425,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js"></script>
 
-    <!-- Excel / SheetJS -->
+    <!-- Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
+    <!-- Bootstrap -->
     <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    <!-- =====================================================
-     INCIDENT MANAGEMENT VUE JAVASCRIPT
-===================================================== -->
+
+    <!-- Header JS -->
     <script src="~/js/header.js"></script>
 
+    <!-- Incident Management JS -->
     <script src="~/js/incident-components/incidentmanagement.js"></script>
+
+
 </body>
 </html>
 <!-- ================= CSS FILES ================= -->

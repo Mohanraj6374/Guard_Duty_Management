@@ -1464,28 +1464,32 @@ var vm = new Vue({
         // =========================================
         // VIEW INCIDENT DETAILS
         // =========================================
+        
 
-        viewIncident: function (incident) {
+       viewIncident: function (incident) {
 
-            if (!incident) {
-                return;
-            }
+    console.log("View button clicked");
 
-            var incidentId = incident.id;
+    if (!incident) {
+        return;
+    }
 
-            if (!incidentId) {
+    var incidentId = incident.id;
 
-                alert('Incident ID is not available for this record.');
+    if (!incidentId) {
+        alert('Incident ID is not available for this record.');
+        return;
+    }
 
-                return;
+    // Encode Incident ID using Base64
+    var encodedId = btoa(incidentId.toString());
 
-            }
+    window.open(
+        '/Incident/IncidentView?IncidentId=' + encodeURIComponent(encodedId),
+        '_blank'
+    );
 
-            window.location.href =
-                '/Incident/IncidentView?IncidentId=' +
-                encodeURIComponent(incidentId);
-
-        },
+},
 
 
         // =========================================
