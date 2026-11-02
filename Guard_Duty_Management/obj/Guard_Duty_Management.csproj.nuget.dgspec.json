@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {}
+    "E:\\GuardDuty\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {
+    "E:\\GuardDuty\\Guard_Duty_Management\\Guard_Duty_Management.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
+        "projectUniqueName": "E:\\GuardDuty\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
         "projectName": "Guard_Duty_Management",
-        "projectPath": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
-        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ADMIN\\Desktop\\temp\\Guard_Duty_Management\\Guard_Duty_Management\\obj\\",
+        "projectPath": "E:\\GuardDuty\\Guard_Duty_Management\\Guard_Duty_Management.csproj",
+        "packagesPath": "C:\\Users\\CHITRIKA\\.nuget\\packages\\",
+        "outputPath": "E:\\GuardDuty\\Guard_Duty_Management\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\CHITRIKA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -30,6 +30,7 @@
         },
         "frameworks": {
           "net8.0": {
+            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {}
           }
@@ -44,10 +45,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "imports": [
             "net461",
@@ -60,6 +62,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -68,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.319/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
