@@ -1,0 +1,527 @@
+﻿
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: #f4f5f9;
+    color: #333333;
+    font-family: Arial, sans-serif;
+}
+
+/* Main Incident Application */
+
+#IncidentApp {
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background-color: #f4f5f9;
+    color: #333333;
+}
+
+/* ================================
+   TOOLBAR
+================================ */
+
+.incident-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    background-color: #f4f5f9;
+    color: #333333;
+}
+
+/* Left side */
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+/* Search container */
+
+.incident-search {
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex: 0 0 260px;
+    width: 260px;
+    height: 38px;
+    background-color: #ffffff;
+    border: 1px solid #dfe3e8;
+    border-radius: 20px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Search icon */
+
+.search-icon {
+    color: #ff9800;
+    font-size: 22px;
+    padding: 0 10px;
+    flex-shrink: 0;
+}
+
+/* Search input */
+
+.incident-search input {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    outline: none;
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 14px;
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+
+    .incident-search input::placeholder {
+        color: #9ca3af;
+    }
+
+/* Clear search button */
+
+.clear-search {
+    flex-shrink: 0;
+    border: none;
+    background-color: #ffffff;
+    color: #6b7280;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+    .clear-search:hover {
+        color: #111827;
+    }
+
+/* Record count */
+
+.record-count {
+    color: #788ba7;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Right side toolbar buttons */
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* Toolbar button */
+
+.toolbar-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #788ba7;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+    .toolbar-button:hover {
+        background-color: #e8ebf1;
+        color: #46566f;
+    }
+
+/* Download icon */
+
+.download-icon {
+    font-size: 20px;
+    color: #788ba7;
+}
+
+/* Fullscreen button */
+
+.fullscreen-button {
+    font-size: 22px;
+    padding: 0 10px;
+}
+
+/* 
+   TABLE CONTAINER
+*/
+
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+/* ================================
+   INCIDENT TABLE
+================================ */
+
+.incident-table {
+    width: 100%;
+    min-width: 1900px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #333333;
+}
+
+    /* Table cells */
+
+    .incident-table th,
+    .incident-table td {
+        border: 1px solid #e5e7eb;
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+        overflow-wrap: anywhere;
+        line-height: 1.5;
+        box-sizing: border-box;
+    }
+
+    /* Table header */
+
+    .incident-table th {
+        background-color: #f0f1f4;
+        color: #788ba7;
+        font-weight: 400;
+        white-space: nowrap;
+    }
+
+        /* Header icons */
+
+        .incident-table th span {
+            color: #788ba7;
+            font-size: 12px;
+            margin-left: 3px;
+        }
+
+        /* Sortable headers */
+
+        .incident-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+            .incident-table th.sortable:hover {
+                background-color: #e6e9ef;
+            }
+
+/* Sort icon */
+
+.sort-icon {
+    display: inline-block;
+    color: #788ba7;
+    font-size: 14px;
+}
+
+/* Table rows */
+
+.incident-table tbody tr {
+    background-color: #ffffff;
+}
+
+    /* Hover effect */
+
+    .incident-table tbody tr:hover td {
+        background-color: #f8fafc;
+    }
+
+/* Table data */
+
+.incident-table td {
+    color: #333333;
+}
+
+/* Action column */
+
+.action-cell {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+/* View button */
+
+.view-button {
+    border: none;
+    background-color: transparent;
+    color: #2563eb;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+    .view-button:hover {
+        color: #1d4ed8;
+    }
+
+/* ================================
+   FULLSCREEN MODE
+================================ */
+
+/*
+   Force the application to retain
+   the normal light theme in fullscreen.
+*/
+
+#IncidentApp:fullscreen {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    overflow: auto;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #f4f5f9 !important;
+    color: #333333 !important;
+    color-scheme: light;
+}
+
+    /* Fullscreen toolbar */
+
+    #IncidentApp:fullscreen .incident-toolbar {
+        background-color: #f4f5f9 !important;
+        color: #333333 !important;
+    }
+
+    /* Fullscreen search */
+
+    #IncidentApp:fullscreen .incident-search {
+        background-color: #ffffff !important;
+        border-color: #dfe3e8;
+    }
+
+        #IncidentApp:fullscreen .incident-search input {
+            background-color: #ffffff !important;
+            color: #333333 !important;
+        }
+
+            #IncidentApp:fullscreen .incident-search input::placeholder {
+                color: #9ca3af;
+            }
+
+    #IncidentApp:fullscreen .clear-search {
+        background-color: #ffffff !important;
+        color: #6b7280 !important;
+    }
+
+    /* Fullscreen toolbar buttons */
+
+    #IncidentApp:fullscreen .toolbar-button {
+        background-color: transparent;
+        color: #788ba7;
+    }
+
+        #IncidentApp:fullscreen .toolbar-button:hover {
+            background-color: #e8ebf1;
+            color: #46566f;
+        }
+
+    /* Fullscreen table container */
+
+    #IncidentApp:fullscreen .table-container {
+        background-color: #ffffff !important;
+    }
+
+    /* Fullscreen table */
+
+    #IncidentApp:fullscreen .incident-table {
+        background-color: #ffffff !important;
+        color: #333333 !important;
+    }
+
+        /* Fullscreen table header */
+
+        #IncidentApp:fullscreen .incident-table th {
+            background-color: #f0f1f4 !important;
+            color: #788ba7 !important;
+        }
+
+        /* Fullscreen table body */
+
+        #IncidentApp:fullscreen .incident-table td {
+            background-color: #ffffff !important;
+            color: #333333 !important;
+        }
+
+        /* Fullscreen table hover */
+
+        #IncidentApp:fullscreen .incident-table tbody tr:hover td {
+            background-color: #f8fafc !important;
+        }
+
+    /* Fullscreen sort icons */
+
+    #IncidentApp:fullscreen .sort-icon {
+        color: #788ba7 !important;
+    }
+
+/* Fullscreen fallback for WebKit browsers */
+
+#IncidentApp:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    overflow: auto;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #f4f5f9 !important;
+    color: #333333 !important;
+    color-scheme: light;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+@media screen and (max-width: 768px) {
+
+    .incident-toolbar {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .toolbar-left {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .incident-search {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .toolbar-right {
+        width: 100%;
+        justify-content: flex-end;
+        margin-left: 0;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .incident-table {
+        min-width: 1900px;
+    }
+        /* Type of Incident column */
+        .incident-table th.type-incident-column {
+            white-space: nowrap;
+            min-width: 180px;
+            padding-right: 12px;
+        }
+
+        /* Keep heading and arrow together */
+        .incident-table th.sortable {
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+            /* Sort arrow spacing */
+            .incident-table th.sortable .sort-icon {
+                display: inline-block;
+                margin-left: 6px;
+                font-size: 13px;
+                vertical-align: middle;
+                white-space: nowrap;
+            }
+}
+
+/* =================================
+   INCIDENT PAGINATION
+================================= */
+
+#IncidentApp .incident-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 60px;
+    padding: 12px 8px;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #f4f5f9;
+    color: #788ba7;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+}
+
+/* Total Records - Left Side */
+#IncidentApp .total-records {
+    color: #788ba7;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+/* Pagination Controls - Right Side */
+#IncidentApp .pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    white-space: nowrap;
+    color: #788ba7;
+    font-size: 18px;
+}
+
+    /* Page Size Dropdown */
+    #IncidentApp .pagination-controls select {
+        min-width: 68px;
+        padding: 3px 6px;
+        border: 1px solid #999;
+        border-radius: 2px;
+        background-color: #ffffff;
+        color: #222222;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+/* Responsive Pagination */
+@media screen and (max-width: 600px) {
+    #IncidentApp .incident-pagination {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    #IncidentApp .total-records,
+    #IncidentApp .pagination-controls {
+        font-size: 15px;
+    }
+
+    #IncidentApp .pagination-controls {
+        gap: 12px;
+    }
+}
