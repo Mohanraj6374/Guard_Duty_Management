@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
     <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css_/dashboardview.css" rel="stylesheet"/>
     <link href="~/css_/header.css" rel="stylesheet"/>
@@ -61,7 +61,7 @@
                                 </a>
                             </div>
                             <button type="button"
-                                    class="btn security-bg fw-semibold text-nowrap"
+                                class="btn security-btn fw-semibold text-nowrap"
                                 id="addTaskButton" v-on:click="openAddTaskForm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-lg align-middle" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
@@ -164,7 +164,7 @@
                                     </div>
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
-                                        <button type="button" class="btn security-bg" v-on:click="confirmClockIn">Clock In</button>
+                                        <button type="button" class="btn security-btn" v-on:click="confirmClockIn">Clock In</button>
                                         <button type="button" class="btn btn-dark" v-on:click="closeClockInForm">Close</button>
                                     </div>
                                 </div>
@@ -207,7 +207,7 @@
                                     
                                     <div class="mb-2">
                                         <label class="form-label">Date<span class="text-danger">*</span></label>
-                                        <input type="date" v-model="addTask.date" class="form-control" required />
+                                        <input type="date" v-model="addTask.date" class="form-control date-picker" required />
                                     </div>
                                     @* <div class="mb-2">
                                         <label class="form-label">Start Time<span class="text-danger">*</span></label>
@@ -232,7 +232,7 @@
                                     </div>  *@
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
-                                        <button type="button" class="btn security-bg" v-on:click="assignTask">Add Task</button>
+                                        <button type="button" class="btn security-btn" v-on:click="assignTask">Add Task</button>
                                         <button type="button" class="btn btn-dark" v-on:click="closeAddTaskForm">Close</button>
                                     </div>
                                 </div>
@@ -404,30 +404,37 @@
                                 <p class="m-0 fs-5 fw-semibold">Please Select Task First</p>
                                 <p class="m-0 fs-6 fw-normal text-muted">Choose a task from the left panel to view details, instructions and updates.</p>
                             </div>
-                            <div v-else class="p-2 d-flex flex-column align-items-center justify-content-center">
-                                <div class="row row-cols-2">
-                                    <div class="col">
-                                        <span>Site Name: </span>
-                                        {{selectedExecutionTask.siteName}}
+                            <div v-else class="d-flex flex-column align-items-center justify-content-center card overflow-hidden">
+                                <div class="card-body bg-header p-2">
+                                    <div class="row row-cols-2 g-2">
+                                        <div class="col">
+                                            <span>Site Name: </span>
+                                            {{selectedExecutionTask.siteName}}
+                                        </div>
+                                        <div class="col">
+                                            <span>Site Code:</span>
+                                            {{selectedExecutionTask.siteId}}
+                                        </div>
+                                        <div class="col">
+                                            <span>Address:</span>
+                                            {{selectedExecutionTask.siteAddress}}
+                                        </div>
+                                        <div class="col">
+                                            <span>Task Name:</span>
+                                            {{selectedExecutionTask.taskName}}
+                                        </div>
+                                        <div class="col">
+                                            <span>Estimates Start Time</span>
+                                            {{selectedExecutionTask.startTime}}
+                                        </div>
+                                        <div class="col">
+                                            <span>Estimates End Time</span>
+                                            {{selectedExecutionTask.endTime}}
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <span>Site Code:</span>
-                                        {{selectedExecutionTask.siteId}}
-                                    </div>
-                                    <div class="col">
-                                        <span>Address:</span>
-                                    </div>
-                                    <div class="col">
-                                        <span>Task Name:</span>
-                                        {{selectedExecutionTask.taskName}}
-                                    </div>
-                                    <div class="col">
-                                        <span>Estimates Start Time</span>
-                                        {{selectedExecutionTask.startTime}}
-                                    </div>
-                                    <div class="col">
-                                        <span>Estimates End Time</span>
-                                        {{selectedExecutionTask.endTime}}
+                                    <div class="mt-2">
+                                        <button class="btn security-btn px-2">Start</button>
+
                                     </div>
                                 </div>
                             </div>

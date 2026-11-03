@@ -4,7 +4,7 @@
             username: window.GuardUserEmail || 'Guard',
 
 
-            currentDateTime: '',
+            currentDateTime: moment().format('DD MMM YYYY | hh:mm:ss A'),
             dateTimeInterval: null
         };
     },
@@ -121,15 +121,17 @@
         </div>
     `,
     mounted() {
+       
         this.updateHeaderDateTime();
-        this.dateTimeInterval = setInterval(() => {
-            this.updateHeaderDateTime()
+
+        this.clockInterval = setInterval(() => {
+            this.updateHeaderDateTime();
         }, 1000);
     },
     methods: {
         updateHeaderDateTime(){
             this.currentDateTime = moment().format(
-                "DD MMM YYYY | hh:mm:ss A"
+                'DD MMM YYYY | hh:mm:ss A'
             );
             // this.currentDateTime = now.toLocaleString('en-US', {
             //     weekday: 'short',
@@ -140,6 +142,7 @@
             //     minute: '2-digit',
             //     hour12: true
             // });
+            console.log(this.currentDateTime);
         },
 
         async logout() {
@@ -163,13 +166,6 @@
                 console.error('Logout failed: ', error.response?.data || error.message);
             }
         }
-    },
-
-    mounted() {
-        this.updateHeaderDateTime();
-        this.dateTimeInterval = setInterval(() => {
-            this.updateHeaderDateTime();
-        },60000)
     },
     beforeDestroy() {
         if (this.dateTimeInterval) {

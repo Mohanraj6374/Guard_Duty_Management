@@ -2,19 +2,23 @@
   "sites": [
     {
       "siteId": 1,
-      "siteName": "Site 1"
+      "siteName": "Site 1",
+      "siteAddress": "Ground Floor, A Block, ABC Tower, New delhi, 110009, India"
     },
     {
       "siteId": 2,
-      "siteName": "Site 2"
+      "siteName": "Site 2",
+      "siteAddress": "Gate 1, D Block, ABC Tower, Chandigarh, 144411, India"
     },
     {
       "siteId": 3,
-      "siteName": "Site 3"
+      "siteName": "Site 3",
+      "siteAddress": "Gate 2, C Block, ABC Tower, New delhi, 110009, India"
     },
     {
       "siteId": 4,
-      "siteName": "Site 4"
+      "siteName": "Site 4",
+      "siteAddress": "Main Gate, T-Apartment, XYZ Commercial Complex, New Delhi, 110009, India"
     }
   ],
 

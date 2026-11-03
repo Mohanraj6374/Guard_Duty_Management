@@ -69,10 +69,14 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="p-2 d-flex align-items-center justify-content-center gap-2 mt-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="#C8AD6B" class="bi bi-lock-fill" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
-                                        </svg>
-                                        <span class="font-size-7 text-muted">Secure Login with OTP</span>
+                                    <label class="font-size-7 text-muted form-label">
+                                        <span class="d-flex align-items-center gap-1">
+                                            <input type="checkbox" v-model="rememberMe" />
+                                            Remember me on this device
+                                        </span>
+                                        
+                                    </label>
+                                        
                                     </div>
                                 </div>
                             </div>
