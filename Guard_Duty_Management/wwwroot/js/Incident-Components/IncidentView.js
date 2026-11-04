@@ -15,11 +15,14 @@ var incidentDetailsApp = new Vue({
 
             isGeneratingPdf: false,
 
-            incidentId: new URLSearchParams(
-                window.location.search
-            ).get("IncidentId"),
+            // incidentId: new URLSearchParams(
+            //     window.location.search
+            // ).get("IncidentId"),
 
-             encodedId: new URLSearchParams(window.location.search).get('IncidentId'),
+            encodedId: new URLSearchParams(window.location.search)
+                .get(btoa("IncidentId")),
+
+            incidentId: null,
             
 
            
@@ -99,7 +102,6 @@ var incidentDetailsApp = new Vue({
     },
 
 
-    //Created 
     created: function () {
 
     try {

@@ -15,6 +15,10 @@ var vm = new Vue({
         errorMessage: '',
         initialized: false,
 
+       
+        isDownloadingPdf: false,
+        isDownloadingExcel: false,
+
         filters: {
             startDate: moment().format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
@@ -1120,16 +1124,8 @@ var vm = new Vue({
         },
 
 
-        sortIndicator: function (column) {
-
-            if (this.sortColumn !== column) {
-
-                return '↕';
-
-            }
-
-            return this.sortDirection === 'asc' ? '↑' : '↓';
-
+        sortIndicator: function(column) {
+            return 'fa-sort';
         },
 
 
@@ -1200,22 +1196,20 @@ var vm = new Vue({
         // PDF DOWNLOAD
         // =========================================
 
-        downloadPdf: function () {
+        downloadPdf: function() {
 
             if (
                 typeof pdfMake === 'undefined' ||
                 !pdfMake.createPdf
             ) {
-
                 alert('PDFMake is not loaded.');
-
                 return;
-
             }
 
+            // Start loader
+            this.isDownloadingPdf = true;
 
             var headers = [
-
                 'S.No',
                 'Incident No',
                 'State',
@@ -1232,17 +1226,12 @@ var vm = new Vue({
                 'Closed By',
                 'Status',
                 'Reported Date'
-
             ];
-
 
             var body = [headers];
 
-
             this.filteredIncidents.forEach((incident, index) => {
-
                 body.push([
-
                     index + 1,
                     incident.incidentNo,
                     incident.state,
@@ -1259,80 +1248,62 @@ var vm = new Vue({
                     incident.closedBy,
                     incident.status,
                     this.formatDate(incident.reportedDate)
-
                 ]);
-
             });
 
-
             var documentDefinition = {
-
                 pageOrientation: 'landscape',
-
                 pageSize: 'A3',
 
                 content: [
-
                     {
-
                         text: 'Incident Management Report',
-
                         style: 'title',
-
                         margin: [0, 0, 0, 12]
-
                     },
-
                     {
-
                         text: 'Total Records: ' +
                             this.filteredIncidents.length,
-
                         margin: [0, 0, 0, 10]
-
                     },
-
                     {
-
                         table: {
-
                             headerRows: 1,
-
                             widths: Array(headers.length).fill('auto'),
-
                             body: body
-
                         },
-
                         layout: 'lightHorizontalLines'
-
                     }
-
                 ],
 
                 styles: {
-
                     title: {
-
                         fontSize: 18,
-
                         bold: true
-
                     }
-
                 },
 
                 defaultStyle: {
-
                     fontSize: 7
-
                 }
-
             };
 
+            try {
 
-            pdfMake.createPdf(documentDefinition)
-                .download('IncidentManagement.pdf');
+                pdfMake.createPdf(documentDefinition).download(
+                    'IncidentManagement.pdf',
+                    () => {
+                        this.isDownloadingPdf = false;
+                    }
+                );
+
+            } catch (error) {
+
+                console.error('PDF download error:', error);
+                this.isDownloadingPdf = false;
+                alert('Unable to generate PDF.');
+
+            }
 
         },
 
@@ -1341,86 +1312,72 @@ var vm = new Vue({
         // EXCEL DOWNLOAD
         // =========================================
 
-        downloadExcel: function () {
+        downloadExcel: function() {
 
             if (
                 typeof XLSX === 'undefined' ||
                 !XLSX.utils
             ) {
-
                 alert('SheetJS is not loaded.');
-
                 return;
-
             }
 
+            // Start loader
+            this.isDownloadingExcel = true;
 
-            var rows = this.filteredIncidents.map((incident, index) => {
+            try {
 
-                return {
+                var rows = this.filteredIncidents.map((incident, index) => {
 
-                    'S.No': index + 1,
+                    return {
+                        'S.No': index + 1,
+                        'Incident No': incident.incidentNo,
+                        'State': incident.state,
+                        'Territory': incident.territory,
+                        'Client': incident.client,
+                        'Site': incident.site,
+                        'Location': incident.location,
+                        'Guard Post': incident.guardPost,
+                        'Type of Incident': incident.type,
+                        'Category': incident.category,
+                        'SubCategory': incident.subCategory,
+                        'Created By': incident.createdBy,
+                        'Assigned To': incident.assignedTo,
+                        'Closed By': incident.closedBy,
+                        'Status': incident.status,
+                        'Reported Date': this.formatDate(incident.reportedDate)
+                    };
 
-                    'Incident No': incident.incidentNo,
+                });
 
-                    'State': incident.state,
+                var worksheet = XLSX.utils.json_to_sheet(rows);
 
-                    'Territory': incident.territory,
+                var workbook = XLSX.utils.book_new();
 
-                    'Client': incident.client,
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    worksheet,
+                    'Incidents'
+                );
 
-                    'Site': incident.site,
+                XLSX.writeFile(
+                    workbook,
+                    'IncidentManagement.xlsx'
+                );
 
-                    'Location': incident.location,
+            }
+            catch (error) {
 
-                    'Guard Post': incident.guardPost,
+                console.error('Excel download error:', error);
+                alert('Unable to generate Excel file.');
 
-                    'Type of Incident': incident.type,
+            }
+            finally {
 
-                    'Category': incident.category,
+                // Stop loader
+                this.isDownloadingExcel = false;
 
-                    'SubCategory': incident.subCategory,
-
-                    'Created By': incident.createdBy,
-
-                    'Assigned To': incident.assignedTo,
-
-                    'Closed By': incident.closedBy,
-
-                    'Status': incident.status,
-
-                    'Reported Date': this.formatDate(
-                        incident.reportedDate
-                    )
-
-                };
-
-            });
-
-
-            var worksheet = XLSX.utils.json_to_sheet(rows);
-
-            var workbook = XLSX.utils.book_new();
-
-
-            XLSX.utils.book_append_sheet(
-
-                workbook,
-
-                worksheet,
-
-                'Incidents'
-
-            );
-
-
-            XLSX.writeFile(
-
-                workbook,
-
-                'IncidentManagement.xlsx'
-
-            );
+            }
 
         },
 
@@ -1466,30 +1423,35 @@ var vm = new Vue({
         // =========================================
         
 
-       viewIncident: function (incident) {
+        viewIncident: function(incident) {
 
-    console.log("View button clicked");
+            console.log("View button clicked");
 
-    if (!incident) {
-        return;
-    }
+            if (!incident || !incident.id) {
+                alert('Incident ID is not available for this record.');
+                return;
+            }
 
-    var incidentId = incident.id;
+            var incidentId = incident.id;
 
-    if (!incidentId) {
-        alert('Incident ID is not available for this record.');
-        return;
-    }
+            // Encode parameter name
+            var encodedKey = btoa("IncidentId");
 
-    // Encode Incident ID using Base64
-    var encodedId = btoa(incidentId.toString());
+            // Encode parameter value
+            var encodedValue = btoa(incidentId.toString());
 
-    window.open(
-        '/Incident/IncidentView?IncidentId=' + encodeURIComponent(encodedId),
-        '_blank'
-    );
+            console.log("Encoded Key:", encodedKey);
+            console.log("Encoded Value:", encodedValue);
 
-},
+            // Open Incident View in new tab
+            window.open(
+                '/Incident/IncidentView?' +
+                encodeURIComponent(encodedKey) + '=' +
+                encodeURIComponent(encodedValue),
+                '_blank'
+            );
+            console.log("Final URL:", finalUrl);
+        },
 
 
         // =========================================
