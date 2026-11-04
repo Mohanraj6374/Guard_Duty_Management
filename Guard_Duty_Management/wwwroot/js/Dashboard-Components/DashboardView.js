@@ -36,9 +36,9 @@ var vm = new Vue({
 
             assignedTaskList: [],
 
-            selectedExecutionTask: null
-            
+            selectedExecutionTask: null,
 
+           
         };
     },
     created() {

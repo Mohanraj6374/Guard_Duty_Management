@@ -49,7 +49,17 @@
             background: rgba(255, 255, 255);
             border-radius: 16px;
         }
-
+.logout-btn {
+    color: #D93643 !important;
+}
+    .logout-btn:focus {
+        background-color: #D93643 !important;
+        color: #fff !important;
+    }
+    .logout-btn:active {
+        background-color: #D93643 !important;
+        color: #fff !important;
+    }
 .rounded-5 {
     border-radius: 10%;
 }

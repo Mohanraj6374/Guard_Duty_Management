@@ -85,6 +85,8 @@
 
 .select2-results {
   display: block;
+  max-height: 120px;
+  overflow-y: scroll;
 }
 
 .select2-results__options {
