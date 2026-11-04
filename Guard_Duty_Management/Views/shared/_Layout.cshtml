@@ -12,6 +12,11 @@
                     User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value??""
                 )
            );
+            window.GuardId = @Html.Raw(
+                 System.Text.Json.JsonSerializer.Serialize(
+                    User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? ""
+                 )
+            );
         </script>
         @RenderBody()
     </body>

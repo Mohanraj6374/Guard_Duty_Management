@@ -1,0 +1,22 @@
+{
+  "records": [
+    {
+      "guardId": "",
+      "siteId": "",
+      "shiftId": "",
+      "guardPostId": "",
+      "isClockedIn": false,
+      "clockInTime": null,
+      "clockOutTime": null
+    },
+    {
+      "guardId": "",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": true,
+      "clockInTime": "2026-11-04T13:14:15.2964829\u002B00:00",
+      "clockOutTime": null
+    }
+  ]
+}

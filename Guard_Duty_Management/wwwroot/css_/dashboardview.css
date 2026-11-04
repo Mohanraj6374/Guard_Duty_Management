@@ -135,6 +135,16 @@
     font-size: 0.7rem;
 }
 
+.badge-white{
+    font-weight:600;
+    background-color: #e2e2e2a6;
+    color: #000;
+}
+.badge-green {
+    font-weight: 600;
+    background-color: rgba(63, 185, 80, 0.15);
+    color: #238636;
+}
 .search-group {
     display: flex;
     line-height: 28px;
@@ -175,6 +185,27 @@
         width: 1rem;
         height: 1rem;
     }
+.task-card {
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border: 1px solid #dee2e6;
+}
+    .task-card:hover {
+        border-color: #198754;
+    }
+
+.selected-task {
+    background-color: #eaf5ee !important;
+    border: 1px solid #a3cfbb !important;
+}
+.taskdetails-card {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.bg-site {
+    background-color: #F5EBD0;
+    color: #80652B;
+}
 
 .empty-illustration {
     display: flex;

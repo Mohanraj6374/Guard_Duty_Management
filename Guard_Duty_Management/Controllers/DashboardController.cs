@@ -6,7 +6,7 @@ namespace Guard_Duty_Management.Controllers
     public class DashboardController : Controller
     {
 
-        [Authorize]
+        //[Authorize]
         public IActionResult DashboardView()
         {
             return View("DashboardView");

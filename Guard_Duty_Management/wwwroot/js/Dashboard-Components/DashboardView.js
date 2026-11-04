@@ -45,6 +45,33 @@ var vm = new Vue({
         console.log("Today's date:", this.selectedDate);
 
         this.loadDashboardData();
+        this.loadClockInStatus();
+    },
+    computed: {
+        prioritizedTaskList() {
+            if (!this.selectedExecutionTask) {
+                return this.assignedTaskList;
+            }
+
+            return [
+                this.selectedExecutionTask,
+                ...this.assignedTaskList.filter(
+                    task => task.assignmentId !==
+                        this.selectedExecutionTask.assignmentId
+                )
+            ];
+        },
+        filteredTaskList() {
+            if (!this.searchText) {
+                return this.prioritizedTaskList;
+            }
+            const search = this.searchText.toLowerCase().trim();
+            return this.prioritizedTaskList.filter(t => {
+                return (t.siteName.toLowerCase().includes(search) || t.taskName.toLowerCase().includes(search));
+            });
+        }
+
+
     },
     
     methods: {
@@ -136,30 +163,113 @@ var vm = new Vue({
 
         selectExecutionTask(task) {
             this.selectedExecutionTask = task;
-            
         },
 
-        confirmClockIn  () {
-            this.clockInStatus = true;
-            this.clockInSwitch = true;
+        // confirmClockIn  () {
+        //     this.clockInStatus = true;
+        //     this.clockInSwitch = true;
 
-            this.showClockInForm = false;
+        //     this.showClockInForm = false;
+        // },
+        async confirmClockIn() {
 
-            
+            try {
+
+                const requestData = {
+                    guardId: window.GuardId,
+                    siteId: this.clockIn.siteId,
+                    shiftId: this.clockIn.shiftId,
+                    guardPostId: this.clockIn.guardPostId
+                };
+
+                const response = await axios.post(
+                    '/ClockIn/ClockIn',
+                    requestData
+                );
+
+                if (response.data.success) {
+
+                    this.clockInStatus = true;
+                    this.clockInSwitch = true;
+
+                    this.clockLogs = [response.data.record];
+
+                    this.showClockInForm = false;
+
+                    console.log("Clocked in successfully.");
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Clock In failed:",
+                    error.response?.data || error.message
+                );
+
+                alert(error.response?.data?.message || "Unable to clock in.");
+
+            }
+        },
+        async confirmClockOut() {
+
+            try {
+
+                const response = await axios.post('/ClockIn/ClockOut', {
+                    guardId: window.GuardId
+                });
+
+                if (response.data.success) {
+
+                    this.clockInStatus = false;
+                    this.clockInSwitch = false;
+
+                    this.clockLogs = [response.data.record];
+
+                    console.log("Clocked out successfully.");
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Clock Out failed:",
+                    error.response?.data || error.message
+                );
+
+                // Restore the switch if the request fails
+                this.clockInSwitch = true;
+
+                alert(error.response?.data?.message || "Unable to clock out.");
+            }
         },
 
         closeClockInForm() {
                 this.showClockInForm = false;
                 this.clockInSwitch = false;
         },
+        // handleClockInToggle() {
+        //     if (this.clockInSwitch && !this.clockInStatus) {
+        //         this.showClockInForm = true;
+
+        //     }
+        //     else if (!this.clockInSwitch && this.clockInStatus) {
+        //         this.clockInStatus = false;
+        //         this.showClockInForm = false;
+        //     }
+        // },
         handleClockInToggle() {
+
             if (this.clockInSwitch && !this.clockInStatus) {
+
                 this.showClockInForm = true;
-                
+
             }
             else if (!this.clockInSwitch && this.clockInStatus) {
-                this.clockInStatus = false;
-                this.showClockInForm = false;
+
+                this.confirmClockOut();
+
             }
         },
 
@@ -170,7 +280,30 @@ var vm = new Vue({
         closeAddTaskForm() {
             this.showAddTaskForm = false;
 
-        }
+        },
+
+        async loadClockInStatus() {
+            try {
+                const response = await axios.get('/ClockIn/GetClockInStatus', {
+                    params: {
+                        guardId: window.GuardId
+                    }
+                });
+
+                this.clockInStatus = response.data.isClockedIn;
+                this.clockInSwitch = response.data.isClockedIn;
+
+                if (response.data.isClockedIn) {
+                    this.clockIn = {
+                        ...response.data.record
+                    };
+                }
+
+            }
+            catch (error) {
+                console.error("Error loading clock-in status:", error);
+            }
+        },
     }
     
 });

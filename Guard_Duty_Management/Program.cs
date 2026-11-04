@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient("GuardAPI", client => {
     client.BaseAddress = new Uri(
-        builder.Configuration["ApiSettings:BaseUrl"]!);
+        builder.Configuration["ApiSettings:BaseUrl"]!); 
 });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
