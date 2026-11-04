@@ -18,6 +18,8 @@
           href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet " href="~/css_/header.css" />
    
     
@@ -215,6 +217,37 @@
                 background: #ffffff;
             }
 
+            /* Loader */
+
+            .grid-loader {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                min-height: 200px;
+                background: rgba(255, 255, 255, 0.9);
+            }
+
+            .spinner {
+                width: 40px;
+                height: 40px;
+                border: 4px solid #e0e0e0;
+                border-top: 4px solid #007bff;
+                border-radius: 50%;
+                animation: spin 0.8s linear infinite;
+            }
+
+            @@keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .grid-loader p {
+                margin-top: 12px;
+                color: #444;
+                font-size: 14px;
+            }
 
             /* =========================================
                RESPONSIVE DESIGN
@@ -305,14 +338,14 @@
                     justify-content: space-between !important;
                     align-items: center !important;
                     width: 100% !important;
-                    min-height: 60px;
-                    padding: 12px 8px;
+                    min-height: 45px;
+                    padding: 8px;
                     margin: 0;
                     box-sizing: border-box;
                     background-color: #f4f5f9;
                     color: #788ba7;
                     font-family: Arial, sans-serif;
-                    font-size: 18px;
+                    font-size: 14px;
                 }
 
                 /* Total Records - Left */
@@ -329,24 +362,24 @@
                     flex-direction: row !important;
                     align-items: center !important;
                     justify-content: flex-end !important;
-                    gap: 24px;
+                    gap: 12px;
                     margin-left: auto !important;
                     white-space: nowrap;
                     color: #788ba7;
-                    font-size: 18px;
+                    font-size: 14px;
                 }
 
                     /* Page Size Dropdown */
                     #IncidentApp .pagination-controls select {
-                        width: 68px;
-                        min-width: 68px;
-                        height: 30px;
+                        width: 58px;
+                        min-width: 58px;
+                        height: 26px;
                         padding: 3px 5px;
                         border: 1px solid #999;
                         border-radius: 2px;
                         background-color: #fff;
                         color: #222;
-                        font-size: 16px;
+                        font-size: 13px;
                         cursor: pointer;
                     }
 
@@ -354,16 +387,16 @@
             @@media screen and (max-width: 600px) {
                 #IncidentApp .incident-pagination {
                     flex-wrap: wrap;
-                    gap: 12px;
+                    gap: 8px;
                 }
 
                 #IncidentApp .total-records,
                 #IncidentApp .pagination-controls {
-                    font-size: 15px;
+                    font-size: 13px;
                 }
 
                 #IncidentApp .pagination-controls {
-                    gap: 12px;
+                    gap: 8px;
                 }
             }
 
@@ -744,6 +777,216 @@
                 }
             }
 
+            /* spinner design for download button  */
+
+            .button-spinner {
+                display: inline-block;
+                width: 13px;
+                height: 13px;
+                border: 2px solid #ffffff;
+                border-top-color: transparent;
+                border-radius: 50%;
+                animation: buttonSpin 0.7s linear infinite;
+                margin-right: 6px;
+                vertical-align: middle;
+            }
+
+            @@keyframes buttonSpin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .toolbar-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+
+            /* design for search  */
+
+            /* Search container */
+            .incident-search {
+                display: flex;
+                align-items: center;
+                position: relative;
+                width: 280px;
+                height: 46px;
+                border: 2px solid #7890b3;
+                border-radius: 30px;
+                background: #ffffff;
+                padding: 0 12px 0 18px;
+                box-sizing: border-box;
+                transition: all 0.3s ease;
+            }
+
+                /* Search input */
+                .incident-search input {
+                    width: 100%;
+                    height: 100%;
+                    border: none;
+                    outline: none;
+                    background: transparent;
+                    font-size: 15px;
+                    color: #333333;
+                    padding: 0;
+                    box-shadow: none;
+                }
+
+                    /* Placeholder */
+                    .incident-search input::placeholder {
+                        color: #999999;
+                    }
+
+                /* Close button */
+                .incident-search .search-close-button {
+                    border: none;
+                    background: transparent;
+                    outline: none;
+                    font-size: 25px;
+                    font-weight: 400;
+                    color: #7890b3;
+                    cursor: pointer;
+                    padding: 0;
+                    margin-left: 8px;
+                    width: 25px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+
+                /* Focus effect */
+                .incident-search:focus-within {
+                    border-color: #536f9b;
+                    box-shadow: 0 0 4px rgba(83, 111, 155, 0.2);
+                }
+
+
+           
+            /* Common Download Button */
+            #IncidentApp .toolbar-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                padding: 8px 18px;
+                min-height: 38px;
+                border-radius: 25px;
+                background: #ffffff;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            /* PDF Button */
+            #IncidentApp .pdf-button {
+                color: #b42318;
+                border: 1px solid #c92a20;
+            }
+
+                #IncidentApp .pdf-button:hover {
+                    background: #fff1f0;
+                    box-shadow: 0 2px 6px rgba(180, 35, 24, 0.12);
+                }
+
+            /* Excel Button */
+            #IncidentApp .excel-button {
+                color: #087443;
+                border: 1px solid #159456;
+            }
+
+                #IncidentApp .excel-button:hover {
+                    background: #edfff4;
+                    box-shadow: 0 2px 6px rgba(8, 116, 67, 0.12);
+                }
+
+            /* File Icons */
+            #IncidentApp .file-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 23px;
+                height: 23px;
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: 700;
+            }
+
+            #IncidentApp .pdf-icon {
+                color: #ffffff;
+                background: #c92a20;
+            }
+
+            #IncidentApp .excel-icon {
+                color: #ffffff;
+                background: #159456;
+                font-size: 15px;
+            }
+
+            /* Disabled state */
+            #IncidentApp .toolbar-button:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                box-shadow: none;
+            }
+            .select2-selection__clear span{
+                display:none;
+            }
+            /* Loading spinner */
+            #IncidentApp .button-spinner {
+                width: 15px;
+                height: 15px;
+                border: 2px solid currentColor;
+                border-top-color: transparent;
+                border-radius: 50%;
+                animation: buttonSpin 0.7s linear infinite;
+            }
+
+            @@keyframes buttonSpin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .date-picker-wrapper {
+                position: relative;
+            }
+
+                .date-picker-wrapper .bi-calendar {
+                    position: absolute;
+                    right: 12px;
+                    left: auto;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #788ba7;
+                    font-size: 16px;
+                    z-index: 2;
+                    pointer-events: none;
+                }
+
+                .date-picker-wrapper input {
+                    padding-left: 12px;
+                    padding-right: 38px;
+                }
+
+            /* Total Records */
+            #IncidentApp .total-records {
+                font-size: 14px;
+            }
+
+            /* Pagination controls */
+            #IncidentApp .pagination-controls {
+                font-size: 14px;
+                gap: 12px;
+            }
+
+                /* Page information */
+                #IncidentApp .pagination-controls span {
+                    font-size: 14px;
+                }
 
     </style>
 
@@ -774,11 +1017,17 @@
 
                     <label for="incidentDateRange">Date Picker</label>
 
-                    <input type="text"
-                           id="incidentDateRange"
-                           class="form-control"
-                           placeholder="Select date range"
-                           readonly />
+                    <div class="date-picker-wrapper">
+
+                        <i class="bi bi-calendar"></i>
+
+                        <input type="text"
+                               id="incidentDateRange"
+                               class="form-control"
+                               placeholder="Select date range"
+                               readonly />
+
+                    </div>
 
                 </div>
 
@@ -971,8 +1220,7 @@
                             v-if="!showSearch"
                             v-on:click="toggleSearch">
 
-                        <span class="search-icon">⌕</span>
-
+                        <span class="search-icon"><i class="bi bi-search"></i></span>
                     </button>
 
 
@@ -1002,7 +1250,7 @@
 
                     <!-- PDF Download -->
 
-                    <button type="button"
+                    @* <button type="button"
                             class="toolbar-button"
                             v-on:click="downloadPdf">
 
@@ -1021,9 +1269,35 @@
                         <span class="download-icon">⇩</span>
                         Excel
 
+                    </button> *@
+
+                    <!-- PDF Download -->
+                    <button type="button"
+                            class="toolbar-button"
+                            v-on:click="downloadPdf"
+                            :disabled="isDownloadingPdf">
+
+                        <span v-if="isDownloadingPdf" class="button-spinner"></span>
+                        <span v-else class="download-icon"><i class="bi bi-download"></i></span>
+
+                        {{ isDownloadingPdf ? 'Generating PDF...' : 'PDF' }}
+
                     </button>
 
 
+                    <!-- Excel Download -->
+                    <button type="button"
+                            class="toolbar-button"
+                            v-on:click="downloadExcel"
+                            :disabled="isDownloadingExcel">
+
+                        <span v-if="isDownloadingExcel" class="button-spinner"></span>
+                        <span v-else class="download-icon"><i class="bi bi-download"></i></span>
+
+                        {{ isDownloadingExcel ? 'Generating Excel...' : 'Excel' }}
+
+                    </button>
+                   
                     <!-- Fullscreen -->
 
                     <button type="button"
@@ -1043,10 +1317,13 @@
             <!-- ================= INCIDENT GRID ================= -->
 
             <div class="table-container">
+                <div v-if="loading" class="grid-loader">
+                    <div class="spinner"></div>
+                    <p>Loading incident records...</p>
+                </div>
+                <table class="incident-table" v-show="!loading">
 
-                <table class="incident-table">
-
-                    <thead>
+                  <thead>
 
                         <tr>
 
@@ -1054,13 +1331,14 @@
 
 
                             <th class="sortable"
-                                v-on:click="sortBy('incidentNo')">
+                                v-on:click="sortBy('incidentNo')" >
 
                                 Incident No
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
-                                <span class="sort-icon">
+                                @* <span class="sort-icon">
                                     {{ sortIndicator('incidentNo') }}
-                                </span>
+                                </span> *@
 
                             </th>
 
@@ -1069,10 +1347,7 @@
                                 v-on:click="sortBy('state')">
 
                                 State
-
-                                <span class="sort-icon">
-                                    {{ sortIndicator('state') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1082,9 +1357,7 @@
 
                                 Territory
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('territory') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1094,9 +1367,7 @@
 
                                 Client
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('client') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1106,9 +1377,7 @@
 
                                 Site
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('site') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1118,9 +1387,7 @@
 
                                 Location
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('location') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1130,10 +1397,7 @@
 
                                 Guard Post
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('guardPost') }}
-                                </span>
-
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
                             </th>
 
 
@@ -1144,9 +1408,7 @@
                                     Type of Incident
                                 </span>
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('type') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1156,9 +1418,7 @@
 
                                 Category
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('category') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1168,9 +1428,7 @@
 
                                 SubCategory
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('subCategory') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1180,9 +1438,7 @@
 
                                 Created By
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('createdBy') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1192,9 +1448,7 @@
 
                                 Assigned To
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('assignedTo') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1204,9 +1458,7 @@
 
                                 Closed By
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('closedBy') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1216,9 +1468,7 @@
 
                                 Status
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('status') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1228,9 +1478,7 @@
 
                                 Reported Date
 
-                                <span class="sort-icon">
-                                    {{ sortIndicator('reportedDate') }}
-                                </span>
+                                <i class="fa-solid" :class="sortIndicator('incidentNo')"></i>
 
                             </th>
 
@@ -1291,7 +1539,7 @@
                                         title="View incident"
                                         v-on:click="viewIncident(incident)">
 
-                                    ◎
+                                    <i class="bi bi-eye"></i>
 
                                 </button>
 
