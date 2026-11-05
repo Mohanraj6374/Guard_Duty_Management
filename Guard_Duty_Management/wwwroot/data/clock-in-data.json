@@ -17,6 +17,186 @@
       "isClockedIn": true,
       "clockInTime": "2026-11-04T13:14:15.2964829\u002B00:00",
       "clockOutTime": null
+    },
+    {
+      "guardId": "1189",
+      "siteId": "",
+      "shiftId": "",
+      "guardPostId": "",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T04:54:33.1418280\u002B00:00",
+      "clockOutTime": "2026-11-05T05:41:00.8321094\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T05:41:09.9918843\u002B00:00",
+      "clockOutTime": "2026-11-05T05:41:26.7622464\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T05:41:39.6801354\u002B00:00",
+      "clockOutTime": "2026-11-05T07:33:05.8080218\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T07:33:28.3117633\u002B00:00",
+      "clockOutTime": "2026-11-05T07:35:38.7692738\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T07:35:41.9975008\u002B00:00",
+      "clockOutTime": "2026-11-05T07:37:18.6216466\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T07:37:23.3298478\u002B00:00",
+      "clockOutTime": "2026-11-05T07:39:12.4428462\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T07:39:33.9945739\u002B00:00",
+      "clockOutTime": "2026-11-05T08:55:41.8113347\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T08:55:46.8999498\u002B00:00",
+      "clockOutTime": "2026-11-05T08:56:00.9160196\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T08:56:10.0344075\u002B00:00",
+      "clockOutTime": "2026-11-05T09:04:49.0038291\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T09:04:52.7043870\u002B00:00",
+      "clockOutTime": "2026-11-05T09:07:44.3643869\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T09:07:47.6842093\u002B00:00",
+      "clockOutTime": "2026-11-05T09:19:51.0581245\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T09:19:54.4905394\u002B00:00",
+      "clockOutTime": "2026-11-05T09:24:06.0139725\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "2",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T09:24:08.8872235\u002B00:00",
+      "clockOutTime": "2026-11-05T09:28:50.2657120\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "",
+      "shiftId": "",
+      "guardPostId": "",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T10:23:04.2917681\u002B00:00",
+      "clockOutTime": "2026-11-05T10:23:12.0918099\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "3",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T12:53:35.7082286\u002B00:00",
+      "clockOutTime": "2026-11-05T12:56:15.9602030\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "3",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T12:58:30.8034530\u002B00:00",
+      "clockOutTime": "2026-11-05T13:04:07.8547107\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "3",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T13:04:12.7057727\u002B00:00",
+      "clockOutTime": "2026-11-05T13:04:29.1652320\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "3",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T13:04:44.6656107\u002B00:00",
+      "clockOutTime": "2026-11-05T13:05:16.9263753\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "3",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-05T13:05:24.0773752\u002B00:00",
+      "clockOutTime": "2026-11-05T13:40:24.3910361\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "",
+      "shiftId": "",
+      "guardPostId": "",
+      "isClockedIn": true,
+      "clockInTime": "2026-11-05T13:40:40.8629835\u002B00:00",
+      "clockOutTime": null
     }
   ]
 }

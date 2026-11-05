@@ -7,9 +7,11 @@ namespace Guard_Duty_Management.Controllers
     public class ClockInController:Controller
     {
         private readonly IWebHostEnvironment _environment;
-        public ClockInController(IWebHostEnvironment environment)   
+        private readonly ILogger<ClockInController> _logger;
+        public ClockInController(IWebHostEnvironment environment, ILogger<ClockInController> logger)   
         {
             _environment = environment;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -42,7 +44,7 @@ namespace Guard_Duty_Management.Controllers
             return Ok(new
             {
                 isClockedIn = true,
-                record = activeRecord
+                record = activeRecord.Clone()
             });
         }
         [HttpPost]
@@ -161,6 +163,34 @@ namespace Guard_Duty_Management.Controllers
                 message = "Clocked out successfully.",
                 record = activeRecord
             });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetShiftActivityLog(string guardId)
+        {
+            var filePath = Path.Combine(_environment.WebRootPath, "data", "clock-in-data.json");
+
+            var json = await System.IO.File.ReadAllTextAsync(filePath);
+
+            var document = JsonDocument.Parse(json);
+            var records = document.RootElement.GetProperty("records");
+
+            _logger.LogInformation("Guard ID received: " + guardId);
+
+            foreach (var record in records.EnumerateArray())
+            {
+                _logger.LogInformation(
+                    "Guard ID in JSON: " +
+                    record.GetProperty("guardId").GetString()
+                );
+            }
+            var activityLogs = records.EnumerateArray()
+                .Where(record => record.GetProperty("guardId").GetString() == guardId)
+                .Select(record => record.Clone())
+                .ToList();
+
+            document.Dispose();
+            return Ok(activityLogs);
         }
     }
 }

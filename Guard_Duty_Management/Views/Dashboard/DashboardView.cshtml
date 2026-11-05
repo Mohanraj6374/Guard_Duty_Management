@@ -15,7 +15,7 @@
 
     @Html.AntiForgeryToken()
 
-    <div class="container-fluid bg-main p-0" id="DashboardView" v-cloak>
+    <div class="container-fluid bg-main p-0 overflow-x-hidden" id="DashboardView" v-cloak>
         <app-header></app-header>
         
         <div class="container-fluid nav-controls py-2">
@@ -244,12 +244,12 @@
         </div>
 
 
-        <div class="container-fluid vh-100 main body-text-color">
-            <div class="row mt-2 g-2 align-items-stretch h-100">
-                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center">
+        <div class="container-fluid main body-text-color">
+            <div class="row mt-2 g-2 align-items-stretch dashboard-layout">
+                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center dashboard-column">
                     <div class="card w-100 h-100 bg-white text-black">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-between">
+                        <div class="card-body dashboard-right-body task-panel">
+                            <div class="d-flex align-items-start justify-content-between">
                                 <div class="d-flex align-items-center justify-content-start gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#C8AD6B" class="bi bi-clipboard-check" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
@@ -289,8 +289,6 @@
                                               rx="10" fill="#FFFFFF"
                                               stroke="#8993A1" stroke-width="3" />
 
-                                        
-
                                         <!-- List items -->
                                         <circle cx="58" cy="58" r="2.5" fill="#8993A1" />
                                         <path d="M70 58 H98"
@@ -327,7 +325,7 @@
                                 <p class=" text-center fw-normal text-muted">There is no task assigned</p>
 
                             </div>
-                            <div v-else class="h-auto mt-2">
+                            <div v-else class="h-auto mt-2 task-list">
                                 <div v-if="filteredTaskList.length > 0" class="p-0 m-0">
                                     <div v-for="task in filteredTaskList" :key="task.assignmentId" class="card mt-2 task-card" v-bind:class="{'selected-task':selectedExecutionTask && selectedExecutionTask.assignmentId === task.assignmentId}" v-on:click="selectExecutionTask(task)" style="cursor:pointer;">
                                         <div class="card-body">
@@ -413,9 +411,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center">
-                    <div class="card w-100 h-100 d-flex align-items-center justify-content-center">
-                        <div class="card-body">
+                <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center dashboard-column">
+                    <div class="card w-100 h-100 d-flex align-items-center justify-content-center p-0">
+                        <div class="card-body h-100">
                             <div v-if="!selectedExecutionTask" class="p-2 d-flex flex-column align-items-center justify-content-center">
 
                                 <div class="empty-illustration">
@@ -520,9 +518,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center">
+                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center dashboard-column">
                     <div class="card w-100 h-100">
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column dashboard-right-body">
                             <div class="d-flex flex-row gap-2 align-items-center justify-content-start px-2 py-2 rounded" v-bind:class="clockInStatus? 'bg-custom-on':'bg-custom-off'">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <div class="p-3 rounded-circle" v-bind:class="clockInStatus ? 'bg-success-subtle':'bg-danger-subtle'">
@@ -539,7 +537,7 @@
                                     <p v-if="clockInStatus" class="mb-1 lh-1 font-size-7 text-muted">You are now receiving tasks and updates.</p>
                                 </div>                               
                             </div>
-                            <div class="d-flex flex-column mt-2 bg-header px-3 py-2 rounded">
+                            <div class="d-flex flex-column mt-2 bg-header px-3 py-2 rounded shift-activity-panel">
                                 <div class="d-flex align-items-center justify-content-start gap-2 py-2">
 
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -560,13 +558,34 @@
 
                                     <p class="m-0 fs-5 fw-semibold align-middle">Shift Activity Log</p>
                                 </div>
-                                <div class="mt-2 px-2">
-                                    <p>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-check-circle-fill align-middle" viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                        </svg>
-                                        <span class="align-middle">{{clockInStatus? 'Clocked In':'Clocked Out'}}</span>
-                                    </p>
+                                <div class="mt-2 px-2 shift-activity-list">
+
+                                    <!--Clock In/Out Activity-->
+                                    <div v-for="record in shiftActivityLogs"
+                                        :key="record.clockInTime">
+
+                                        <!--Clockout activity-->
+                                        <div v-if="record.clockOutTime" class="d-flex align-items-center mb-2 gap-2 bg-custom-off p-2 rounded border border-danger-subtle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                                            </svg>
+                                            <span class="lh-1 fw-semibold">
+                                                Clocked Out <br />
+                                                <span class="font-size-8 fw-normal">{{formatDateTime(record.clockOutTime)}}</span>
+                                            </span>
+                                        </div>
+                                        <!--Clockin activity-->
+                                        <div class="d-flex align-items-center mb-2 gap-2 bg-custom-on p-2 rounded border border-success-subtle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                            </svg>
+                                            <span class="lh-1 fw-semibold">Clocked In <br />
+                                                <span class="font-size-8 fw-normal">{{formatDateTime(record.clockInTime)}}</span>
+                                            </span>
+                                        </div>
+
+                                        
+                                    </div>
 
                                 </div>
                             </div>
@@ -574,6 +593,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="container-fluid vw-100 py-3 bg-transparent">
+            @* <p class="mb-0 fs-3 lh-1">MSS Security</p>
+            <p class="mb-0 lh-1 font-size-8">A SIS Group Enterprise</p> *@
         </div>
     </div>
 

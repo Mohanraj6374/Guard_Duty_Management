@@ -1,22 +1,24 @@
 var vm = new Vue({
     el: '#DashboardView',
     data() {
-        return{
-
+        return {
+            guardId: window.GuardId,
             selectedDate: moment().format("YYYY-MM-DD"),
-            
-            clockLogs:[],
+
+            clockLogs: [],
             clockInStatus: false,
             clockInSwitch: false,
+            shiftActivityLogs: [],
+            
             showClockInForm: false,
             showAddTaskForm: false,
             searchText: '',
 
             clockIn: {
-                siteId:'',
+                siteId: '',
                 siteId: '',
                 shiftId: '',
-                guardPostId:''
+                guardPostId: ''
             },
 
             addTask: {
@@ -24,7 +26,7 @@ var vm = new Vue({
                 taskId: '',
                 date: '',
                 startTime: '',
-                endTime: ''                
+                endTime: ''
             },
 
             siteOptions: [],
@@ -38,14 +40,13 @@ var vm = new Vue({
 
             selectedExecutionTask: null,
 
-           
+
         };
     },
     created() {
-        console.log("Today's date:", this.selectedDate);
-
         this.loadDashboardData();
         this.loadClockInStatus();
+        this.loadShiftActivityLogs();
     },
     computed: {
         prioritizedTaskList() {
@@ -73,8 +74,15 @@ var vm = new Vue({
 
 
     },
-    
+
     methods: {
+        formatDateTime(date) {
+            if (!date) {
+                return "-";
+            }
+            return window.moment(date).local().format("hh:mm A, DD MMM YYYY");
+        },
+
         async loadDashboardData() {
 
             try {
@@ -110,6 +118,7 @@ var vm = new Vue({
 
         },
 
+        //adding the task
         assignTask() {
 
             if (!this.addTask.siteId || !this.addTask.taskId || !this.addTask.date || !this.addTask.startTime || !this.addTask.endTime) {
@@ -154,13 +163,14 @@ var vm = new Vue({
                 taskId: '',
                 date: '',
                 startTime: '',
-                endTime:''
+                endTime: ''
             }
 
             this.showAddTaskForm = false;
 
         },
 
+        //storing the selected task from task list
         selectExecutionTask(task) {
             this.selectedExecutionTask = task;
         },
@@ -171,6 +181,8 @@ var vm = new Vue({
 
         //     this.showClockInForm = false;
         // },
+
+        //updating the data if user is successfully clocked in
         async confirmClockIn() {
 
             try {
@@ -212,6 +224,8 @@ var vm = new Vue({
 
             }
         },
+
+        //Updating the data if the user is clocked out successfully
         async confirmClockOut() {
 
             try {
@@ -246,8 +260,8 @@ var vm = new Vue({
         },
 
         closeClockInForm() {
-                this.showClockInForm = false;
-                this.clockInSwitch = false;
+            this.showClockInForm = false;
+            this.clockInSwitch = false;
         },
         // handleClockInToggle() {
         //     if (this.clockInSwitch && !this.clockInStatus) {
@@ -275,13 +289,14 @@ var vm = new Vue({
 
         openAddTaskForm() {
             this.showAddTaskForm = true;
-            
+
         },
         closeAddTaskForm() {
             this.showAddTaskForm = false;
 
         },
 
+        //keep the dashboard updated of the status of guard if he is clocked in or clocked out
         async loadClockInStatus() {
             try {
                 const response = await axios.get('/ClockIn/GetClockInStatus', {
@@ -290,8 +305,13 @@ var vm = new Vue({
                     }
                 });
 
+                console.log("Clock In Api response:", response.data);
+
                 this.clockInStatus = response.data.isClockedIn;
                 this.clockInSwitch = response.data.isClockedIn;
+
+                console.log("clockin status", this.clockInStatus);
+                console.log("clockin switch", this.clockInSwitch);
 
                 if (response.data.isClockedIn) {
                     this.clockIn = {
@@ -304,6 +324,25 @@ var vm = new Vue({
                 console.error("Error loading clock-in status:", error);
             }
         },
+        async loadShiftActivityLogs() {
+            try {
+                console.log("Guard ID from Vue:", this.guardId);
+                const response = await axios.get('/ClockIn/GetShiftActivityLog', {
+                    params: {
+                        guardId: this.guardId
+                    }
+                });
+                this.shiftActivityLogs = response.data.sort((a, b) => {
+                    return new Date(b.clockInTime) - new Date(a.clockInTime);
+                });
+
+                for (let i in this.shiftActivityLogs) {
+                    console.log(this.shiftActivityLogs[i]);
+                }
+            } catch (error) {
+                console.error("Error loading shift sctivity log", error);
+            }    
+        }
     }
     
 });
