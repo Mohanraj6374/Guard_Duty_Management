@@ -49,6 +49,7 @@ var vm = new Vue({
         this.loadShiftActivityLogs();
     },
     computed: {
+        //changing the order in task list which task is selected will be at top
         prioritizedTaskList() {
             if (!this.selectedExecutionTask) {
                 return this.assignedTaskList;
@@ -62,6 +63,7 @@ var vm = new Vue({
                 )
             ];
         },
+        //search bar
         filteredTaskList() {
             if (!this.searchText) {
                 return this.prioritizedTaskList;
@@ -76,6 +78,7 @@ var vm = new Vue({
     },
 
     methods: {
+        //Format date time in activity log
         formatDateTime(date) {
             if (!date) {
                 return "-";
@@ -83,6 +86,7 @@ var vm = new Vue({
             return window.moment(date).local().format("hh:mm A, DD MMM YYYY");
         },
 
+        //loading guard/shift/task
         async loadDashboardData() {
 
             try {
@@ -258,7 +262,7 @@ var vm = new Vue({
                 alert(error.response?.data?.message || "Unable to clock out.");
             }
         },
-
+        //Closing clock In form with close or cross button
         closeClockInForm() {
             this.showClockInForm = false;
             this.clockInSwitch = false;
@@ -273,6 +277,12 @@ var vm = new Vue({
         //         this.showClockInForm = false;
         //     }
         // },
+
+
+
+
+        //handling the behaviour of clock in toggle whether it should be turn off or turn on
+        //Calling confirmClockIn which gives the status to update the switch and status
         handleClockInToggle() {
 
             if (this.clockInSwitch && !this.clockInStatus) {
@@ -286,11 +296,12 @@ var vm = new Vue({
 
             }
         },
-
+        //Opening Add Task Form
         openAddTaskForm() {
             this.showAddTaskForm = true;
 
         },
+        //Closing Add Task Form
         closeAddTaskForm() {
             this.showAddTaskForm = false;
 
@@ -324,6 +335,8 @@ var vm = new Vue({
                 console.error("Error loading clock-in status:", error);
             }
         },
+
+        //Activity Log Clock In/Clock Out
         async loadShiftActivityLogs() {
             try {
                 console.log("Guard ID from Vue:", this.guardId);
