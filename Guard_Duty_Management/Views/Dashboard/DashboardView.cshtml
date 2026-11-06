@@ -138,7 +138,7 @@
 
         <div v-if="showClockInForm" id="clockInPopup" class="container-fluid d-flex align-items-center popup-form bg-custom-blur overflow-x-hidden overflow-y-hidden position-fixed start-0 top-0 py-3 mb-2">
             <div class="row justify-content-center align-items-center w-100 h-100">
-                <div class="col-md-4 col-12">
+                <div class="col-lg-4 col-sm-7 col-11">
                     <div class="mt-3 text-dark card bg-grad rounded-3 shadow-lg px-3">
                         <div class="card-body border-0">
                         <button class="btn-close btn-icon btn-close-dark position-absolute top-0 end-0 m-3" v-on:click="closeClockInForm"></button>
@@ -475,12 +475,12 @@
                                     <div class="row row-cols-2 g-2">
                                         <div class="col">
                                             <p class="text-muted font-size-8 mb-0">SITE NAME: </p>
-                                            <p class="mb-0">{{selectedExecutionTask.siteName}}</p>
+                                            <p class="mb-0 fw-semibold">{{selectedExecutionTask.siteName}}</p>
                                             
                                         </div>
                                         <div class="col">
                                             <p class="text-muted font-size-8 mb-0">SITE CODE:</p>
-                                            <p class="mb-0">{{selectedExecutionTask.siteId}}</p>
+                                            <p class="mb-0 fw-semibold">{{selectedExecutionTask.siteId}}</p>
                                             
                                         </div>
                                         <div class="col">
@@ -504,10 +504,14 @@
                                         </div>
                                     </div>
                                     <div class="mt-2">
-                                        <button class="btn security-btn px-3">Start</button>
-                                        <button class="btn btn-dark px-3">End</button>
-                                        <div>
-                                            <p class="fw-bold">Total Time:00:00:00</p>
+                                        <!--Start Button-->
+                                        <button v-if="!taskRunning && !taskCompleted" class="btn security-btn px-3" v-on:click="startTask()">Start</button>
+                                        <!--Running Timer-->
+                                        <p v-if="taskRunning || taskCompleted" class="fw-semibold">{{taskRunning ? 'Running Time:':'Total Time:' }} <span class="fw-bold">{{formattedTotalTime}}</span></p>
+                                        <!--End Button-->
+                                        <button v-if="taskRunning && !taskCompleted" class="btn btn-dark px-3" v-on:click="endTask()">End</button>
+                                        <!--Completed Section-->
+                                        <div v-if="taskCompleted">
                                             <input class="form-control in" placeholder="Comments" />
                                             <button class="btn btn-success px-3 mt-2">Submit</button>
                                         </div>
@@ -521,7 +525,8 @@
                 <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center dashboard-column">
                     <div class="card w-100 h-100">
                         <div class="card-body d-flex flex-column dashboard-right-body">
-                            <div class="d-flex flex-row gap-2 align-items-center justify-content-start px-2 py-2 rounded" v-bind:class="clockInStatus? 'bg-custom-on':'bg-custom-off'">
+                            <!--ClockIn/Out Status Box-->
+                            <div class="d-flex flex-row gap-2 align-items-center justify-content-start px-2 py-2 rounded border" v-bind:class="[clockInStatus? 'bg-custom-on':'bg-custom-off',clockInStatus? 'border-success-subtle':'border-danger-subtle']">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <div class="p-3 rounded-circle" v-bind:class="clockInStatus ? 'bg-success-subtle':'bg-danger-subtle'">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-clock" viewBox="0 0 16 16" v-bind:class="clockInStatus ? 'clock-green':'clock-red'">
@@ -535,8 +540,10 @@
                                     <p class="mb-2 fs-5 fw-semibold lh-1" v-bind:class="clockInStatus ? 'text-success':'security-text'">{{ clockInStatus ? 'Clocked In' : 'Clocked Out' }}</p>
                                     <p v-if="!clockInStatus" class="mb-1 lh-1 font-size-7 text-muted">Start your shift to began receiving tasks and updates.</p>
                                     <p v-if="clockInStatus" class="mb-1 lh-1 font-size-7 text-muted">You are now receiving tasks and updates.</p>
-                                </div>                               
+                                </div>
                             </div>
+                                
+                            
                             <div class="d-flex flex-column mt-2 bg-header px-3 py-2 rounded shift-activity-panel">
                                 <div class="d-flex align-items-center justify-content-start gap-2 py-2">
 

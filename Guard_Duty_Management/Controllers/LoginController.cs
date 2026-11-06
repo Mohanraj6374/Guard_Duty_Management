@@ -189,15 +189,11 @@ namespace Guard_Duty_Management.Controllers
                     });
                 }
 
-
-                var getUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserDetails?mobileNo=8310561649";
+                //var getUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserDetails?mobileNo=8310561649";
                 //string verifyUrl = _configuration["ApiSettings:VerifyUserDetails"]!;
-
-                //var getUrl = $"{verifyUrl}";
+                var getUrl = $"{VerifyUserDetailsUrl}?mobileNo={Uri.EscapeDataString(request.PhoneNumber.Trim())}";
                 var userResponse = await _httpClient.GetAsync(getUrl);
                 Console.WriteLine("Details fetched");
-                
-
                 var userResult = await userResponse.Content.ReadAsStringAsync();
 
                 if (!userResponse.IsSuccessStatusCode)
@@ -228,7 +224,8 @@ namespace Guard_Duty_Management.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, guardId),
-                    new Claim(ClaimTypes.Name, string.IsNullOrWhiteSpace(email)?request.PhoneNumber.Trim():email),                   
+                    //new Claim(ClaimTypes.Name, string.IsNullOrWhiteSpace(email)?request.PhoneNumber.Trim():email),
+                    new Claim(ClaimTypes.Name, email),
                     new Claim(ClaimTypes.MobilePhone, request.PhoneNumber)
                 };
 
