@@ -9,18 +9,30 @@
 .toast-notification {
     position: relative;
     width: 100%;
-    background-color: #ffffff;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
 .toast-content{
-    
 }
-.toast-close{
+.toast-success{
+    background: #00ff90;
+
+}
+.toast-error {
+    background: #ff0000;
+}
+.toast-warning {
+    background: #ffd800;
+}
+.toast-info {
+    background: #00ffff;
+}
+.toast-close {
     border: none;
-    background:transparent;
-    font-size:23px;
+    background: transparent;
+    font-size: 4rem;
     line-height: 1;
-    cursor: pointer;
+    cursor: pointer !important;
+    color: aliceblue;
 }

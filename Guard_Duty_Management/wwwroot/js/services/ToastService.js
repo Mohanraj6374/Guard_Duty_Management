@@ -3,15 +3,15 @@ window.ToastService = {
     eventBus: new Vue(),
 
     //Success Notification
-    success(message, duration = 4000) {
+    success(message, duration = 150000) {
         this.show(message, 'success', duration);
     },
     //Error Notification
-    error(mrssage, duration = 4000) {
+    error(message, duration = 40000) {
         this.show(message, 'error', duration);
     },
     //Info Notification
-    info(message, duration = 4000) {
+    info(message, duration = 40000) {
         this.show(message, 'info', duration);
     },
     //warning notification

@@ -99,8 +99,17 @@ var vm = new Vue({
     },
 
     methods: {
-        testToast() {
+        successToast() {
             ToastService.success('Task Successfully Added');
+        },
+        warningToast() {
+            ToastService.warning('Warning: Clock Out when Shift Ended ');
+        },
+        infoToast() {
+            ToastService.info('Need Clock In to Add Task');
+        },
+        errorToast() {
+            ToastService.error('OOps! It seems task not added');
         },
         
         //Format date time in activity log
