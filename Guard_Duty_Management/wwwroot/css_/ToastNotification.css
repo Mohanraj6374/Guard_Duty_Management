@@ -1,0 +1,26 @@
+﻿.toast-container{
+    position: fixed;
+    top:50px;
+    right: 20px;
+    z-index: 99999;
+    width: 350px;
+    max-width: calc(100vw - 40px);
+}
+.toast-notification {
+    position: relative;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+.toast-content{
+    
+}
+.toast-close{
+    border: none;
+    background:transparent;
+    font-size:23px;
+    line-height: 1;
+    cursor: pointer;
+}

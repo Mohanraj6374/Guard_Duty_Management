@@ -99,6 +99,10 @@ var vm = new Vue({
     },
 
     methods: {
+        testToast() {
+            ToastService.success('Task Successfully Added');
+        },
+        
         //Format date time in activity log
         formatDateTime(date) {
             if (!date) {
