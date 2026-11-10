@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 
 namespace Guard_Duty_Management.Controllers
@@ -14,6 +16,7 @@ namespace Guard_Duty_Management.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly string? _azureMapsKey;
 
         public IncidentController(
             IHttpClientFactory httpClientFactory,
@@ -21,11 +24,13 @@ namespace Guard_Duty_Management.Controllers
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _azureMapsKey = _configuration["AzureMaps:SubscriptionKey"];
         }
 
         // Opens the incident view
         public IActionResult IncidentView()
         {
+            ViewBag.AzureMapsKey = _azureMapsKey;
             return View("IncidentView");
         }
 
@@ -145,6 +150,68 @@ namespace Guard_Duty_Management.Controllers
             }
 
         }*/
+
+
+
+        private async Task<string?> ConvertImageToBase64(
+    HttpClient client,
+    string imageUrl)
+        {
+            try
+            {
+                if (!Uri.TryCreate(
+                    imageUrl,
+                    UriKind.Absolute,
+                    out var imageUri))
+                {
+                    return null;
+                }
+
+                if (imageUri.Scheme != Uri.UriSchemeHttps ||
+                    imageUri.Host != "mssiopsstore.blob.core.windows.net")
+                {
+                    return null;
+                }
+
+                using var response = await client.GetAsync(
+                    imageUri,
+                    HttpCompletionOption.ResponseHeadersRead
+                );
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var contentType =
+                    response.Content.Headers.ContentType?.MediaType;
+
+                if (contentType == null ||
+                    !contentType.StartsWith(
+                        "image/",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                // Limit each image to 10 MB
+                if (response.Content.Headers.ContentLength > 10 * 1024 * 1024)
+                    return null;
+
+                var imageBytes =
+                    await response.Content.ReadAsByteArrayAsync();
+
+                if (imageBytes.Length > 10 * 1024 * 1024)
+                    return null;
+
+                var base64 = Convert.ToBase64String(imageBytes);
+
+                return $"data:{contentType};base64,{base64}";
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
+        }
+
         public async Task<IActionResult> GetIncidents(int IncidentId)
         {
             try
@@ -186,7 +253,7 @@ namespace Guard_Duty_Management.Controllers
                 }
 
                 // 2. Get the SAS Token API URL from configuration
-                 var sasApiUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/GetSASToken_R";
+                var sasApiUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/GetSASToken_R";
 
                 if (string.IsNullOrWhiteSpace(sasApiUrl))
                 {
@@ -239,21 +306,24 @@ namespace Guard_Duty_Management.Controllers
                         statusCode: 502);
                 }
 
-                // 5. Secure the comma-separated image URLs
+                /// 5. Process Open Images
                 var imageUri = incidentData["imageUri"]?.GetValue<string>();
+
+                var securedImages = new List<string>();
 
                 if (!string.IsNullOrWhiteSpace(imageUri))
                 {
-                    var securedImages = imageUri
+                    securedImages = imageUri
                         .Split(',', StringSplitOptions.RemoveEmptyEntries)
                         .Select(url => url.Trim())
-                        .Where(url => Uri.TryCreate(
-                            url, UriKind.Absolute, out _))
+                        .Where(url =>
+                            Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+                            uri.Scheme == Uri.UriSchemeHttps &&
+                            uri.Host == "mssiopsstore.blob.core.windows.net")
                         .Select(url =>
                         {
-                            // Remove an existing query string before
-                            // appending the current SAS parameters.
                             var uri = new Uri(url);
+
                             var builder = new UriBuilder(uri)
                             {
                                 Query = sasQuery,
@@ -262,12 +332,76 @@ namespace Guard_Duty_Management.Controllers
 
                             return builder.Uri.ToString();
                         })
-                        .ToArray();
-
-                    // Return the secured image URLs as a comma-separated string
-                    incidentData["imageUri"] =
-                        string.Join(",", securedImages);
+                        .ToList();
                 }
+
+                // 6. Convert Open Images to Base64
+                var imageDataUrls = await Task.WhenAll(
+                    securedImages.Select(url =>
+                        ConvertImageToBase64(client, url))
+                );
+
+                var base64Images = new JsonArray();
+
+                foreach (var image in imageDataUrls)
+                {
+                    if (!string.IsNullOrWhiteSpace(image))
+                    {
+                        base64Images.Add(image);
+                    }
+                }
+
+                incidentData["openImagesBase64"] = base64Images;
+
+
+                // 7. Process Closed Images
+                var closedImageUri =
+                    incidentData["closeImgUri"]?.GetValue<string>();
+
+                var securedClosedImages = new List<string>();
+
+                if (!string.IsNullOrWhiteSpace(closedImageUri))
+                {
+                    securedClosedImages = closedImageUri
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(url => url.Trim())
+                        .Where(url =>
+                            Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+                            uri.Scheme == Uri.UriSchemeHttps &&
+                            uri.Host == "mssiopsstore.blob.core.windows.net")
+                        .Select(url =>
+                        {
+                            var uri = new Uri(url);
+
+                            var builder = new UriBuilder(uri)
+                            {
+                                Query = sasQuery,
+                                Fragment = string.Empty
+                            };
+
+                            return builder.Uri.ToString();
+                        })
+                        .ToList();
+                }
+
+                // 8. Convert Closed Images to Base64
+                var closedImageDataUrls = await Task.WhenAll(
+                    securedClosedImages.Select(url =>
+                        ConvertImageToBase64(client, url))
+                );
+
+                var closedBase64Images = new JsonArray();
+
+                foreach (var image in closedImageDataUrls)
+                {
+                    if (!string.IsNullOrWhiteSpace(image))
+                    {
+                        closedBase64Images.Add(image);
+                    }
+                }
+
+                incidentData["closedImagesBase64"] = closedBase64Images;
+
 
                 // 6. Return the modified incident JSON to Vue
                 return new ContentResult

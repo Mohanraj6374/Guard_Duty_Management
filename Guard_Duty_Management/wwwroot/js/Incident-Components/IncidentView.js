@@ -18,14 +18,11 @@ var incidentDetailsApp = new Vue({
             // incidentId: new URLSearchParams(
             //     window.location.search
             // ).get("IncidentId"),
-
-            encodedId: new URLSearchParams(window.location.search)
-                .get(btoa("IncidentId")),
-
+            encodedId: new URLSearchParams(window.location.search) .get(btoa("IncidentId")),
             incidentId: null,
-            
-
-           
+          // Azure Maps properties
+        azureMap: null,
+        azureMapsKey: window.azureMapsKey,
 
             incident: {
 
@@ -33,6 +30,7 @@ var incidentDetailsApp = new Vue({
                 reportTitle: "Security (ST) Report",
                 reportReference: "--",
                 reportDate: "--",
+                
 
                 // Basic incident details
                 id: "--",
@@ -49,6 +47,7 @@ var incidentDetailsApp = new Vue({
 
                 // Location details
                 openGpsLocation: "--",
+                mapImageBase64: "",
                 siteName: "--",
                 locationName: "--",
 
@@ -204,6 +203,64 @@ var incidentDetailsApp = new Vue({
 
     methods: {
 
+        initializeAzureMap: function () {
+
+    // Get GPS coordinates from incident data
+    var coordinates = this.incident.openGpsLocation;
+
+    if (!coordinates || coordinates === "--") {
+        console.log("GPS coordinates not available.");
+        return;
+    }
+
+    // Split longitude and latitude
+    var parts = coordinates.split(",");
+
+    if (parts.length !== 2) {
+        console.log("Invalid GPS coordinates.");
+        return;
+    }
+
+    var longitude = parseFloat(parts[0]);
+    var latitude = parseFloat(parts[1]);
+
+    if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) {
+        console.log("Invalid latitude or longitude.");
+        return;
+    }
+
+    // Dispose previous map instance if one exists
+    if (this.azureMap) {
+        this.azureMap.dispose();
+        this.azureMap = null;
+    }
+
+    // Create Azure Map
+    this.azureMap = new atlas.Map("azureIncidentMap", {
+        center: [longitude, latitude],
+        zoom: 15,
+
+        authOptions: {
+            authType: "subscriptionKey",
+            subscriptionKey: this.azureMapsKey
+        }
+    });
+
+    // Add incident location marker after map loads
+    this.azureMap.events.add("ready", () => {
+
+        var marker = new atlas.HtmlMarker({
+            position: [longitude, latitude],
+            text: "I",
+            color: "red"
+        });
+
+        this.azureMap.markers.add(marker);
+
+    });
+
+},
+
         // --------------------------------------
         // Get Incident Details API
         // --------------------------------------
@@ -230,66 +287,72 @@ var incidentDetailsApp = new Vue({
 
             })
 
-            .then((response) => {
+                .then((response) => {
 
-                console.log("Complete API Response:", response.data);
+                    console.log("Complete API Response:", response.data);
 
-                // Extract actual incident object
-                var result =
-                    response.data &&
-                    response.data.data != null
-                        ? response.data.data
-                        : response.data;
+                    // Extract actual incident object
+                    var result =
+                        response.data &&
+                            response.data.data != null
+                            ? response.data.data
+                            : response.data;
 
-                if (
-                    !result ||
-                    typeof result !== "object" ||
-                    Array.isArray(result)
-                ) {
-                    throw new Error("No incident data returned.");
-                }
+                    if (
+                        !result ||
+                        typeof result !== "object" ||
+                        Array.isArray(result)
+                    ) {
+                        throw new Error("No incident data returned.");
+                    }
 
-                console.log("Incident Object:", result);
+                    console.log("Incident Object:", result);
 
-                // Call mapping method
-                this.mapIncidentData(result);
+                    // Call mapping method
+                    this.mapIncidentData(result);
 
-                console.log(
-                    "Mapped Incident:",
-                    this.incident
-                );
+                    console.log(
+                        "Mapped Incident:",
+                        this.incident
+                    );
 
-            })
+                })
 
-            .catch((error) => {
+                .catch((error) => {
 
-                console.error(
-                    "Failed to load incident details:",
-                    error
-                );
+                    console.error(
+                        "Failed to load incident details:",
+                        error
+                    );
 
-                if (error.response) {
+                    if (error.response) {
 
-                    this.errorMessage =
-                        "Failed to load incident. HTTP Status: " +
-                        error.response.status;
+                        this.errorMessage =
+                            "Failed to load incident. HTTP Status: " +
+                            error.response.status;
 
-                } else {
+                    } else {
 
-                    this.errorMessage =
-                        error.message ||
-                        "Unable to load incident details.";
-                }
+                        this.errorMessage =
+                            error.message ||
+                            "Unable to load incident details.";
+                    }
 
-            })
+                })
 
-            .finally(() => {
+                .finally(() => {
 
-                this.loading = false;
+                    this.loading = false;
 
-            });
+                });
         },
 
+        // getLocalImageUrl: function (azureUrl) {
+
+        //     return "/Incident/GetIncidentImage?url=" +
+        //         encodeURIComponent(azureUrl);
+
+        // },
 
         // --------------------------------------
         // Map API Response to Vue Data
@@ -297,6 +360,8 @@ var incidentDetailsApp = new Vue({
 
         mapIncidentData: function (result) {
 
+            console.log("API Result:", result);
+            console.log("Mapped Incident Data:", this.incident);
             // Basic incident details
 
             this.incident.id =
@@ -351,6 +416,9 @@ var incidentDetailsApp = new Vue({
             this.incident.closedGpsLocation =
                 result.closedLocation || "--";
 
+                this.$nextTick(() => {
+    this.initializeAzureMap();
+});
 
             // Incident classification
 
@@ -412,17 +480,25 @@ var incidentDetailsApp = new Vue({
 
 
             // Images
-            console.log("Open Image URL:", result.imageUri);
-console.log("Closed Image URL:", result.closeImgUri);
-            this.incident.openImages =
-                this.splitImageUrls(result.imageUri);
+           // Images - receive Base64 images from the controller
+console.log("Open Base64 Images:", result.openImagesBase64);
+console.log("Closed Base64 Images:", result.closedImagesBase64);
 
+this.incident.openImages =
+    Array.isArray(result.openImagesBase64)
+        ? result.openImagesBase64.filter(Boolean)
+        : [];
 
-            this.incident.closedImages =
-                this.splitImageUrls(result.closeImgUri);
+this.incident.closedImages =
+    Array.isArray(result.closedImagesBase64)
+        ? result.closedImagesBase64.filter(Boolean)
+        : [];
 
-console.log("Open Image URL:", result.imageUri);
-console.log("Closed Image URL:", result.closeImgUri);
+this.$nextTick(() => {
+    this.initializeImageMagnify();
+});
+
+            
             // Attendance
 
             var attendeeName =
@@ -492,11 +568,11 @@ console.log("Closed Image URL:", result.closeImgUri);
         },
 
         formatNarrative: function (value) {
-           if (!value || value === "--") { return "--"; }
+            if (!value || value === "--") { return "--"; }
 
-         return value
-        .replace(/<\/?p[^>]*>/gi, "\n")
-        .trim();
+            return value
+                .replace(/<\/?p[^>]*>/gi, "\n")
+                .trim();
 
         },
 
@@ -521,61 +597,115 @@ console.log("Closed Image URL:", result.closeImgUri);
 
         },
 
+        initializeImageMagnify: function () {
+
+            this.$nextTick(() => {
+
+                $('[data-magnify="gallery"]').magnify({
+                    draggable: true,
+                    resizable: true,
+                    movable: true,
+                    keyboard: true,
+                    title: true,
+
+                    initEvent: 'click',
+                    initMaximized: false,
+
+                    fixedModalSize: true,
+                    fixedModalPos: true,
+
+                    modalWidth: 800,
+                    modalHeight: 600,
+
+                    headerToolbar: ['close', 'maximize'],
+
+                    footerToolbar: [
+                        'zoomIn',
+                        'zoomOut',
+                        'prev',
+                        'next',
+                        'fullscreen',
+                        'actualSize'
+                    ]
+                });
+
+            });
+        },
         //DownlaodPdf
 
-        downloadPdf: function () {
+        downloadPdf: async function () {
 
-    var element = document.getElementById("incidentPdfContent");
+            var element = document.getElementById("incidentPdfContent");
 
-    if (!element) {
-        alert("Incident report content not found.");
-        return;
-    }
+            if (!element) {
+                alert("Incident report content not found.");
+                return;
+            }
 
-    this.isGeneratingPdf = true;
+            this.isGeneratingPdf = true;
 
-    var options = {
-        margin: 8,
-        filename: "Incident_Report_" + this.incident.id + ".pdf",
+            try {
 
-        image: {
-            type: "jpeg",
-            quality: 0.98
-        },
+                // Wait until all incident images finish loading
+                var images = Array.from(element.querySelectorAll("img"));
 
-        html2canvas: {
-            scale: 2,
-            useCORS: true
-        },
+                await Promise.all(
+                    images.map(img => {
+                        if (img.complete) {
+                            return Promise.resolve();
+                        }
 
-        jsPDF: {
-            unit: "mm",
-            format: "a4",
-            orientation: "portrait"
-        },
+                        return new Promise(resolve => {
+                            img.onload = resolve;
+                            img.onerror = resolve;
+                        });
+                    })
+                );
 
-        pagebreak: {
-            mode: ["css", "legacy"]
+                var options = {
+                    margin: 8,
+                    filename: "Incident_Report_" + this.incident.id + ".pdf",
+
+                    image: {
+                        type: "jpeg",
+                        quality: 0.98
+                    },
+
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: false,
+                        logging: true
+                    },
+
+                    jsPDF: {
+                        unit: "mm",
+                        format: "a4",
+                        orientation: "portrait"
+                    },
+
+                    pagebreak: {
+                        mode: ["css", "legacy"]
+                    }
+                };
+
+                await html2pdf()
+                    .set(options)
+                    .from(element)
+                    .save();
+
+                console.log("PDF downloaded successfully");
+
+            }
+            catch (error) {
+                console.error("PDF generation error:", error);
+                alert("Unable to generate PDF.");
+            }
+            finally {
+                this.isGeneratingPdf = false;
+            }
         }
-    };
-
-    html2pdf()
-        .set(options)
-        .from(element)
-        .save()
-        .then(() => {
-            console.log("PDF downloaded successfully");
-        })
-        .catch((error) => {
-            console.error("PDF generation error:", error);
-            alert("Unable to generate PDF.");
-        })
-        .finally(() => {
-            this.isGeneratingPdf = false;
-        });
-}
-,
-
+        ,
         // --------------------------------------
         // Retry API Request
         // --------------------------------------

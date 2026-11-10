@@ -543,8 +543,8 @@ var vm = new Vue({
                 $element.select2({
 
                     width: '100%',
-                    placeholder: 'All',
-                    allowClear: true
+                    // placeholder: 'All',
+                    allowClear: false
 
                 });
 

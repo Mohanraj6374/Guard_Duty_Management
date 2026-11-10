@@ -4,11 +4,17 @@
 
 <html>
 <head>
-    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css"
-          rel="stylesheet" />
-
+    
+    <link href="~/css/jquery.magnify.css" rel="stylesheet" />
+    
+    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
     <link rel="stylesheet" href="~/css_/header.css" />
+   @* Azure Maps *@
+  <link rel="stylesheet"
+      href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css">
 
+   <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
+    
     <style>
         /* GENERAL PAGE DESIGN */
 
@@ -260,6 +266,8 @@
             .incident-summary {
                 padding: 12px;
             }
+                
+               
         }
     </style>
 </head>
@@ -309,16 +317,23 @@
 
                 <!-- MAP SECTION -->
 
-                <div class="incident-map">
+                @* <div class="incident-map">
 
                     <iframe title="Incident Location Map"
                             :src="mapUrl"
                             loading="lazy">
                     </iframe>
 
-                </div>
+                </div> *@
+                  @* Incident Map using Azure *@
+                 <div id="azureIncidentMap" style="height: 350px; width: 100%;">
+
+</div>
 
                 <h4 class="section-heading">Incident Details</h4>
+
+              
+               
 
                 <!-- INCIDENT DETAILS GRID -->
 
@@ -484,10 +499,13 @@
                     <div class="grid-value full-value">
 
                         <div class="incident-images">
-
                             <img v-for="(image, index) in incident.openImages"
                                  :key="'open-' + index"
                                  :src="image"
+                                 @* crossorigin="anonymous" *@
+                                 data-magnify="gallery"
+                                 data-group="incident-gallery"
+                                 :data-src="image"
                                  :alt="'Incident image ' + (index + 1)" />
 
                         </div>
@@ -511,6 +529,10 @@
                             <img v-for="(image, index) in incident.closedImages"
                                  :key="'closed-' + index"
                                  :src="image"
+                                 @* crossorigin="anonymous" *@
+                                 data-magnify="gallery"
+                                 data-group="incident-gallery"
+                                 :data-src="image"
                                  :alt="'Closed incident image ' + (index + 1)" />
 
                         </div>
@@ -562,31 +584,36 @@
 
     </div>
     <!-- END VUE APPLICATION -->
-
-
     <!-- VUE 2 CDN -->
-
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
 
     <!-- AXIOS CDN -->
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    @* Moment js *@
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <!-- JQUERY CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- MOMENT JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
     <!-- HEADER COMPONENT -->
-
-
     <script src="~/js/header.js"></script>
 
     <!-- PDF GENERATION LIBRARY -->
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+    <!-- MAGNIFY JS -->
+    
+    <script src="~/lib/magnify.js/jquery.magnify.js"></script>
+
+
+    <script>
+    window.azureMapsKey = '@ViewBag.AzureMapsKey';
+</script>
+
     <!-- INCIDENT DETAILS JAVASCRIPT -->
-
     <script src="~/js/Incident-Components/IncidentView.js"></script>
-
+    
+    
 </body>
 </html>
