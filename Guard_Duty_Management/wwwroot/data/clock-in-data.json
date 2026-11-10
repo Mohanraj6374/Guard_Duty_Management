@@ -638,6 +638,15 @@
       "isClockedIn": false,
       "clockInTime": "2026-11-10T10:26:40.7499498\u002B00:00",
       "clockOutTime": "2026-11-10T11:42:03.1462993\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": true,
+      "clockInTime": "2026-11-10T11:57:10.1584767\u002B00:00",
+      "clockOutTime": null
     }
   ]
 }

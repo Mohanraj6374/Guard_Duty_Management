@@ -173,7 +173,7 @@ var vm = new Vue({
                     taskId: this.addTask.taskId,
                     taskName: selectedTask.text,
 
-                    date: this.addTask.date,
+                    date: window.moment(this.addTask.date).format("DD-MM-YYYY"),
                     startTime: this.addTask.startTime,
                     endTime: this.addTask.endTime,
 
