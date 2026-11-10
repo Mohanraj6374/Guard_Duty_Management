@@ -440,6 +440,15 @@
       "isClockedIn": false,
       "clockInTime": "2026-11-06T13:22:42.0569908\u002B00:00",
       "clockOutTime": "2026-11-06T13:22:50.0705772\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T05:05:00.4271710\u002B00:00",
+      "clockOutTime": "2026-11-10T05:05:06.6124974\u002B00:00"
     }
   ]
 }

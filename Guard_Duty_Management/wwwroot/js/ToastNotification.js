@@ -77,22 +77,15 @@
         //     this.notifications.splice(index, 1);
         // }
         removeToast(id) {
-
-            console.log('Close clicked:', id);
-
             const index = this.notifications.findIndex(
                 toast => toast.id === id
             );
 
             if (index === -1) return;
 
-            const toast = this.notifications[index];
-
-            clearTimeout(toast.timer);
+            clearTimeout(this.notifications[index].timer);
 
             this.notifications.splice(index, 1);
-
-            console.log('Notification removed:', id);
         }
     }
 });

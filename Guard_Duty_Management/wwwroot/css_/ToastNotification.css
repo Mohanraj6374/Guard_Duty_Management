@@ -29,6 +29,7 @@
     background: #00ffff;
 }
 .toast-close {
+    pointer-events: auto !important;
     border: none;
     background: transparent;
     font-size: 4rem;
