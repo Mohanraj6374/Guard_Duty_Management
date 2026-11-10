@@ -145,7 +145,7 @@
                 }
             }catch(error){
                 console.error("Send OTP error: ",error.response?.data || error.message);
-                this.otpError = error.response?.data?.message || "Unable to send OTP. Please try again.";
+                this.otpError = error.response?.data?.message || "Unable to send OTP. Please try again...";
             }finally{
                 this.isSendingOtp = false;
             }

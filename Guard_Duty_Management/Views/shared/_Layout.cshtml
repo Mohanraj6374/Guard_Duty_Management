@@ -2,7 +2,8 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-         <title>@ViewData["Title"] </title>
+        <title>@ViewData["Title"] </title>
+        <link href="~/css_/ToastNotification.css" rel="stylesheet"/>
     </head>
     <body>
 
@@ -12,7 +13,17 @@
                     User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value??""
                 )
            );
+            window.GuardId = @Html.Raw(
+                 System.Text.Json.JsonSerializer.Serialize(
+                    User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? ""
+                 )
+            );
         </script>
+
+        <!--Global toast container-->
+        <div id="toastApp">
+            <toast-notification></toast-notification>
+        </div>
         @RenderBody()
     </body>
 </html>

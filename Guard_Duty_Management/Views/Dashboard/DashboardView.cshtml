@@ -15,7 +15,7 @@
 
     @Html.AntiForgeryToken()
 
-    <div class="container-fluid bg-main p-0" id="DashboardView" v-cloak>
+    <div class="container-fluid bg-main p-0 overflow-x-hidden" id="DashboardView" v-cloak>
         <app-header></app-header>
         
         <div class="container-fluid nav-controls py-2">
@@ -138,7 +138,7 @@
 
         <div v-if="showClockInForm" id="clockInPopup" class="container-fluid d-flex align-items-center popup-form bg-custom-blur overflow-x-hidden overflow-y-hidden position-fixed start-0 top-0 py-3 mb-2">
             <div class="row justify-content-center align-items-center w-100 h-100">
-                <div class="col-md-4 col-12">
+                <div class="col-lg-4 col-sm-7 col-11">
                     <div class="mt-3 text-dark card bg-grad rounded-3 shadow-lg px-3">
                         <div class="card-body border-0">
                         <button class="btn-close btn-icon btn-close-dark position-absolute top-0 end-0 m-3" v-on:click="closeClockInForm"></button>
@@ -244,20 +244,27 @@
         </div>
 
 
-        <div class="container-fluid vh-100 main body-text-color">
-            <div class="row mt-2 g-2 align-items-stretch h-100">
-                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center">
+        <div class="container-fluid main body-text-color">
+            <div class="row mt-2 g-2 align-items-stretch dashboard-layout">
+                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center dashboard-column">
                     <div class="card w-100 h-100 bg-white text-black">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center justify-content-start gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#C8AD6B" class="bi bi-clipboard-check" viewBox="0 0 16 16">
-                                  <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
-                                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
-                                </svg>
-                                <p class="m-0 fs-5 fw-semibold">
-                                    Task List
-                                </p>
+                        <div class="card-body dashboard-right-body task-panel">
+                            <div class="d-flex align-items-start justify-content-between">
+                                <div class="d-flex align-items-center justify-content-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#C8AD6B" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
+                                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                                        <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                                    </svg>
+                                    <p class="m-0 fs-5 fw-semibold">
+                                        Task List
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="badge rounded-pill badge-white font-size-9">
+                                        {{assignedTaskList.length}} Tasks
+                                    </span>
+                                </div>
                             </div>
                             <div class="search-group mt-2">
                                 <svg viewBox="0 0 24 24" aria-hidden="true" class="icon">
@@ -281,8 +288,6 @@
                                         <rect x="48" y="39" width="60" height="70"
                                               rx="10" fill="#FFFFFF"
                                               stroke="#8993A1" stroke-width="3" />
-
-                                        
 
                                         <!-- List items -->
                                         <circle cx="58" cy="58" r="2.5" fill="#8993A1" />
@@ -320,35 +325,95 @@
                                 <p class=" text-center fw-normal text-muted">There is no task assigned</p>
 
                             </div>
-                            <div v-else class="h-auto mt-2">
+                            <div v-else class="h-auto mt-2 task-list">
+                                <div v-if="filteredTaskList.length > 0" class="p-0 m-0">
+                                    <div v-for="task in filteredTaskList" :key="task.assignmentId" class="card mt-2 task-card" v-bind:class="{'selected-task':selectedExecutionTask && selectedExecutionTask.assignmentId === task.assignmentId}" v-on:click="selectExecutionTask(task)" style="cursor:pointer;">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <div class="mb-2 d-flex gap-2">
+                                                        <div class="p-2 bg-site rounded">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                                                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                                            </svg>
+                                                        </div>
+                                                        <div>
+                                                            <p class="mb-1 lh-1 text-muted font-size-7">SITE:</p>
+                                                            <p class="mb-0 lh-1">{{task.siteName}}</p>
+                                                        </div>
 
-                                <div v-for="task in assignedTaskList" :key="task.assignmentId" class="card mt-2" v-bind:class="{'selected-task':selectedExecutionTask && selectedExecutionTask.assignmentId === task.assignmentId}" v-on:click="selectExecutionTask(task)">
-                                    <div class="card-body">
-                                            <p class="mb-1">
-                                            <span>Site name:</span> 
-                                            {{task.siteName}}
-                                        </p>
-                                            <p class="mb-1">
-                                            <span>Task:</span> 
-                                            {{task.taskName}}
-                                        </p>
-                                            <p class="mb-1">
-                                            <span>Estimated Start Date Time:</span>
-                                            {{task.date}} {{task.startTime}}
-                                        </p>
-                                        <p class="mb-1">
-                                            <span>Estimated Start Date Time:</span>
-                                            {{task.date}} {{task.endTime}}
-                                        </p>
+                                                    </div>
+                                                    <div class="mb-2 d-flex gap-2">
+                                                        <div class="p-2 security-text bg-danger-subtle rounded">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
+                                                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                                                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div>
+                                                            <p class="mb-1 lh-1 text-muted font-size-7">TASK:</p>
+                                                            <p class="mb-0 lh-1">{{task.taskName}}</p>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-3 d-flex justify-content-end">
+                                                    <div v-if="selectedExecutionTask && selectedExecutionTask.assignmentId === task.assignmentId">
+                                                        <div class="badge rounded-pill badge-green font-size-9">Selected</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="m-0 mt-1 mb-1" v-bind:class="selectedExecutionTask && selectedExecutionTask.assignmentId === task.assignmentId ? 'text-success':''" />
+                                            <div class="mb-1 d-flex align-items-center justify-content-start gap-2">
+                                                <span class="text-muted">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                                                    </svg>
+                                                </span>
+                                                <span class="text-muted font-size-9">Date: </span>
+                                                {{task.date}}
+                                            </div>
+                                            <div class="mb-1 d-flex align-items-center justify-content-start gap-2">
+                                                <span class="text-muted font-size-9">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock align-middle" viewBox="0 0 16 16">
+                                                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                                    </svg>
+                                                </span>
+                                                <span class="text-muted font-size-9">Start Time:</span>
+                                                {{task.startTime}}
+                                            </div>
+                                            <div class="mb-1 d-flex align-items-center justify-content-start gap-2">
+                                                <span class="text-muted font-size-9">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock align-middle" viewBox="0 0 16 16">
+                                                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                                    </svg>
+                                                </span>
+                                                <span class="text-muted font-size-9">End Time:</span>
+                                                {{task.endTime}}
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                                <div v-else class="text-center py-4">
+
+                                    <p class="fw-semibold mb-1">No matching tasks found</p>
+
+                                    <p class="text-muted mb-0">
+                                        Try searching with another site or task name.
+                                    </p>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center">
-                    <div class="card w-100 h-100 d-flex align-items-center justify-content-center">
-                        <div class="card-body">
+                <div class="col-lg-6 col-12 d-flex align-items-center justify-content-center dashboard-column">
+                    <div class="card w-100 h-100 d-flex align-items-center justify-content-center p-0">
+                        <div class="card-body h-100">
                             <div v-if="!selectedExecutionTask" class="p-2 d-flex flex-column align-items-center justify-content-center">
 
                                 <div class="empty-illustration">
@@ -404,39 +469,49 @@
                                 <p class="m-0 fs-5 fw-semibold">Please Select Task First</p>
                                 <p class="m-0 fs-6 fw-normal text-muted">Choose a task from the left panel to view details, instructions and updates.</p>
                             </div>
-                            <div v-else class="d-flex flex-column align-items-center justify-content-center card overflow-hidden">
-                                <div class="card-body bg-header p-2">
+                            <div v-else class="d-flex flex-column align-items-center justify-content-center card taskdetails-card overflow-hidden">
+                                <div class="card-body bg-header p-3">
+                                    <p class="fs-5 fw-semibold">Task Details</p>
                                     <div class="row row-cols-2 g-2">
                                         <div class="col">
-                                            <span>Site Name: </span>
-                                            {{selectedExecutionTask.siteName}}
+                                            <p class="text-muted font-size-8 mb-0">SITE NAME: </p>
+                                            <p class="mb-0 fw-semibold">{{selectedExecutionTask.siteName}}</p>
+                                            
                                         </div>
                                         <div class="col">
-                                            <span>Site Code:</span>
-                                            {{selectedExecutionTask.siteId}}
+                                            <p class="text-muted font-size-8 mb-0">SITE CODE:</p>
+                                            <p class="mb-0 fw-semibold">{{selectedExecutionTask.siteId}}</p>
+                                            
                                         </div>
                                         <div class="col">
-                                            <span>Address:</span>
-                                            {{selectedExecutionTask.siteAddress}}
+                                            <p class="text-muted font-size-8 mb-0">ADDRESS:</p>
+                                            <p class="fw-semibold mb-0">{{selectedExecutionTask.siteAddress}}</p>
+                                            
                                         </div>
                                         <div class="col">
-                                            <span>Task Name:</span>
-                                            {{selectedExecutionTask.taskName}}
+                                            <p class="text-muted font-size-8 mb-0">TASK NAME:</p>
+                                            <p class="fw-semibold mb-0">{{selectedExecutionTask.taskName}}</p>
+                                            
                                         </div>
                                         <div class="col">
-                                            <span>Estimates Start Time</span>
-                                            {{selectedExecutionTask.startTime}}
+                                            <p class="text-muted font-size-8 mb-0">ESTIMATED START TIME:</p>
+                                            <p class="fw-semibold mb-0">{{selectedExecutionTask.startTime}}</p>
                                         </div>
                                         <div class="col">
-                                            <span>Estimates End Time</span>
-                                            {{selectedExecutionTask.endTime}}
+                                            <p class="text-muted font-size-8 mb-0">ESTIMATED END TIME:</p>
+                                            <p class="fw-semibold mb-0">{{selectedExecutionTask.endTime}}</p>
+                                            
                                         </div>
                                     </div>
                                     <div class="mt-2">
-                                        <button class="btn security-btn px-3">Start</button>
-                                        <button class="btn btn-dark px-3">End</button>
-                                        <div>
-                                            <p class="fw-bold">Total Time:00:00:00</p>
+                                        <!--Start Button-->
+                                        <button v-if="!taskRunning && !taskCompleted" class="btn security-btn px-3" v-on:click="startTask()">Start</button>
+                                        <!--Running Timer-->
+                                        <p v-if="taskRunning || taskCompleted" class="fw-semibold">{{taskRunning ? 'Running Time:':'Total Time:' }} <span class="fw-bold">{{formattedTotalTime}}</span></p>
+                                        <!--End Button-->
+                                        <button v-if="taskRunning && !taskCompleted" class="btn btn-dark px-3" v-on:click="endTask()">End</button>
+                                        <!--Completed Section-->
+                                        <div v-if="taskCompleted">
                                             <input class="form-control in" placeholder="Comments" />
                                             <button class="btn btn-success px-3 mt-2">Submit</button>
                                         </div>
@@ -447,10 +522,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center">
+                <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center dashboard-column">
                     <div class="card w-100 h-100">
-                        <div class="card-body">
-                            <div class="d-flex flex-row gap-2 align-items-center justify-content-start px-2 py-2 rounded" v-bind:class="clockInStatus? 'bg-custom-on':'bg-custom-off'">
+                        <div class="card-body d-flex flex-column dashboard-right-body">
+                            <!--ClockIn/Out Status Box-->
+                            <div>
+                                <button class="btn btn-danger"
+                                        v-on:click="errorToast">
+                                    Error Toast
+                                </button>
+                                <button class="btn btn-info"
+                                        v-on:click="infoToast">
+                                    Info Toast
+                                </button>
+                                <button class="btn btn-success"
+                                        v-on:click="successToast">
+                                    Success Toast
+                                </button>
+                                <button class="btn btn-warning"
+                                        v-on:click="warningToast">
+                                    Warning Toast
+                                </button>
+                            </div>
+
+                            <div class="d-flex flex-row gap-2 align-items-center justify-content-start px-2 py-2 rounded border" v-bind:class="[clockInStatus? 'bg-custom-on':'bg-custom-off',clockInStatus? 'border-success-subtle':'border-danger-subtle']">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <div class="p-3 rounded-circle" v-bind:class="clockInStatus ? 'bg-success-subtle':'bg-danger-subtle'">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="bi bi-clock" viewBox="0 0 16 16" v-bind:class="clockInStatus ? 'clock-green':'clock-red'">
@@ -464,9 +559,11 @@
                                     <p class="mb-2 fs-5 fw-semibold lh-1" v-bind:class="clockInStatus ? 'text-success':'security-text'">{{ clockInStatus ? 'Clocked In' : 'Clocked Out' }}</p>
                                     <p v-if="!clockInStatus" class="mb-1 lh-1 font-size-7 text-muted">Start your shift to began receiving tasks and updates.</p>
                                     <p v-if="clockInStatus" class="mb-1 lh-1 font-size-7 text-muted">You are now receiving tasks and updates.</p>
-                                </div>                               
+                                </div>
                             </div>
-                            <div class="d-flex flex-column mt-2 bg-header px-3 py-2 rounded">
+                                
+                            <!--Activity Log-->
+                            <div class="d-flex flex-column mt-2 bg-header px-3 py-2 rounded shift-activity-panel">
                                 <div class="d-flex align-items-center justify-content-start gap-2 py-2">
 
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -487,13 +584,34 @@
 
                                     <p class="m-0 fs-5 fw-semibold align-middle">Shift Activity Log</p>
                                 </div>
-                                <div class="mt-2 px-2">
-                                    <p>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-check-circle-fill align-middle" viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                        </svg>
-                                        <span class="align-middle">{{clockInStatus? 'Clocked In':'Clocked Out'}}</span>
-                                    </p>
+                                <div class="mt-2 px-2 shift-activity-list">
+
+                                    <!--Clock In/Out Activity-->
+                                    <div v-for="record in shiftActivityLogs"
+                                        :key="record.clockInTime">
+
+                                        <!--Clockout activity-->
+                                        <div v-if="record.clockOutTime" class="d-flex align-items-center mb-2 gap-2 bg-custom-off p-2 rounded border border-danger-subtle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+                                            </svg>
+                                            <span class="lh-1 fw-semibold">
+                                                Clocked Out <br />
+                                                <span class="font-size-8 fw-normal">{{formatDateTime(record.clockOutTime)}}</span>
+                                            </span>
+                                        </div>
+                                        <!--Clockin activity-->
+                                        <div class="d-flex align-items-center mb-2 gap-2 bg-custom-on p-2 rounded border border-success-subtle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                            </svg>
+                                            <span class="lh-1 fw-semibold">Clocked In <br />
+                                                <span class="font-size-8 fw-normal">{{formatDateTime(record.clockInTime)}}</span>
+                                            </span>
+                                        </div>
+
+                                        
+                                    </div>
 
                                 </div>
                             </div>
@@ -502,20 +620,25 @@
                 </div>
             </div>
         </div>
+        <div class="container-fluid vw-100 py-3 bg-transparent">
+            @* <p class="mb-0 fs-3 lh-1">MSS Security</p>
+            <p class="mb-0 lh-1 font-size-8">A SIS Group Enterprise</p> *@
+        </div>
     </div>
-
-
-
-   
-
-
-
     
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="~/lib/jquery/jquery-4.0.0.min.js"></script>
     <script src="~/lib/select2/js/select2.js"></script>
-    <script src="~/lib/vue-js/vue@2.7.16.js"></script>
+    <script src="~/lib/vue-js/vue@2.7.16.js"></script>   
+    <script src="~/js/services/ToastService.js"></script> <!--Toast Service Dependancy-->
+    <script src="~/js/ToastNotification.js"></script> <!--Toast Component registered-->
+    <!--Initialie toast-->
+    <script>
+            new Vue({
+                el: '#toastApp'
+            });
+    </script>
     <script src="~/lib/axios/axios@1.12.2.js"></script>
     <script src="~/lib/linq-js/linq.js4.0.3.js"></script>
     <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>

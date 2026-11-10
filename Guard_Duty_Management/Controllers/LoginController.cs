@@ -13,13 +13,19 @@ namespace Guard_Duty_Management.Controllers
     public class LoginController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-        public LoginController(IHttpClientFactory httpClient, IConfiguration configuration)
+        private readonly ILogger<LoginController> _logger;
+
+        
+        private const string VerifyUserDetailsUrl = "api/CustomerPortal/VerifyUserDetails";
+        private const string SendOtpUrl = "api/CustomerPortal/SendUserOTP";
+        private const string VerifyOtpUrl = "api/CustomerPortal/VerifyUserOtp";
+        public LoginController(IHttpClientFactory httpClient, ILogger<LoginController> logger)
         {
             _httpClient = httpClient.CreateClient("GuardAPI");
 
-            _httpClient.DefaultRequestHeaders.Add("Token", "997e3faeb3cb8cf58ae7330616f8e4d02b11361bc892b5de5e14a6d9e7e16390");
-            _configuration = configuration;
+            _httpClient.DefaultRequestHeaders.Add("Token", "997e3faeb3cb8cf58ae7330616f8e4d02b11361bc892b5de5e14a6d9e7e16390");            
+
+            _logger = logger;
         }
 
         [HttpGet]
@@ -48,10 +54,10 @@ namespace Guard_Duty_Management.Controllers
             }
             try
             {
-                string baseUrl = _configuration["ApiSettings:BaseUrl"]!;
-                string verifyUrl = _configuration["ApiSettings:VerifyUserDetails"]!;
+                //string baseUrl = _configuration["ApiSettings:BaseUrl"]!;
+                //string checkPhoneApiUrl = _configuration["ApiSettings:VerifyUserDetails"]!;
 
-                var apiUrl = $"{verifyUrl}?mobileNo={Uri.EscapeDataString(mobileNo)}";
+                var apiUrl = $"{VerifyUserDetailsUrl}?mobileNo={Uri.EscapeDataString(mobileNo)}";
 
                 var response = await _httpClient.GetAsync(apiUrl);
                 var result = await response.Content.ReadAsStringAsync();
@@ -88,28 +94,41 @@ namespace Guard_Duty_Management.Controllers
             try
             {
                 
-                string baseUrl = _configuration["ApiSettings:BaseUrl"]!;
-                string sendOtpUrl = _configuration["ApiSettings:SendOTP"]!;
+                //string baseUrl = _configuration["ApiSettings:BaseUrl"]!;
+                //string sendOtpUrl = _configuration["ApiSettings:SendOTP"]!;
 
                 //var apiUrl = $"{sendOtpUrl}";
 
-                var respnose = await _httpClient.PostAsJsonAsync(sendOtpUrl, new
+                var response = await _httpClient.PostAsJsonAsync(SendOtpUrl, new
                 {
                     phoneNumber = request.PhoneNumber,
                     countryCode = request.CountryCode
                 });
 
-                var result = await respnose.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsStringAsync();
+
+                _logger.LogError("========== SEND OTP DEBUG ==========");
+                _logger.LogError("API URL: {Url}",
+                    response.RequestMessage?.RequestUri);
+
+                _logger.LogError("Status Code: {StatusCode}",
+                    (int)response.StatusCode);
+
+                _logger.LogError("API Response: {Response}",
+                    result);
+
+                _logger.LogError("========== END DEBUG ==========");
 
                 return new ContentResult
                 {
                     Content = result,
                     ContentType="application/json",
-                    StatusCode = (int)respnose.StatusCode
+                    StatusCode = (int)response.StatusCode
                 };
 
             }catch(Exception ex)
             {
+                _logger.LogError(ex, "SendOTP API exception");
                 Console.WriteLine(ex.Message);
                 return StatusCode(502, new
                 {
@@ -133,11 +152,11 @@ namespace Guard_Duty_Management.Controllers
             try
             {
                 
-                string baseUrl = _configuration["ApiSettings:BaseUrl"]!;
-                string verifyOtpUrl = _configuration["ApiSettings:VerifyOTP"]!;
-                var apiUrl = $"{verifyOtpUrl}";
+                //string baseUrl = _configuration["ApiSettings:BaseUrl"]!;
+                //string verifyOtpUrl = _configuration["ApiSettings:VerifyOTP"]!;
+                //var apiUrl = $"{verifyOtpUrl}";
 
-                var response = await _httpClient.PostAsJsonAsync(apiUrl, new
+                var response = await _httpClient.PostAsJsonAsync(VerifyOtpUrl, new
                 {
                     countryCode = request.CountryCode,
                     phoneNumber = request.PhoneNumber,
@@ -170,15 +189,11 @@ namespace Guard_Duty_Management.Controllers
                     });
                 }
 
-
-                var getUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserDetails?mobileNo=8310561649";
+                //var getUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/VerifyUserDetails?mobileNo=8310561649";
                 //string verifyUrl = _configuration["ApiSettings:VerifyUserDetails"]!;
-
-                //var getUrl = $"{verifyUrl}";
+                var getUrl = $"{VerifyUserDetailsUrl}?mobileNo={Uri.EscapeDataString(request.PhoneNumber.Trim())}";
                 var userResponse = await _httpClient.GetAsync(getUrl);
                 Console.WriteLine("Details fetched");
-                
-
                 var userResult = await userResponse.Content.ReadAsStringAsync();
 
                 if (!userResponse.IsSuccessStatusCode)
@@ -209,7 +224,8 @@ namespace Guard_Duty_Management.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, guardId),
-                    new Claim(ClaimTypes.Name, string.IsNullOrWhiteSpace(email)?request.PhoneNumber.Trim():email),                   
+                    //new Claim(ClaimTypes.Name, string.IsNullOrWhiteSpace(email)?request.PhoneNumber.Trim():email),
+                    new Claim(ClaimTypes.Name, email),
                     new Claim(ClaimTypes.MobilePhone, request.PhoneNumber)
                 };
 

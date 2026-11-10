@@ -1,5 +1,7 @@
 ﻿body {
 }
+/*Scroll-bar behaviour*/
+
 /* CSS for DashboardView view */
 [v-cloak] {
     display: none !important;
@@ -135,6 +137,16 @@
     font-size: 0.7rem;
 }
 
+.badge-white{
+    font-weight:600;
+    background-color: #e2e2e2a6;
+    color: #000;
+}
+.badge-green {
+    font-weight: 600;
+    background-color: rgba(63, 185, 80, 0.15);
+    color: #238636;
+}
 .search-group {
     display: flex;
     line-height: 28px;
@@ -175,6 +187,27 @@
         width: 1rem;
         height: 1rem;
     }
+.task-card {
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border: 1px solid #dee2e6;
+}
+    .task-card:hover {
+        border-color: #198754;
+    }
+
+.selected-task {
+    background-color: #eaf5ee !important;
+    border: 1px solid #a3cfbb !important;
+}
+.taskdetails-card {
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.bg-site {
+    background-color: #F5EBD0;
+    color: #80652B;
+}
 
 .empty-illustration {
     display: flex;
@@ -219,6 +252,63 @@
 .date-picker:valid {
     color: #212529;
 }
+
+
+/*Dashboard main section layout*/
+.dashboard-layout {
+    min-height: calc(100vh - 148px);
+    align-items: stretch;
+}
+.dashboard-column {
+    /*    height: 100%;
+    min-height: 0;
+    min-width: 0;*/
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+}
+.dashboard-right-body {
+/*    min-height: 0;
+    overflow: hidden;*/
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.task-panel {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+}
+.task-list {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.shift-activity-panel {
+    /*    flex: 1;
+    min-height: 0;
+    overflow: hidden;*/
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: hidden;
+}
+.shift-activity-list {
+/*    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;*/
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/*Responsive*/
 @media (max-width: 576px) {
     .left-nav-controls {
         border-bottom: #c3d7ffff !important; /* equivalent to .shadow */
@@ -232,5 +322,26 @@
     .nav-controls {
         background: #ebeef5!important;
         box-shadow: 0 .2rem 0.5rem rgba(0, 0, 0, .15) !important; /* equivalent to .shadow */
+    }
+}
+@media(max-width: 991.98px){
+    .dashboard-layout{
+        height:auto;
+    }
+    .dashboard-column{
+        min-height: 400px;
+    }
+    .shift-activity-panel {
+        min-height: 300px;
+    }
+
+    .shift-activity-list {
+        max-height: 350px;
+    }
+    .task-panel {
+        min-height: 300px;
+    }
+    .task-list {
+        max-height: 350px;
     }
 }

@@ -166,18 +166,23 @@
                 </div>
             </div>
         </div>
-        <!-- Load dependencies first -->
+        <!-- Load dependencies -->
         <script src="@Url.Content("~/lib/jquery/jquery-4.0.0.min.js")"></script>
         <script src="~/lib/select2/js/select2.min.js"></script>
         <script src="@Url.Content("~/lib/vue-js/vue@2.7.16.js")"></script>
+        <script src="~/js/services/ToastService.js"></script> <!--Toast Service Dependancy-->
+        <script src="~/js/ToatNotification.js"></script> <!--Toast Component registered-->
+        <!--Initialie toast-->
+        <script>
+                new Vue({
+                    el: '#toastApp'
+                });
+        </script>
         <script src="@Url.Content("~/lib/axios/axios@1.12.2.js")"></script>
         <script src="@Url.Content("~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js")"></script>
-
         <!-- Register the header component before mounting the Login Vue instance -->
-    <script src="~/js/dashboard-components/Select2Component.js"></script>
+        <script src="~/js/dashboard-components/Select2Component.js"></script>
         <script src="~/js/login-components/login.js"></script>
-
-    
     </body>
 </html>
 
