@@ -644,9 +644,9 @@
       "siteId": "1",
       "shiftId": "1",
       "guardPostId": "1",
-      "isClockedIn": true,
+      "isClockedIn": false,
       "clockInTime": "2026-11-10T11:57:10.1584767\u002B00:00",
-      "clockOutTime": null
+      "clockOutTime": "2026-11-10T12:52:21.9306496\u002B00:00"
     }
   ]
 }
