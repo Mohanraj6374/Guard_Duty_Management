@@ -282,6 +282,7 @@
 
         <!-- INCIDENT PAGE BACKGROUND -->
         <div class="incident-page">
+           
 
             <!-- PDF BUTTON -->
             <div class="pdf-button-container">
@@ -326,9 +327,11 @@
 
                 </div> *@
                   @* Incident Map using Azure *@
-                 <div id="azureIncidentMap" style="height: 350px; width: 100%;">
-
-</div>
+                 <div id="azureIncidentMap" style="height: 350px; width: 100%;"> </div>
+                <img v-if="incident.mapImageBase64"
+                     :src="incident.mapImageBase64"
+                     alt="Incident Location Map"
+                     style="width: 100%; height: 350px; object-fit: cover;" />
 
                 <h4 class="section-heading">Incident Details</h4>
 

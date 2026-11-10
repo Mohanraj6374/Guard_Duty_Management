@@ -402,6 +402,43 @@ namespace Guard_Duty_Management.Controllers
 
                 incidentData["closedImagesBase64"] = closedBase64Images;
 
+                // Generate static map image for PDF
+                var coordinates = incidentData["repotedLocation"]?.GetValue<string>();
+
+                if (!string.IsNullOrWhiteSpace(coordinates))
+                {
+                    var parts = coordinates.Split(',');
+
+                    if (parts.Length == 2 &&
+                        double.TryParse(parts[0].Trim(),
+                            System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture, out var longitude) &&
+                        double.TryParse(parts[1].Trim(),
+                            System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture, out var latitude))
+                    {
+                        var mapUrl =
+                            "https://atlas.microsoft.com/map/static" +
+                            "?api-version=2024-04-01" +
+                            "&tilesetId=microsoft.base.road" +
+                            "&zoom=15" +
+                            $"&center={longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)},{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
+                            "&width=800&height=450" +
+                            "&pins=" + Uri.EscapeDataString($"default||{longitude} {latitude}") +
+                            "&view=IN";
+
+                        using var mapResponse = await client.GetAsync(mapUrl);
+
+                        if (mapResponse.IsSuccessStatusCode)
+                        {
+                            var mapBytes = await mapResponse.Content.ReadAsByteArrayAsync();
+
+                            incidentData["mapImageBase64"] =
+                                "data:image/png;base64," + Convert.ToBase64String(mapBytes);
+                        }
+                    }
+                }
+
 
                 // 6. Return the modified incident JSON to Vue
                 return new ContentResult
