@@ -9,7 +9,8 @@ var vm = new Vue({
             clockInStatus: false,
             clockInSwitch: false,
             shiftActivityLogs: [],
-            
+            isLoadingActivityLogs: false,
+
             showClockInForm: false,
             showAddTaskForm: false,
             searchText: '',
@@ -40,7 +41,7 @@ var vm = new Vue({
 
             selectedExecutionTask: null,
 
-            
+
             taskRunning: false,
             taskCompleted: false,
             taskStartTime: null,
@@ -48,16 +49,24 @@ var vm = new Vue({
             totalSeconds: 0,
             timerInterval: null,
 
-
-
+            isAddingTask: false,
+            isClockingIn: false,
+            isClockingOut: false,
+            isDashboardLoading: true
         };
     },
-    created() {
-        this.loadDashboardData();
-        this.loadClockInStatus();
-        this.loadShiftActivityLogs();
+    async created() {
+        try {
+            await Promise.all([
+                this.loadDashboardData(),
+                this.loadClockInStatus(),
+                this.loadShiftActivityLogs()
+            ]);
+        } finally {
+            this.isDashboardLoading = false;
+        }
     },
-    computed: {
+    computed: {        
         //changing the order in task list which task is selected will be at top
         prioritizedTaskList() {
             if (!this.selectedExecutionTask) {
@@ -99,19 +108,6 @@ var vm = new Vue({
     },
 
     methods: {
-        successToast() {
-            ToastService.success('Task Successfully Added');
-        },
-        warningToast() {
-            ToastService.warning('Warning: Clock Out when Shift Ended ');
-        },
-        infoToast() {
-            ToastService.info('Need Clock In to Add Task');
-        },
-        errorToast() {
-            ToastService.error('OOps! It seems task not added');
-        },
-        
         //Format date time in activity log
         formatDateTime(date) {
             if (!date) {
@@ -148,51 +144,62 @@ var vm = new Vue({
             }
             catch (error) {
                 console.error("Error loading dashboard data:", error);
+                ToastService.error("Error: Something went wrong.Please try again.");
             }
         },
 
         //adding the task
         assignTask() {
             if (!this.addTask.siteId || !this.addTask.taskId || !this.addTask.date || !this.addTask.startTime || !this.addTask.endTime) {
-                alert('Please fill all required fields.')
+                ToastService.warning('Warning: Please fill all required fields.')
                 return;
             }
             selectedSite = this.siteOptions.find(site => site.id == this.addTask.siteId);
             selectedTask = this.taskOptions.find(task => task.id == this.addTask.taskId);
 
             if (!selectedSite || !selectedTask) {
-                alert('Invalid Site or Task selection.')
+                ToastService.warning('Warning: Invalid Site or Task selection.');
                 return;
             }
-            const task = {
-                assignmentId: Date.now(),
-                siteId: this.addTask.siteId,
-                siteName: selectedSite.text,
-                siteAddress: selectedSite.address,
+            this.isAddingTask = true;
+            console.log("this.isAddingTask = true");
+            try {
+                const task = {
+                    assignmentId: Date.now(),
+                    siteId: this.addTask.siteId,
+                    siteName: selectedSite.text,
+                    siteAddress: selectedSite.address,
 
-                taskId: this.addTask.taskId,
-                taskName: selectedTask.text,
+                    taskId: this.addTask.taskId,
+                    taskName: selectedTask.text,
 
-                date: this.addTask.date,
-                startTime: this.addTask.startTime,
-                endTime: this.addTask.endTime,
+                    date: this.addTask.date,
+                    startTime: this.addTask.startTime,
+                    endTime: this.addTask.endTime,
 
-                guardTaskStartTime: null,
-                guardTaskEndTime: null,
-                totalDuration: 0
+                    guardTaskStartTime: null,
+                    guardTaskEndTime: null,
+                    totalDuration: 0
+                }
+                this.assignedTaskList.push(task);
+                // console.log("Task Assigned");
+
+                //reset form
+                this.addTask = {
+                    siteId: '',
+                    taskId: '',
+                    date: '',
+                    startTime: '',
+                    endTime: ''
+                }
+                this.showAddTaskForm = false;
+                ToastService.success('Task Successfully Added');
+            }catch (error) {
+                ToastService.error('Error: Task Not Added');
             }
-            this.assignedTaskList.push(task);
-            // console.log("Task Assigned");
-
-            //reset form
-            this.addTask = {
-                siteId: '',
-                taskId: '',
-                date: '',
-                startTime: '',
-                endTime: ''
+            finally {
+                this.isAddingTask = false;
             }
-            this.showAddTaskForm = false;
         },
 
         //storing the selected task from task list
@@ -209,11 +216,12 @@ var vm = new Vue({
 
         //updating the data if user is successfully clocked in
         async confirmClockIn() {
+            if (!this.clockIn.siteId || !this.clockIn.shiftId || !this.clockIn.guardPostId) {
+                ToastService.warning("Please fill all requred fields.")
+                return;
+            }
+            this.isClockingIn= true;
             try {
-                if (!this.clockIn.siteId || !this.clockIn.shiftId || !this.clockIn.guardPostId) {
-                    alert("Please fill all requred fields.")
-                    return;
-                }
                 const requestData = {
                     guardId: window.GuardId,
                     siteId: this.clockIn.siteId,
@@ -231,19 +239,29 @@ var vm = new Vue({
                     clockedInSite = response.data.record;                    
                     this.showClockInForm = false;
                     await this.loadShiftActivityLogs();
+                    ToastService.success('Success: Clocked in successfully');
                 }              
+                else {
+                    ToastService.error(
+                        response.data.message || 'Unable to clock in.'
+                    );
+                }
             }
             catch (error) {
                 console.error(
                     "Clock In failed:",
                     error.response?.data || error.message
                 );
-                alert(error.response?.data?.message || "Unable to clock in.");
+                // alert(error.response?.data?.message || "Unable to clock in.");
+                ToastService.error(error.response?.data?.message || "Unable to clock in.");
+            } finally {
+                this.isClockingIn = false;
             }
         },
 
         //Updating the data if the user is clocked out successfully
         async confirmClockOut() {
+            this.isClockingOut = true;
 
             try {
 
@@ -258,21 +276,26 @@ var vm = new Vue({
                     this.clockLogs = [response.data.record];
                     await this.loadShiftActivityLogs();
 
-                    alert("Clocked out successfully");
+                    // alert("Clocked out successfully");
+                    ToastService.success('Success: Clocked Out Successfully');
                 }
-
+                else {
+                    ToastService.error(
+                        response.data.message || 'Unable to clock out.'
+                    );
+                }
             }
             catch (error) {
-
                 console.error(
                     "Clock Out failed:",
                     error.response?.data || error.message
                 );
-
                 // Restore the switch if the request fails
                 this.clockInSwitch = true;
-
-                alert(error.response?.data?.message || "Unable to clock out.");
+                // alert(error.response?.data?.message || "Unable to clock out.");
+                ToastService.error(error.response?.data?.message || "Unable to clock out.");
+            } finally {
+                this.isClockingOut = false;
             }
         },
         //Closing clock In form with close or cross button
@@ -304,20 +327,16 @@ var vm = new Vue({
 
             }
             else if (!this.clockInSwitch && this.clockInStatus) {
-
                 this.confirmClockOut();
-
             }
         },
         //Opening Add Task Form
         openAddTaskForm() {
             this.showAddTaskForm = true;
-
         },
         //Closing Add Task Form
         closeAddTaskForm() {
             this.showAddTaskForm = false;
-
         },
 
         //keep the dashboard updated of the status of guard if he is clocked in or clocked out
@@ -329,14 +348,8 @@ var vm = new Vue({
                     }
                 });
 
-                // console.log("Clock In Api response:", response.data);
-
                 this.clockInStatus = response.data.isClockedIn;
                 this.clockInSwitch = response.data.isClockedIn;
-                
-
-                // console.log("clockin status", this.clockInStatus);
-                // console.log("clockin switch", this.clockInSwitch);
 
                 if (response.data.isClockedIn) {
                     this.clockIn = {
@@ -348,24 +361,21 @@ var vm = new Vue({
             }
             catch (error) {
                 console.error("Error loading clock-in status:", error);
+                ToastService.error("Error: Something went wrong.");
             }
         },
-
 
         //start task timer
         startTask() {
             if (this.taskRunning || this.taskCompleted) {
                 return;
             }
-
             this.taskStartTime = performance.now();
             this.taskRunning = true;
-            // console.log("Task running");
-
             this.timerInterval = setInterval(() => {
                 this.totalSeconds = Math.floor(performance.now() - this.taskStartTime) / 1000
             }, 1000);
-
+            ToastService.info("Info: Task Started");
         },
         //end task timer
         endTask() {
@@ -375,18 +385,15 @@ var vm = new Vue({
 
             clearInterval(this.timerInterval);
             this.timerInterval = null;
-
             this.totalSeconds = Math.floor((this.taskEndTime - this.taskStartTime) / 1000);
-
-            // console.log("Task Completed");
-            // console.log("Total", this.totalSeconds);
             this.taskRunning = false;
             this.taskCompleted = true;
+            ToastService.success("Success: Task Completed");
         },
         //Activity Log Clock In/Clock Out
         async loadShiftActivityLogs() {
+            this.isLoadingActivityLogs = true;
             try {
-                // console.log("Guard ID from Vue:", this.guardId);
                 const response = await axios.get('/ClockIn/GetShiftActivityLog', {
                     params: {
                         guardId: this.guardId
@@ -395,13 +402,13 @@ var vm = new Vue({
                 this.shiftActivityLogs = response.data.sort((a, b) => {
                     return new Date(b.clockInTime) - new Date(a.clockInTime);
                 });
-
-                // for (let i in this.shiftActivityLogs) {
-                //     console.log(this.shiftActivityLogs[i]);
-                // }
             } catch (error) {
                 console.error("Error loading shift sctivity log", error);
-            }    
+                ToastService.error("Error: Something went wrong.");
+            }
+            finally {
+                this.isLoadingActivityLogs = false;
+            }
         }
     }
     

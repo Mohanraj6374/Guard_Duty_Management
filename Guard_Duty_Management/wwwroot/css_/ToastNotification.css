@@ -15,25 +15,28 @@
 }
 .toast-content{
 }
-.toast-success{
-    background: #00ff90;
-
+.toast-success {
+    background: #e3f9e1;
+    border: 1px solid #00d048ff;
+  
 }
 .toast-error {
-    background: #ff0000;
+    background: #fdeaea;
+    border: 1px solid #ff0000ff;
 }
 .toast-warning {
-    background: #ffd800;
+    background: #f9f8e2;
+    border: 1px solid #ffd800ff;
 }
 .toast-info {
-    background: #00ffff;
+    background: #e3ffff;
+    border: 1px solid #0094ffff;
 }
 .toast-close {
     pointer-events: auto !important;
     border: none;
     background: transparent;
-    font-size: 4rem;
-    line-height: 1;
+    font-size: 1.5rem;
     cursor: pointer !important;
-    color: aliceblue;
+    color: rgba(0, 0, 0, 0.25);
 }
