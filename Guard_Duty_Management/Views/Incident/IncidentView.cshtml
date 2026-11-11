@@ -511,8 +511,8 @@
                         Open Narrative
                     </div>
 
-                    <div class="grid-value full-value">
-                        {{ formatNarrative(incident.openNarrative) }}
+                    <div class="grid-value full-value"
+                         v-html="formatNarrative(incident.openNarrative)">
                     </div>
 
                     <!-- CLOSED NARRATIVE -->
@@ -521,9 +521,9 @@
                         Closed Narrative
                     </div>
 
-                    <div class="grid-value full-value">
-                        {{ formatNarrative(incident.closedNarrative) }}
-                    </div>
+                   <div class="grid-value full-value"
+     v-html="formatNarrative(incident.closedNarrative)">
+</div>
 
                     <!-- OPEN IMAGES -->
 
@@ -586,12 +586,12 @@
 
                     <div class="summary-item">
                         <strong>Who:</strong>
-                        <p>{{ incident.summary.who }}</p>
+                        <p v-html="formatNarrative(incident.summary.who)"></p>
                     </div>
 
                     <div class="summary-item">
                         <strong>What:</strong>
-                        <p>{{ formatNarrative(incident.summary.what) }}</p>
+                        <p v-html="formatNarrative(incident.summary.what)"></p>
                     </div>
 
                     <div class="summary-item">
