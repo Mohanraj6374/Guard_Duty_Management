@@ -269,6 +269,38 @@
                 
                
         }
+        /* Hide static map during normal page viewing */
+.pdf-map-image {
+    display: none;
+}
+
+/* PDF export mode */
+#incidentPdfContent.pdf-export-mode #azureIncidentMap {
+    display: none;
+}
+
+#incidentPdfContent.pdf-export-mode .pdf-map-image {
+    display: block;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+/* Hide static map during normal page viewing */
+.pdf-map-image {
+    display: none;
+}
+
+/* PDF export mode */
+#incidentPdfContent.pdf-export-mode #azureIncidentMap {
+    display: none;
+}
+
+#incidentPdfContent.pdf-export-mode .pdf-map-image {
+    display: block;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
     </style>
 </head>
 
@@ -329,10 +361,10 @@
                   @* Incident Map using Azure *@
                  <div id="azureIncidentMap" style="height: 350px; width: 100%;"> </div>
                 <img v-if="incident.mapImageBase64"
-                     :src="incident.mapImageBase64"
-                     alt="Incident Location Map"
-                     style="width: 100%; height: 350px; object-fit: cover;" />
-
+     class="pdf-map-image"
+     :src="incident.mapImageBase64"
+     alt="Incident Location Map"
+     style="width: 100%; height: 350px; object-fit: cover;" />
                 <h4 class="section-heading">Incident Details</h4>
 
               
@@ -614,7 +646,9 @@
     window.azureMapsKey = '@ViewBag.AzureMapsKey';
 </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- INCIDENT DETAILS JAVASCRIPT -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="~/js/Incident-Components/IncidentView.js"></script>
     
     
