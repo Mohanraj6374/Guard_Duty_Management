@@ -152,10 +152,13 @@
                                         <select2 v-model="clockIn.shiftId" :options="shiftOptions" placeholder="Select Shift" required></select2>
                                         
                                     </div>
-
                                     <div class="mb-2">
                                         <label class="form-label">Guard Post<span class="text-danger">*</span></label>
                                         <select2 v-model="clockIn.guardPostId" :options="guardPostOptions" placeholder="Select Guard Post" required></select2>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Ops Post<span class="text-danger">*</span></label>
+                                        <select2 v-model="clockIn.opsPostId" :options="opsPostOptions" placeholder="Select Ops Post" required></select2>
                                     </div>
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
