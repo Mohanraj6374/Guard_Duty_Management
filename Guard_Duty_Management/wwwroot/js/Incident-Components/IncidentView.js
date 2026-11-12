@@ -160,7 +160,7 @@
                 return "";
             }
 
-            var bbox = [
+            var box = [
                 longitude - 0.015,
                 latitude - 0.01,
                 longitude + 0.015,
@@ -262,7 +262,7 @@
         // Get Incident Details API
         // --------------------------------------
 
-        getIncident: function () {
+        getIncident:  async function () {
 
             console.log("getIncident() called");
 
@@ -276,6 +276,23 @@
             this.loading = true;
             this.errorMessage = "";
 
+            // Show page loading spinner
+    Swal.fire({
+    title: "Loading Incident Details...",
+    text: "Please wait while the incident information is loading.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showConfirmButton: false,
+    didOpen: function () {
+        Swal.showLoading();
+    }
+});
+// Allow browser to display the spinner before API processing
+await new Promise(resolve => {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(resolve);
+    });
+});
             axios.get("/Incident/GetIncidents", {
 
                 params: {
@@ -340,6 +357,9 @@
                 .finally(() => {
 
                     this.loading = false;
+                    Swal.close();
+
+
 
                 });
         },

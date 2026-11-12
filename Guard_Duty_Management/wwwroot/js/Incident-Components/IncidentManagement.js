@@ -290,6 +290,17 @@ var vm = new Vue({
 
             this.loading = true;
             this.errorMessage = '';
+            // Show page loading spinner
+Swal.fire({
+    title: "Loading Incident Details...",
+    text: "Please wait while the incident information is loading.",
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showConfirmButton: false,
+    didOpen: function () {
+        Swal.showLoading();
+    }
+});
 
             axios.get('/Incident/GetIncidentList', {
 
