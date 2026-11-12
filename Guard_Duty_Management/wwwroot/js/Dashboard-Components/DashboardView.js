@@ -1,3 +1,4 @@
+import Enumerable from '../../lib/linq-js/linq.js4.0.3.js';
 var vm = new Vue({
     el: '#DashboardView',
     data() {
@@ -40,8 +41,10 @@ var vm = new Vue({
             assignedTaskList: [],
 
             selectedExecutionTask: null,
+            selectedTask: '',
+            selectedSite:'',
 
-
+            // clockedInSite:'',
             taskRunning: false,
             taskCompleted: false,
             taskStartTime: null,
@@ -74,11 +77,13 @@ var vm = new Vue({
             }
 
             return [
+                // this.selectedExecutionTask,
+                // ...this.assignedTaskList.filter(
+                //     task => task.assignmentId !==
+                //         this.selectedExecutionTask.assignmentId
+                // )
                 this.selectedExecutionTask,
-                ...this.assignedTaskList.filter(
-                    task => task.assignmentId !==
-                        this.selectedExecutionTask.assignmentId
-                )
+                ...Enumerable.from(this.assignedTaskList).where(task => task.assignmentId !== this.selectedExecutionTask.assignmentId).toArray()
             ];
         },
         //search bar
@@ -87,9 +92,12 @@ var vm = new Vue({
                 return this.prioritizedTaskList;
             }
             const search = this.searchText.toLowerCase().trim();
-            return this.prioritizedTaskList.filter(t => {
-                return (t.siteName.toLowerCase().includes(search) || t.taskName.toLowerCase().includes(search));
-            });
+            // return this.prioritizedTaskList.filter(t => {
+            //     return (t.siteName.toLowerCase().includes(search) || t.taskName.toLowerCase().includes(search));
+            // });
+            return Enumerable.from(this.prioritizedTaskList).where(t =>
+                t.siteName.toLowerCase().includes(search) || t.taskName.toLowerCase().includes(search)
+            ).toArray();
         },
 
         //formatting time for calculating and showing the task execution period
@@ -122,25 +130,42 @@ var vm = new Vue({
                 const response = await axios.get('/data/dashboard-data.json');
                 const data = await response.data;
 
-                this.siteOptions = data.sites.map(site => ({
+                // this.siteOptions = data.sites.map(site => ({
+                //     id: site.siteId,
+                //     text: site.siteName,
+                //     address: site.siteAddress
+                // }));
+                this.siteOptions = Enumerable.from(data.sites).select(site => ({
                     id: site.siteId,
                     text: site.siteName,
                     address: site.siteAddress
-                }));
+                })).toArray();
 
-                this.taskOptions = data.tasks.map(task => ({
+                // this.taskOptions = data.tasks.map(task => ({
+                //     id: task.taskId,
+                //     text: task.taskName
+                // }));
+                this.taskOptions = Enumerable.from(data.tasks).select(task => ({
                     id: task.taskId,
                     text: task.taskName
-                }));
+                })).toArray();
 
-                this.shiftOptions = data.shifts.map(shift => ({
+                // this.shiftOptions = data.shifts.map(shift => ({
+                //     id: shift.shiftId,
+                //     text: shift.shiftTime
+                // }));
+                this.shiftOptions = Enumerable.from(data.shifts).select(shift => ({
                     id: shift.shiftId,
                     text: shift.shiftTime
-                }));
-                this.guardPostOptions = data.guardposts.map(guardpost => ({
-                    id: guardpost.guardpostId,
-                    text: guardpost.guardpostName
-                }));
+                })).toArray();
+                // this.guardPostOptions = data.guardposts.map(guardpost => ({
+                //     id: guardpost.guardpostId,
+                //     text: guardpost.guardpostName
+                // }));
+                this.guardPostOptions = Enumerable.from(data.guardposts).select(guard => ({
+                    id: guard.guardpostId,
+                    text: guard.guardpostName
+                })).toArray();
             }
             catch (error) {
                 console.error("Error loading dashboard data:", error);
@@ -154,24 +179,26 @@ var vm = new Vue({
                 ToastService.warning('Warning: Please fill all required fields.')
                 return;
             }
-            selectedSite = this.siteOptions.find(site => site.id == this.addTask.siteId);
-            selectedTask = this.taskOptions.find(task => task.id == this.addTask.taskId);
+            // this.selectedSite = this.siteOptions.find(site => site.id == this.addTask.siteId);
+            // this.selectedTask = this.taskOptions.find(task => task.id == this.addTask.taskId);
+            this.selectedSite = Enumerable.from(this.siteOptions).firstOrDefault(site => site.id == this.addTask.siteId);
+            this.selectedTask = Enumerable.from(this.taskOptions).firstOrDefault(task => task.id == this.addTask.taskId);
 
-            if (!selectedSite || !selectedTask) {
+            if (!this.selectedSite || !this.selectedTask) {
                 ToastService.warning('Warning: Invalid Site or Task selection.');
                 return;
             }
             this.isAddingTask = true;
-            console.log("this.isAddingTask = true");
+            // console.log("this.isAddingTask = true");
             try {
                 const task = {
                     assignmentId: Date.now(),
                     siteId: this.addTask.siteId,
-                    siteName: selectedSite.text,
-                    siteAddress: selectedSite.address,
+                    siteName: this.selectedSite.text,
+                    siteAddress: this.selectedSite.address,
 
                     taskId: this.addTask.taskId,
-                    taskName: selectedTask.text,
+                    taskName:this.selectedTask.text,
 
                     date: window.moment(this.addTask.date).format("DD-MM-YYYY"),
                     startTime: this.addTask.startTime,
@@ -207,13 +234,6 @@ var vm = new Vue({
             this.selectedExecutionTask = task;
         },
 
-        // confirmClockIn  () {
-        //     this.clockInStatus = true;
-        //     this.clockInSwitch = true;
-
-        //     this.showClockInForm = false;
-        // },
-
         //updating the data if user is successfully clocked in
         async confirmClockIn() {
             if (!this.clockIn.siteId || !this.clockIn.shiftId || !this.clockIn.guardPostId) {
@@ -236,7 +256,7 @@ var vm = new Vue({
                     this.clockInStatus = true;
                     this.clockInSwitch = true;
                     this.clockLogs = [response.data.record];
-                    clockedInSite = response.data.record;                    
+                    // this.clockedInSite = response.data.record.siteId;                    
                     this.showClockInForm = false;
                     await this.loadShiftActivityLogs();
                     ToastService.success('Success: Clocked in successfully');
@@ -252,7 +272,6 @@ var vm = new Vue({
                     "Clock In failed:",
                     error.response?.data || error.message
                 );
-                // alert(error.response?.data?.message || "Unable to clock in.");
                 ToastService.error(error.response?.data?.message || "Unable to clock in.");
             } finally {
                 this.isClockingIn = false;
@@ -275,8 +294,6 @@ var vm = new Vue({
                     this.clockInSwitch = false;
                     this.clockLogs = [response.data.record];
                     await this.loadShiftActivityLogs();
-
-                    // alert("Clocked out successfully");
                     ToastService.success('Success: Clocked Out Successfully');
                 }
                 else {
@@ -292,7 +309,6 @@ var vm = new Vue({
                 );
                 // Restore the switch if the request fails
                 this.clockInSwitch = true;
-                // alert(error.response?.data?.message || "Unable to clock out.");
                 ToastService.error(error.response?.data?.message || "Unable to clock out.");
             } finally {
                 this.isClockingOut = false;
@@ -303,20 +319,7 @@ var vm = new Vue({
             this.showClockInForm = false;
             this.clockInSwitch = false;
         },
-        // handleClockInToggle() {
-        //     if (this.clockInSwitch && !this.clockInStatus) {
-        //         this.showClockInForm = true;
-
-        //     }
-        //     else if (!this.clockInSwitch && this.clockInStatus) {
-        //         this.clockInStatus = false;
-        //         this.showClockInForm = false;
-        //     }
-        // },
-
-
-
-
+        
         //handling the behaviour of clock in toggle whether it should be turn off or turn on
         //Calling confirmClockIn which gives the status to update the switch and status
         handleClockInToggle() {

@@ -56,8 +56,7 @@
 #addTaskButton:disabled {
     background: #D93643;
     color: #FFFFFF;
-    cursor: not-allowed;
-    opacity: 0.9;
+    opacity: 0.91;
 }
 /*Popup forms*/
 .popup-form {
