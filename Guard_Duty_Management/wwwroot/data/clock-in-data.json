@@ -440,6 +440,348 @@
       "isClockedIn": false,
       "clockInTime": "2026-11-06T13:22:42.0569908\u002B00:00",
       "clockOutTime": "2026-11-06T13:22:50.0705772\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T05:05:00.4271710\u002B00:00",
+      "clockOutTime": "2026-11-10T05:05:06.6124974\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T06:59:02.4674115\u002B00:00",
+      "clockOutTime": "2026-11-10T07:00:20.8539867\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T07:08:33.7149699\u002B00:00",
+      "clockOutTime": "2026-11-10T07:08:38.6777924\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T07:08:49.9437769\u002B00:00",
+      "clockOutTime": "2026-11-10T07:37:32.5901636\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T07:37:36.0199441\u002B00:00",
+      "clockOutTime": "2026-11-10T09:00:28.0021766\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:00:31.8610948\u002B00:00",
+      "clockOutTime": "2026-11-10T09:00:45.4916878\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:01:59.9462105\u002B00:00",
+      "clockOutTime": "2026-11-10T09:02:47.2652102\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:02:50.1313122\u002B00:00",
+      "clockOutTime": "2026-11-10T09:32:15.3303529\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:32:19.4020308\u002B00:00",
+      "clockOutTime": "2026-11-10T09:37:31.5528964\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:37:34.5393102\u002B00:00",
+      "clockOutTime": "2026-11-10T09:39:38.0765920\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:39:41.6036271\u002B00:00",
+      "clockOutTime": "2026-11-10T09:39:46.2076216\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:39:48.7660697\u002B00:00",
+      "clockOutTime": "2026-11-10T09:40:17.6066887\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:40:21.2248406\u002B00:00",
+      "clockOutTime": "2026-11-10T09:40:23.7828414\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:41:03.4606607\u002B00:00",
+      "clockOutTime": "2026-11-10T09:45:37.2837629\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:45:42.4791933\u002B00:00",
+      "clockOutTime": "2026-11-10T09:48:10.8137413\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:48:13.6538798\u002B00:00",
+      "clockOutTime": "2026-11-10T09:48:16.3543961\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T09:49:14.3130390\u002B00:00",
+      "clockOutTime": "2026-11-10T09:49:19.7103205\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "2",
+      "shiftId": "2",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T10:05:02.1502586\u002B00:00",
+      "clockOutTime": "2026-11-10T10:05:06.8855627\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T10:09:20.4253009\u002B00:00",
+      "clockOutTime": "2026-11-10T10:09:30.4108392\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T10:15:09.6152869\u002B00:00",
+      "clockOutTime": "2026-11-10T10:16:40.5839975\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T10:17:10.1175633\u002B00:00",
+      "clockOutTime": "2026-11-10T10:20:33.5654065\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "2",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T10:26:40.7499498\u002B00:00",
+      "clockOutTime": "2026-11-10T11:42:03.1462993\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-10T11:57:10.1584767\u002B00:00",
+      "clockOutTime": "2026-11-10T12:52:21.9306496\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T05:34:15.6657392\u002B00:00",
+      "clockOutTime": "2026-11-11T05:35:25.9909470\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T05:43:51.3617089\u002B00:00",
+      "clockOutTime": "2026-11-11T05:43:57.9478067\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:21:05.5374187\u002B00:00",
+      "clockOutTime": "2026-11-11T06:21:21.2432870\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:21:29.1587984\u002B00:00",
+      "clockOutTime": "2026-11-11T06:21:57.8298076\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:22:09.9560370\u002B00:00",
+      "clockOutTime": "2026-11-11T06:24:36.5808573\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:25:07.1283881\u002B00:00",
+      "clockOutTime": "2026-11-11T06:29:58.5384648\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:30:05.2728267\u002B00:00",
+      "clockOutTime": "2026-11-11T06:32:00.6902001\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:33:21.3321581\u002B00:00",
+      "clockOutTime": "2026-11-11T06:37:30.3195512\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:37:33.6484501\u002B00:00",
+      "clockOutTime": "2026-11-11T06:37:38.4448493\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:37:41.4828046\u002B00:00",
+      "clockOutTime": "2026-11-11T06:38:22.6246138\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:38:26.5647408\u002B00:00",
+      "clockOutTime": "2026-11-11T06:43:08.8847741\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:50:59.2651502\u002B00:00",
+      "clockOutTime": "2026-11-11T06:51:01.0701523\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T06:51:05.6836356\u002B00:00",
+      "clockOutTime": "2026-11-11T07:29:14.3395279\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T07:29:17.8631450\u002B00:00",
+      "clockOutTime": "2026-11-11T10:01:05.9830385\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-11T10:12:58.4554702\u002B00:00",
+      "clockOutTime": "2026-11-11T10:13:04.9800990\u002B00:00"
     }
   ]
 }

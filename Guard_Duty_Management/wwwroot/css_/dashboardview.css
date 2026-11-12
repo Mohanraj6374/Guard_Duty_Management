@@ -52,6 +52,12 @@
     .nav-link.active-tab::after {
         background-color: #D93643;
     }
+
+#addTaskButton:disabled {
+    background: #D93643;
+    color: #FFFFFF;
+    opacity: 0.91;
+}
 /*Popup forms*/
 .popup-form {
     width: 100vw;

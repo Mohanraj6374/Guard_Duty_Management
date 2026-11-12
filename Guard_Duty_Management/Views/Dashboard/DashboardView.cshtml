@@ -17,125 +17,120 @@
 
     <div class="container-fluid bg-main p-0 overflow-x-hidden" id="DashboardView" v-cloak>
         <app-header></app-header>
-        
+        <!--second header/navigation-->
         <div class="container-fluid nav-controls py-2">
-                <div class="row align-items-center g-1">
-                    <!-- Left Actions -->
+            <div class="row align-items-center g-1">
+                <!-- Left Actions -->
                 <div class="col-lg-4 col-md-6 col-12 left-nav-controls px-2 py-2">
-                        <div class="d-flex flex-nowrap align-items-center justify-content-md-start justify-content-between gap-1">
-                            <div class="d-flex flex-nowrap align-items-center gap-1">
-                                <a href="/Dashboard/DashboardView"
-                                   class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "DashboardView" ? "active-tab" : "")">
-
-                                    <div class="d-flex align-items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard-minus" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
-                                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
-                                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
-                                        </svg>
-                                        Task
-                                    </div>
-                                </a>
-
-                                <a href="/Incident/IncidentManagementView" target="_blank"
-                               class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "IncidentManagementView" ? "active-tab" : "")">
-                                    <div class="d-flex align-items-center gap-2">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             width="24"
-                                             height="24"
-                                             viewBox="0 0 24 24"
-                                             fill="none"
-                                             stroke="currentColor"
-                                             stroke-width="1.8"
-                                             stroke-linecap="round"
-                                             stroke-linejoin="round">
-
-                                            <rect x="4" y="2.5" width="16" height="19" rx="2" />
-                                            <path d="M8 8h8M8 12h8M8 16h5" />
-
-                                        </svg>
-
-                                        Incident
-                                    </div>
-                                </a>
-                            </div>
-                            <button type="button"
-                                class="btn security-btn fw-semibold text-nowrap"
-                                id="addTaskButton" v-on:click="openAddTaskForm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-lg align-middle" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                    <div class="d-flex flex-nowrap align-items-center justify-content-md-start justify-content-between gap-1">
+                        <div class="d-flex flex-nowrap align-items-center gap-1">
+                            <a href="/Dashboard/DashboardView"
+                               class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "DashboardView" ? "active-tab" : "")">
+                                <div class="d-flex align-items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard-minus" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M5.5 9.5A.5.5 0 0 1 6 9h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5" />
+                                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                                        <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
                                     </svg>
-                                    <span class="align-middle">Add Task</span>
-                                
-                            </button>
+                                    Task
+                                </div>
+                            </a>
+
+                            <a href="/Incident/IncidentManagementView" target="_blank"
+                           class="btn fw-semibold px-3 py-2 nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "IncidentManagementView" ? "active-tab" : "")">
+                                <div class="d-flex align-items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.8"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+
+                                        <rect x="4" y="2.5" width="16" height="19" rx="2" />
+                                        <path d="M8 8h8M8 12h8M8 16h5" />
+
+                                    </svg>
+                                    Incident
+                                </div>
+                            </a>
                         </div>
+                        <span :title="!clockInStatus ? 'Clock in to add a task' :''" :style="{ cursor: !clockInStatus? 'not-allowed': 'pointer' }">
+                            <button type="button"
+                                    class="btn security-btn fw-semibold text-nowrap"
+                                    id="addTaskButton" v-on:click="openAddTaskForm"
+                                    v-bind:disabled="!clockInStatus"
+                                    :title="!clockInStatus ? '' : 'Add Task'">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-lg align-middle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                </svg>
+                                <span class="align-middle">Add Task</span>
+                            </button>
+                        </span>
                     </div>
+                </div>
                     
 
                     <!-- Right Controls -->
-                    <div class="col-lg-8 col-md-6 col-12">                    
+                <div class="col-lg-8 col-md-6 col-12">                    
                     <div class="row align-items-center justify-content-md-end justify-content-center">
-                            <div class="col-lg-6 col-12">
-                                <div class="d-flex flex-sm-nowrap flex-wrap align-items-center gap-3 ms-lg-auto mt-3 mt-md-0 mb-3 mb-md-0 justify-content-end">
+                        <div class="col-lg-6 col-12">
+                            <div class="d-flex flex-sm-nowrap flex-wrap align-items-center gap-3 ms-lg-auto mt-3 mt-md-0 mb-3 mb-md-0 justify-content-end">
 
-                                    <!-- Date Picker -->
+                                <!-- Date Picker -->
                                 <div class="input-group d-flex align-items-center justify-content-center gap-2 bg-white shadow-sm rounded px-3 py-2">
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <div class="p-1">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="p-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#C8AD6B" class="bi bi-calendar" viewBox="0 0 16 16">
-                                                  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                                </svg>
-                                            </div>
+                                              <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                            </svg>
                                         </div>
-                                        
-                                            <input type="date"
+                                    </div>                                        
+                                    <input type="date"
                                                    class="border-0 form-control p-0 rounded fw-semibold"
                                                    v-model="selectedDate"
                                                    aria-label="Select date" />
-                                    </div>
+                                </div>
 
                                     <!-- Clock-In Toggle -->
-                                    <div class="d-flex align-items-center gap-2 bg-white rounded px-3 py-2 shadow-sm w-100">
+                                <div class="d-flex align-items-center gap-2 bg-white rounded px-3 py-2 shadow-sm w-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                         stroke-width="0.7" class="bi bi-arrow-repeat clock-in-icon" v-bind:class="clockInStatus? 'clock-in-running':''" viewBox="0 0 16 16">
-                                            <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
-                                            <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
-                                        </svg>
-
-                                        <span class="fw-semibold text-secondary text-nowrap">
-                                            ClockIn:
-                                        </span>
-
-                                        <span id="clockInStatus"
-                                              class="fw-semibold text-nowrap" v-bind:class="clockInStatus? 'text-success':'text-danger'">
-                                            {{clockInStatus ? 'ON':'OFF'}}
-                                        </span>
-
-                                        <div class="form-check form-switch mb-0 ms-auto">
-                                            <input class="form-check-input"
-                                                   type="checkbox"
-                                                   role="switch"
-                                                   id="clockInSwitch"
-                                                   v-model="clockInSwitch"
-                                                   v-on:change="handleClockInToggle"
-                                                   aria-label="Toggle Clock-In"
-                                                   style="cursor: pointer;">
-                                        </div>
-
+                                     stroke-width="0.7" class="bi bi-arrow-repeat clock-in-icon" v-bind:class="clockInStatus? 'clock-in-running':''" viewBox="0 0 16 16">
+                                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                                        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+                                    </svg>
+                                    <span class="fw-semibold text-secondary text-nowrap">
+                                        ClockIn:
+                                    </span>
+                                    <span v-if="isClockingOut" class="spinner-border spinner-border-sm text-danger"></span>
+                                    <span v-else id="clockInStatus" 
+                                          class="fw-semibold text-nowrap" v-bind:class="clockInStatus? 'text-success':'text-danger'">
+                                        {{clockInStatus ? 'ON':'OFF'}}
+                                    </span>
+                                    <div class="form-check form-switch mb-0 ms-auto" :title="!clockInSwitch ? 'Clock In' :'Clock Out'">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               role="switch"
+                                               id="clockInSwitch"
+                                               v-model="clockInSwitch"
+                                               v-on:change="handleClockInToggle"
+                                               aria-label="Toggle Clock-In"
+                                               style="cursor: pointer;">
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        @* </nav> *@
+        </div>
+        
 
     
 
-
+        <!--Clock In Form-->
         <div v-if="showClockInForm" id="clockInPopup" class="container-fluid d-flex align-items-center popup-form bg-custom-blur overflow-x-hidden overflow-y-hidden position-fixed start-0 top-0 py-3 mb-2">
             <div class="row justify-content-center align-items-center w-100 h-100">
                 <div class="col-lg-4 col-sm-7 col-11">
@@ -164,7 +159,10 @@
                                     </div>
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
-                                        <button type="button" class="btn security-btn" v-on:click="confirmClockIn">Clock In</button>
+                                        <button type="button" class="btn security-btn" v-on:click="confirmClockIn">
+                                            <span v-if="isClockingIn" class="spinner-border spinner-border-sm me-2"></span>
+                                            {{isClockingIn?'Clocking In...':'Clock In'}}
+                                        </button>
                                         <button type="button" class="btn btn-dark" v-on:click="closeClockInForm">Close</button>
                                     </div>
                                 </div>
@@ -174,7 +172,7 @@
                 </div>
             </div>
         </div>
-
+        <!--Add Task Form Popup-->
         <div v-if="showAddTaskForm" id="addTaskPopup" class="container-fluid d-flex align-items-center popup-form bg-custom-blur position-fixed start-0 top-0 py-3 mb-2 overflow-x-hidden">
             <div class="row justify-content-center align-items-center w-100 h-100">
                 <div class="col-md-6 col-12">
@@ -232,7 +230,10 @@
                                     </div>  *@
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
-                                        <button type="button" class="btn security-btn" v-on:click="assignTask">Add Task</button>
+                                        <button type="button" class="btn security-btn" v-on:click="assignTask">
+                                            <span class="spinner-border-sm text-danger me-1"></span>
+                                            {{isAddingTask?'Adding Task':'Add Task'}}
+                                        </button>
                                         <button type="button" class="btn btn-dark" v-on:click="closeAddTaskForm">Close</button>
                                     </div>
                                 </div>
@@ -243,9 +244,13 @@
             </div>
         </div>
 
-
+        <!--Main/Dashboard Panel-->
         <div class="container-fluid main body-text-color">
-            <div class="row mt-2 g-2 align-items-stretch dashboard-layout">
+            <div v-if="isDashboardLoading" class="d-flex flex-column align-items-center justify-content-center py-3" style="min-height: 400px;" >
+                <div class="spinner-border text-danger"></div>
+                <span>Loading...</span>
+            </div>
+            <div v-else class="row mt-2 g-2 align-items-stretch dashboard-layout">
                 <div class="col-lg-3 col-12 d-flex align-items-center justify-content-center dashboard-column">
                     <div class="card w-100 h-100 bg-white text-black">
                         <div class="card-body dashboard-right-body task-panel">
@@ -272,7 +277,7 @@
                                         <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
                                     </g>
                                 </svg>
-                                <input title="search" class="input" type="search" placeholder="Search" v-model="searchText" v-on:input="currentPage=1" />
+                                <input title="search" class="input" type="search" placeholder="Search" v-model="searchText"/>
                             </div>
                             <div v-if="assignedTaskList.length===0" class="h-auto mt-2">
                                 <div class="empty-illustration">
@@ -526,25 +531,6 @@
                     <div class="card w-100 h-100">
                         <div class="card-body d-flex flex-column dashboard-right-body">
                             <!--ClockIn/Out Status Box-->
-                            <div>
-                                <button class="btn btn-danger"
-                                        v-on:click="errorToast">
-                                    Error Toast
-                                </button>
-                                <button class="btn btn-info"
-                                        v-on:click="infoToast">
-                                    Info Toast
-                                </button>
-                                <button class="btn btn-success"
-                                        v-on:click="successToast">
-                                    Success Toast
-                                </button>
-                                <button class="btn btn-warning"
-                                        v-on:click="warningToast">
-                                    Warning Toast
-                                </button>
-                            </div>
-
                             <div class="d-flex flex-row gap-2 align-items-center justify-content-start px-2 py-2 rounded border" v-bind:class="[clockInStatus? 'bg-custom-on':'bg-custom-off',clockInStatus? 'border-success-subtle':'border-danger-subtle']">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <div class="p-3 rounded-circle" v-bind:class="clockInStatus ? 'bg-success-subtle':'bg-danger-subtle'">
@@ -585,9 +571,18 @@
                                     <p class="m-0 fs-5 fw-semibold align-middle">Shift Activity Log</p>
                                 </div>
                                 <div class="mt-2 px-2 shift-activity-list">
+                                    <div v-if="isLoadingActivityLogs"
+                                         class="d-flex flex-column justify-content-center align-items-center py-4">
+
+                                        <div class="spinner-border text-danger"
+                                             role="status">
+                                        </div>
+                                        <span class="">Loading...</span>
+
+                                    </div>
 
                                     <!--Clock In/Out Activity-->
-                                    <div v-for="record in shiftActivityLogs"
+                                    <div v-else v-for="record in shiftActivityLogs"
                                         :key="record.clockInTime">
 
                                         <!--Clockout activity-->
@@ -608,11 +603,8 @@
                                             <span class="lh-1 fw-semibold">Clocked In <br />
                                                 <span class="font-size-8 fw-normal">{{formatDateTime(record.clockInTime)}}</span>
                                             </span>
-                                        </div>
-
-                                        
+                                        </div>                                        
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -640,11 +632,11 @@
             });
     </script>
     <script src="~/lib/axios/axios@1.12.2.js"></script>
-    <script src="~/lib/linq-js/linq.js4.0.3.js"></script>
+    @* <script src="~/lib/linq-js/linq.js4.0.3.js"></script> *@
     <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/header.js"></script>
     <script src="~/js/Dashboard-Components/Select2Component.js"></script>
-    <script src="~/js/dashboard-components/dashboardview.js"></script>
+    <script type="module" src="~/js/dashboard-components/dashboardview.js"></script>
 
 </body>
 
