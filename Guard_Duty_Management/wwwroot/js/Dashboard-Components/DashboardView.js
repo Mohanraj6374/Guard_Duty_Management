@@ -181,7 +181,7 @@ var vm = new Vue({
         //once the sites are loaded then other data like shift,guardPost, OpsPost dependent on sites will loaded 
         async loadSiteDependentData(siteId) {
             try {
-                const requestId = ++this.siteRequestId;
+                const requestId = ++this.siteRequestId; //assigning requestId to every api request to prevent race condition
                 // const shiftResponse = await axios.get('/Dashboard/GetShifts', {
                 //     params: { siteId: siteId }
                 // });
@@ -196,6 +196,7 @@ var vm = new Vue({
                         params: { siteId: siteId }
                     })
                 ]);
+                //race condition checking
                 if (requestId !== this.siteRequestId) {
                     return;
                 }
