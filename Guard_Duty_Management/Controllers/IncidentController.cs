@@ -418,14 +418,15 @@ namespace Guard_Duty_Management.Controllers
                             System.Globalization.CultureInfo.InvariantCulture, out var latitude))
                     {
                         var mapUrl =
-                            "https://atlas.microsoft.com/map/static" +
-                            "?api-version=2024-04-01" +
-                            "&tilesetId=microsoft.base.road" +
-                            "&zoom=15" +
-                            $"&center={longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)},{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
-                            "&width=800&height=450" +
-                            "&pins=" + Uri.EscapeDataString($"default||{longitude} {latitude}") +
-                            "&view=IN";
+    "https://atlas.microsoft.com/map/static" +
+    "?api-version=2024-04-01" +
+    "&tilesetId=microsoft.base.road" +
+    "&zoom=15" +
+    $"&center={longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)},{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
+    "&width=800&height=450" +
+    "&pins=" + Uri.EscapeDataString($"default||{longitude} {latitude}") +
+    "&view=IN" +
+    "&subscription-key=" + Uri.EscapeDataString(_azureMapsKey ?? "");
 
                         using var mapResponse = await client.GetAsync(mapUrl);
 

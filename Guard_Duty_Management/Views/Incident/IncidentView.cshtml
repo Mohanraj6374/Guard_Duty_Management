@@ -269,6 +269,38 @@
                 
                
         }
+        /* Hide static map during normal page viewing */
+.pdf-map-image {
+    display: none;
+}
+
+/* PDF export mode */
+#incidentPdfContent.pdf-export-mode #azureIncidentMap {
+    display: none;
+}
+
+#incidentPdfContent.pdf-export-mode .pdf-map-image {
+    display: block;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+/* Hide static map during normal page viewing */
+.pdf-map-image {
+    display: none;
+}
+
+/* PDF export mode */
+#incidentPdfContent.pdf-export-mode #azureIncidentMap {
+    display: none;
+}
+
+#incidentPdfContent.pdf-export-mode .pdf-map-image {
+    display: block;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
     </style>
 </head>
 
@@ -329,10 +361,10 @@
                   @* Incident Map using Azure *@
                  <div id="azureIncidentMap" style="height: 350px; width: 100%;"> </div>
                 <img v-if="incident.mapImageBase64"
-                     :src="incident.mapImageBase64"
-                     alt="Incident Location Map"
-                     style="width: 100%; height: 350px; object-fit: cover;" />
-
+     class="pdf-map-image"
+     :src="incident.mapImageBase64"
+     alt="Incident Location Map"
+     style="width: 100%; height: 350px; object-fit: cover;" />
                 <h4 class="section-heading">Incident Details</h4>
 
               
@@ -479,8 +511,8 @@
                         Open Narrative
                     </div>
 
-                    <div class="grid-value full-value">
-                        {{ formatNarrative(incident.openNarrative) }}
+                    <div class="grid-value full-value"
+                         v-html="formatNarrative(incident.openNarrative)">
                     </div>
 
                     <!-- CLOSED NARRATIVE -->
@@ -489,9 +521,9 @@
                         Closed Narrative
                     </div>
 
-                    <div class="grid-value full-value">
-                        {{ formatNarrative(incident.closedNarrative) }}
-                    </div>
+                   <div class="grid-value full-value"
+     v-html="formatNarrative(incident.closedNarrative)">
+</div>
 
                     <!-- OPEN IMAGES -->
 
@@ -554,12 +586,12 @@
 
                     <div class="summary-item">
                         <strong>Who:</strong>
-                        <p>{{ incident.summary.who }}</p>
+                        <p v-html="formatNarrative(incident.summary.who)"></p>
                     </div>
 
                     <div class="summary-item">
                         <strong>What:</strong>
-                        <p>{{ formatNarrative(incident.summary.what) }}</p>
+                        <p v-html="formatNarrative(incident.summary.what)"></p>
                     </div>
 
                     <div class="summary-item">
@@ -614,7 +646,9 @@
     window.azureMapsKey = '@ViewBag.AzureMapsKey';
 </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- INCIDENT DETAILS JAVASCRIPT -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="~/js/Incident-Components/IncidentView.js"></script>
     
     
