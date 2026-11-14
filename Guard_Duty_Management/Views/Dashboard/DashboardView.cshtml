@@ -148,14 +148,32 @@
                                         <select2 v-model="clockIn.siteId" :options="siteOptions" placeholder="Select Site" required></select2>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label">Shift<span class="text-danger">*</span></label>
-                                        <select2 v-model="clockIn.shiftId" :options="shiftOptions" placeholder="Select Shift" required></select2>
+                                        <label class="form-label">
+                                            Shift<span class="text-danger">*</span>
+                                            <span v-if="isLoadingShifts" class="ms-2 text-muted small">
+                                                <span class="spinner-border spinner-border-sm border-1"></span> Loading...
+                                            </span>
+                                        </label>
+                                        <select2 v-model="clockIn.shiftId" :options="shiftOptions" :disabled="isLoadingShifts || !clockIn.siteId" placeholder="Select Shift" required></select2>
                                         
                                     </div>
-
                                     <div class="mb-2">
-                                        <label class="form-label">Guard Post<span class="text-danger">*</span></label>
-                                        <select2 v-model="clockIn.guardPostId" :options="guardPostOptions" placeholder="Select Guard Post" required></select2>
+                                        <label class="form-label">
+                                            Guard Post<span class="text-danger">*</span>
+                                            <span v-if="isLoadingGuardPosts" class="ms-2 text-muted small">
+                                                <span class="spinner-border spinner-border-sm border-1"></span> Loading...
+                                            </span>
+                                        </label>
+                                        <select2 v-model="clockIn.guardPostId" :options="guardPostOptions" :disabled="isLoadingGuardPosts || !clockIn.siteId" placeholder="Select Guard Post" required></select2>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            Ops Post<span class="text-danger">*</span>
+                                            <span v-if="isLoadingOpsPosts" class="ms-2 text-muted">
+                                                <span class="spinner-border spinner-border-sm border-1"></span> Loading...
+                                            </span>
+                                        </label>
+                                        <select2 v-model="clockIn.opsPostId" :options="opsPostOptions" :disabled="isLoadingOpsPosts || !clockIn.guardPostId" placeholder="Select Ops Post" required></select2>
                                     </div>
 
                                     <div class="my-3 d-flex justify-content-end gap-3">
@@ -485,7 +503,7 @@
                                         </div>
                                         <div class="col">
                                             <p class="text-muted font-size-8 mb-0">SITE CODE:</p>
-                                            <p class="mb-0 fw-semibold">{{selectedExecutionTask.siteId}}</p>
+                                            <p class="mb-0 fw-semibold">{{selectedExecutionTask.siteCode}}</p>
                                             
                                         </div>
                                         <div class="col">

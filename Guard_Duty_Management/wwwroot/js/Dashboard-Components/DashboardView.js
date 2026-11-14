@@ -17,10 +17,10 @@ var vm = new Vue({
             searchText: '',
 
             clockIn: {
-                siteId: '',
-                siteId: '',
+                siteId: '',                
                 shiftId: '',
-                guardPostId: ''
+                guardPostId: '',
+                opsPostId:''
             },
 
             addTask: {
@@ -32,11 +32,14 @@ var vm = new Vue({
             },
 
             siteOptions: [],
-
             taskOptions: [],
-
+            availableTaskOptions: [],
             shiftOptions: [],
             guardPostOptions: [],
+            opsPostOptions:[],
+
+            siteRequestId: 0, //race condition identifier
+            opsPostRequestId: 0, //race condition identifier
 
             assignedTaskList: [],
 
@@ -55,7 +58,11 @@ var vm = new Vue({
             isAddingTask: false,
             isClockingIn: false,
             isClockingOut: false,
-            isDashboardLoading: true
+            isDashboardLoading: true,
+            isLoadingShifts: false,
+            isLoadingGuardPosts: false,
+            isLoadingOpsPosts: false,
+            isLoadingTaskList: false
         };
     },
     async created() {
@@ -68,6 +75,33 @@ var vm = new Vue({
         } finally {
             this.isDashboardLoading = false;
         }
+    },
+    watch: {
+        'clockIn.siteId': function (newSiteId) {            
+            this.clockIn.shiftId = '';
+            this.clockIn.guardPostId = '';
+            this.clockIn.opsPostId = '';
+            this.shiftOptions = [];
+            this.guardPostOptions = [];
+            this.opsPostOptions = [];
+            if (!newSiteId) {
+                return;
+            }
+            this.loadSiteDependentData(newSiteId);
+        },
+        'clockIn.guardPostId': function (newGuardPostId) {
+            this.opsPostOptions = [];
+            this.clockIn.opsPostId = '';
+            if (!this.clockIn.siteId || !newGuardPostId) {
+                return;
+            }
+            this.loadOpsPostData(this.clockIn.siteId, newGuardPostId);
+        },
+        'addTask.siteId': function (newSiteId) {
+            this.addTask.taskId = '';
+            this.loadTaskBySite(newSiteId);
+        }
+
     },
     computed: {        
         //changing the order in task list which task is selected will be at top
@@ -127,44 +161,33 @@ var vm = new Vue({
         //loading guard/shift/task
         async loadDashboardData() {
             try {
-                const response = await axios.get('/data/dashboard-data.json');
-                const data = await response.data;
+                // const dashboardResponse = await axios.get('/data/dashboard-data.json');
+                // const dashboardData = dashboardResponse.data;
+                // const response = await axios.get('/data/dashboard-data.json');
+                const response = await axios.get('/Dashboard/GetSites');
+                const data = response.data;
 
-                // this.siteOptions = data.sites.map(site => ({
+                // this.siteOptions = data.data.map(site => ({
                 //     id: site.siteId,
                 //     text: site.siteName,
                 //     address: site.siteAddress
                 // }));
-                this.siteOptions = Enumerable.from(data.sites).select(site => ({
+                this.siteOptions = Enumerable.from(data.data).select(site => ({
                     id: site.siteId,
+                    code: site.siteCode,
                     text: site.siteName,
                     address: site.siteAddress
                 })).toArray();
-
-                // this.taskOptions = data.tasks.map(task => ({
-                //     id: task.taskId,
-                //     text: task.taskName
-                // }));
-                this.taskOptions = Enumerable.from(data.tasks).select(task => ({
-                    id: task.taskId,
-                    text: task.taskName
-                })).toArray();
-
-                // this.shiftOptions = data.shifts.map(shift => ({
-                //     id: shift.shiftId,
-                //     text: shift.shiftTime
-                // }));
-                this.shiftOptions = Enumerable.from(data.shifts).select(shift => ({
-                    id: shift.shiftId,
-                    text: shift.shiftTime
-                })).toArray();
-                // this.guardPostOptions = data.guardposts.map(guardpost => ({
-                //     id: guardpost.guardpostId,
-                //     text: guardpost.guardpostName
-                // }));
-                this.guardPostOptions = Enumerable.from(data.guardposts).select(guard => ({
-                    id: guard.guardpostId,
-                    text: guard.guardpostName
+                const taskListResponse = await axios.get("/Dashboard/GetTaskList", {
+                    params: {
+                        date: this.selectedDate
+                    }
+                })
+                const taskListData = taskListResponse.data;
+                this.availableTaskOptions = 
+                this.taskOptions = Enumerable.from(taskListData.data).where(task=> task.id === this.addTask.taskId).select(task => ({
+                    id: task.id,
+                    text: task.taskTypeName
                 })).toArray();
             }
             catch (error) {
@@ -172,7 +195,118 @@ var vm = new Vue({
                 ToastService.error("Error: Something went wrong.Please try again.");
             }
         },
+        //once the sites are loaded then other data like shift,guardPost, OpsPost dependent on sites will loaded 
+        async loadSiteDependentData(siteId) {
+            try {
+                this.isLoadingShifts = true;
+                this.isLoadingGuardPosts = true;
+                const requestId = ++this.siteRequestId; //assigning requestId to every api request to prevent race condition
+                // const shiftResponse = await axios.get('/Dashboard/GetShifts', {
+                //     params: { siteId: siteId }
+                // });
+                // const guardPostResponse = await axios.get('/Dashboard/GetGuardPosts', {
+                //     params: { siteId: siteId }
+                // });
+                const [shiftResponse, guardPostResponse] = await Promise.all([
+                    axios.get('/Dashboard/GetShifts', {
+                        params: { siteId: siteId }
+                    }),
+                    axios.get('/Dashboard/GetGuardPosts', {
+                        params: { siteId: siteId }
+                    })
+                ]);
+                //race condition checking
+                if (requestId !== this.siteRequestId) {
+                    return;
+                }
+                const shifts = shiftResponse.data;
+                const guardPosts = guardPostResponse.data;
 
+                this.shiftOptions = Enumerable.from(shifts.data).select(shift => ({
+                    id: shift.shiftId,
+                    text: shift.shiftStartTimeStr + "-" + shift.shiftEndTimeStr,
+                    start: shift.shiftStartTimeStr,
+                    end: shift.shiftEndTimeStr
+                })).toArray();
+
+                this.guardPostOptions = Enumerable.from(guardPosts.data).select(guard => ({
+                    id: guard.id,
+                    text: guard.postName
+                })).toArray();
+            } catch (error) {
+                console.error("Error loading SiteDependent data:", error);
+                ToastService.error("Error: Something went wrong.Please try again.");
+            } finally {
+                this.isLoadingShifts = false;
+                this.isLoadingGuardPosts = false;
+            }
+        },
+        async loadOpsPostData(siteId, guardPostId) {
+            this.isLoadingOpsPosts = true;
+            const PostRequestId = ++this.opsPostRequestId;
+            try {
+                const opsPostResponse = await axios.get('/Dashboard/GetOpsPosts', {
+                    params: {
+                        siteId: siteId,
+                        guardPostId: guardPostId
+                    }
+                });
+                if (PostRequestId !== this.opsPostRequestId) {
+                    return;
+                }
+                const opsPosts = opsPostResponse.data;
+                this.opsPostOptions = Enumerable.from(opsPosts.data).select(ops => ({
+                    id: ops.id,
+                    text: ops.opsPostName
+                })).toArray();
+            }
+            catch (error) {
+                console.error("Error loading Ops Post Data: ", error);
+                ToastService.error("Error: Something went wrong. Please try again.");
+            } finally {
+                this.isLoadingOpsPosts = false;
+            }
+        },
+        async loadTaskBySite(siteId) {
+            //if no site is selected in dropdown, the taskoptions become empty
+            if (!siteId) {
+                this.taskOptions = [];
+                return;
+            }
+            try {
+                this.isLoadingTaskList = true;
+                const taskListResponse = await axios.get("/Dashboard/GetTaskList", {
+                    params: {
+                        date: this.selectedDate
+                    }
+                })
+                const taskListData = taskListResponse.data;
+                this.availableTaskOptions = taskListData.data;
+                console.table(this.availableTaskOptions.map(task => ({
+                    taskId: task.id,
+                    siteId: task.siteId,
+                    taskName: task.taskTypeName
+                })));
+                console.log("Selected Site ID:", siteId);
+                console.log("API Task Response:", taskListData.data);
+                console.log("Add Task Site ID:", this.addTask.siteId);
+                this.taskOptions = Enumerable.from(this.availableTaskOptions).where(task => Number(task.siteId) === Number(siteId)).select(task => ({
+                    id: task.id,
+                    text: task.taskTypeName
+                })).toArray();
+                console.log("Filtered Task Options:", this.taskOptions);
+                console.table(this.taskOptions.map(task => ({
+                    taskId: task.id,
+                    siteId: task.siteId,
+                    taskName: task.taskTypeName
+                })));
+            } catch (error) {
+                console.error("Error loading task list.");
+                ToastService.error("Error: Something went wrong. Please try again");
+            } finally {
+                this.isLoadingTaskList = false;
+            }            
+        },
         //adding the task
         assignTask() {
             if (!this.addTask.siteId || !this.addTask.taskId || !this.addTask.date || !this.addTask.startTime || !this.addTask.endTime) {

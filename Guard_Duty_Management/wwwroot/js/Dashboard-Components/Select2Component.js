@@ -23,7 +23,7 @@ Vue.component('select2', {
     },
 
     template: `
-        <select class="form-select">
+        <select class="form-select" :disabled="disabled">
             <option value=""></option>
             <option v-for="option in options"
                     :key="option.id"

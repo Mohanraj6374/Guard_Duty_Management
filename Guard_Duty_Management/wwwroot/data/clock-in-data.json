@@ -782,6 +782,69 @@
       "isClockedIn": false,
       "clockInTime": "2026-11-11T10:12:58.4554702\u002B00:00",
       "clockOutTime": "2026-11-11T10:13:04.9800990\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-12T04:57:42.7788603\u002B00:00",
+      "clockOutTime": "2026-11-12T06:53:15.9211407\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "1",
+      "shiftId": "1",
+      "guardPostId": "1",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-12T08:43:15.6743727\u002B00:00",
+      "clockOutTime": "2026-11-12T09:29:49.9454916\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "764",
+      "shiftId": "954",
+      "guardPostId": "1454",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-12T11:19:42.5487376\u002B00:00",
+      "clockOutTime": "2026-11-12T11:38:05.3868900\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "764",
+      "shiftId": "954",
+      "guardPostId": "1454",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-12T12:59:29.9041818\u002B00:00",
+      "clockOutTime": "2026-11-13T05:52:29.2462874\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "764",
+      "shiftId": "954",
+      "guardPostId": "1454",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-13T06:31:09.2695505\u002B00:00",
+      "clockOutTime": "2026-11-13T07:12:55.3485019\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "763",
+      "shiftId": "3496",
+      "guardPostId": "1456",
+      "isClockedIn": false,
+      "clockInTime": "2026-11-13T09:02:58.1543404\u002B00:00",
+      "clockOutTime": "2026-11-13T10:28:27.8600702\u002B00:00"
+    },
+    {
+      "guardId": "1189",
+      "siteId": "763",
+      "shiftId": "954",
+      "guardPostId": "1453",
+      "isClockedIn": true,
+      "clockInTime": "2026-11-13T10:28:38.2058768\u002B00:00",
+      "clockOutTime": null
     }
   ]
 }
