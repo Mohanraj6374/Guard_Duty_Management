@@ -106,7 +106,6 @@ namespace Guard_Duty_Management.Controllers
                     statusCode: 504);
             }
         }
-
         public IActionResult IncidentDashboardView()
         {
             return View("IncidentDashboardView");
@@ -116,43 +115,6 @@ namespace Guard_Duty_Management.Controllers
         {
             return View("IncidentManagementView");
         }
-
-        /*public async Task<IActionResult> GetIncidents(int IncidentId)
-        {
-            try
-            {
-                var apiUrl = "https://mssiopscore.azurewebsites.net/api/CustomerPortal/GetSxpIncidentdetails" + $"?incidentId={IncidentId}";
-                var client = _httpClientFactory.CreateClient();
-                using var response = await client.GetAsync(apiUrl);
-                var json = await response.Content.ReadAsStringAsync();
-                return new ContentResult
-                {
-                    StatusCode = (int)response.StatusCode,
-                    Content = json,
-                    ContentType = "application/json"
-
-                };
-
-            }
-            catch (HttpRequestException)
-            {
-                
-                    return Problem(
-                       title: "Could not connect to the external incident API.",
-                       statusCode: 502);
-                
-            }
-            catch (TaskCanceledException)
-            {
-                return Problem(
-                    title: "The external incident API request timed out.",
-                    statusCode: 504);
-            }
-
-        }*/
-
-
-
         private async Task<string?> ConvertImageToBase64(
     HttpClient client,
     string imageUrl)
@@ -267,6 +229,7 @@ namespace Guard_Duty_Management.Controllers
                 //var sasJson = await sasResponse.Content.ReadAsStringAsync();
                 //var token = _configuration["IncidentApi:Token"];
                 var token = "c0262e33492a4d389a8e20549eeebcd0";
+
                 using var sasRequest = new HttpRequestMessage(
                     HttpMethod.Get,
                     sasApiUrl);
@@ -334,32 +297,8 @@ namespace Guard_Duty_Management.Controllers
                         })
                         .ToList();
                 }
-
-                // 6. Convert Open Images to Base64
-                var imageDataUrls = await Task.WhenAll(
-                    securedImages.Select(url =>
-                        ConvertImageToBase64(client, url))
-                );
-
-                var base64Images = new JsonArray();
-
-                foreach (var image in imageDataUrls)
-                {
-                    if (!string.IsNullOrWhiteSpace(image))
-                    {
-                        base64Images.Add(image);
-                    }
-                }
-
-                incidentData["openImagesBase64"] = base64Images;
-
-
-                // 7. Process Closed Images
-                var closedImageUri =
-                    incidentData["closeImgUri"]?.GetValue<string>();
-
+                var closedImageUri = incidentData["closeImgUri"]?.GetValue<string>();
                 var securedClosedImages = new List<string>();
-
                 if (!string.IsNullOrWhiteSpace(closedImageUri))
                 {
                     securedClosedImages = closedImageUri
@@ -382,33 +321,15 @@ namespace Guard_Duty_Management.Controllers
                             return builder.Uri.ToString();
                         })
                         .ToList();
-                }
-
-                // 8. Convert Closed Images to Base64
-                var closedImageDataUrls = await Task.WhenAll(
-                    securedClosedImages.Select(url =>
-                        ConvertImageToBase64(client, url))
-                );
-
-                var closedBase64Images = new JsonArray();
-
-                foreach (var image in closedImageDataUrls)
-                {
-                    if (!string.IsNullOrWhiteSpace(image))
-                    {
-                        closedBase64Images.Add(image);
-                    }
-                }
-
-                incidentData["closedImagesBase64"] = closedBase64Images;
-
+                } 
+                incidentData["openImageUrls"] = BuildImageArray(securedImages);
+                incidentData["closedImageUrls"] = BuildImageArray(securedClosedImages);
+                await AttachFormImagesAsync( incidentData, sasQuery);
                 // Generate static map image for PDF
                 var coordinates = incidentData["repotedLocation"]?.GetValue<string>();
-
                 if (!string.IsNullOrWhiteSpace(coordinates))
                 {
                     var parts = coordinates.Split(',');
-
                     if (parts.Length == 2 &&
                         double.TryParse(parts[0].Trim(),
                             System.Globalization.NumberStyles.Float,
@@ -418,30 +339,25 @@ namespace Guard_Duty_Management.Controllers
                             System.Globalization.CultureInfo.InvariantCulture, out var latitude))
                     {
                         var mapUrl =
-    "https://atlas.microsoft.com/map/static" +
-    "?api-version=2024-04-01" +
-    "&tilesetId=microsoft.base.road" +
-    "&zoom=15" +
-    $"&center={longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)},{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
-    "&width=800&height=450" +
-    "&pins=" + Uri.EscapeDataString($"default||{longitude} {latitude}") +
-    "&view=IN" +
-    "&subscription-key=" + Uri.EscapeDataString(_azureMapsKey ?? "");
-
+                                "https://atlas.microsoft.com/map/static" +
+                                "?api-version=2024-04-01" +
+                                "&tilesetId=microsoft.base.road" +
+                                "&zoom=15" +
+                                $"&center={longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)},{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}" +
+                                "&width=800&height=450" +
+                                "&pins=" + Uri.EscapeDataString($"default||{longitude} {latitude}") +
+                                "&view=IN" +
+                                "&subscription-key=" + Uri.EscapeDataString(_azureMapsKey ?? "");
                         using var mapResponse = await client.GetAsync(mapUrl);
-
                         if (mapResponse.IsSuccessStatusCode)
                         {
                             var mapBytes = await mapResponse.Content.ReadAsByteArrayAsync();
-
                             incidentData["mapImageBase64"] =
                                 "data:image/png;base64," + Convert.ToBase64String(mapBytes);
                         }
                     }
                 }
-
-
-                // 6. Return the modified incident JSON to Vue
+               // 6. Return the modified incident JSON to Vue
                 return new ContentResult
                 {
                     StatusCode = (int)incidentResponse.StatusCode,
@@ -474,9 +390,74 @@ namespace Guard_Duty_Management.Controllers
                     statusCode: 502);
             }
         }
+          private Task AttachFormImagesAsync(JsonObject incidentData, string sasQuery)
+        {
+            var formJson = incidentData["respoense"]?.GetValue<string>();
+            if (string.IsNullOrWhiteSpace(formJson)) return Task.CompletedTask;
+
+            JsonNode? root;
+            try { root = JsonNode.Parse(formJson); }
+            catch (JsonException) { return Task.CompletedTask; }
+            if (root is not JsonArray sections) return Task.CompletedTask;
+
+            var pictureControls = sections
+                .OfType<JsonObject>()
+                .SelectMany(s => s["Controls"] is JsonArray c
+                    ? c.OfType<JsonObject>()
+                    : Enumerable.Empty<JsonObject>())
+                .Where(c => string.Equals(
+                    c["contentType"]?.GetValue<string>(),
+                    "PICTURE",
+                    StringComparison.OrdinalIgnoreCase));
+
+            foreach (var control in pictureControls)
+            {
+                var urls = control["Response"]?.GetValue<string>();
+                var secured = string.IsNullOrWhiteSpace(urls)
+                    ? new List<string>()
+                    : urls
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .Where(u => Uri.TryCreate(u, UriKind.Absolute, out var uri) &&
+                                    uri.Scheme == Uri.UriSchemeHttps &&
+                                    uri.Host == "mssiopsstore.blob.core.windows.net")
+                        .Select(u => new UriBuilder(u)
+                        {
+                            Query = sasQuery,
+                            Fragment = string.Empty
+                        }.Uri.ToString())
+                        .ToList();
+
+                control["ResponseImageUrls"] = BuildImageArray(secured);
+            }
+
+            incidentData["respoense"] = root.ToJsonString();
+            return Task.CompletedTask;
+        }
+          private static JsonArray BuildImageArray(IEnumerable<string> urls)
+        {
+            var arr = new JsonArray();
+            foreach (var u in urls)
+                arr.Add(new JsonObject { ["url"] = u });
+            return arr;
+        }
+        [HttpGet]
+        public IActionResult GetAzureMapsKey()
+        {
+            var key = _configuration["AzureMaps:SubscriptionKey"];
+
+            return Json(new { key });
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetImagesBase64([FromBody] List<string> urls)
+        {
+            if (urls == null || urls.Count == 0) return Json(new List<string?>());
+            if (urls.Count > 50) return BadRequest("Too many images.");
+
+            var client = _httpClientFactory.CreateClient();
+            var results = await Task.WhenAll(urls.Select(u => ConvertImageToBase64(client, u)));
+            return Json(results);   // same order as the input
+        }
     }
-
-
-}
+    }
 
 

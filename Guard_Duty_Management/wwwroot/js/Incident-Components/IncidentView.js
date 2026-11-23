@@ -1,23 +1,23 @@
 ﻿var incidentDetailsApp = new Vue({
 
     el: "#IncidentDetailsApp",
-     data: function () {
+
+    data: function () {
         return {
-          loading: false,
             errorMessage: "",
             isGeneratingPdf: false,
-            // Corrected Incident ID parameter
-            encodedId: new URLSearchParams(window.location.search).get(btoa("IncidentId")),
             incidentId: null,
-            // Azure Maps properties
-            azureMap: null,
-            azureMapsKey: window.azureMapsKey,
+            formControls: [],
+            azure_map_api_url:"/Incident/GetAzureMapsKey",
+            get_incident_api_url: "/Incident/GetIncidents",
+            image_base64_api_url: "/Incident/GetImagesBase64",
+            // dynamic form parsed from the "respoense" JSON
             incident: {
                 // Report heading
-                reportTitle: "Security (ST) Report",
+                reportTitle: "",
                 reportReference: "--",
                 reportDate: "--",
-                // Basic incident details
+                // Basic details
                 id: "--",
                 status: "--",
                 // Customer details
@@ -29,15 +29,17 @@
                 dateTime: "--",
                 // Location details
                 openGpsLocation: "--",
+                locationCoordinates: "",   // "latitude,longitude" shown under the map
+                locationCapturedOn: "--",
                 mapImageBase64: "",
                 siteName: "--",
                 locationName: "--",
-                // Incident classification
+                // Classification
                 type: "--",
                 category: "--",
                 subcategory: "--",
                 conductedOn: "--",
-                // Assignment details
+                // Assignment
                 assignedTo: "--",
                 role: "--",
                 guardPost: "--",
@@ -62,457 +64,544 @@
                 // Images
                 openImages: [],
                 closedImages: [],
-                // Incident summary
-                summary: {
-                    who: "--",
-                    what: "--",
-                    when: "--",
-                    where: "--",
-                    why: "--"
-                }
+                // Summary
+                summary: { who: "--", what: "--", when: "--", where: "--", why: "--" }   
             }
         };
     },
     created: function () {
+        // Non-reactive: the Azure map object must NOT be inside Vue data
+        this._azureMap = null;
+        var encodedId = new URLSearchParams(window.location.search).get(btoa("IncidentId"));
+        if (!encodedId) {
+            this.errorMessage = "Incident ID is missing.";
+            return;
+        }
         try {
-            if (!this.encodedId) {
+            // "+" in base64 becomes a space in query strings, so restore it
+            this.incidentId = atob(encodedId.replace(/ /g, "+"));
+        } catch (error) {
+            console.error("Incident ID decode failed:", error);
+            this.errorMessage = "Invalid Incident ID.";
+            return;
+        }
+        this.getIncident();
+    },
+
+    beforeDestroy: function () {
+        if (this._azureMap) {
+            this._azureMap.dispose();
+            this._azureMap = null;
+        }
+    },
+    methods: {      
+        // API
+        getIncident: async function () {
+            if (!this.incidentId) {
                 this.errorMessage = "Incident ID is missing.";
                 return;
             }
-            this.incidentId = atob(this.encodedId);
-        this.getIncident();
-        } catch (error) {
-            this.errorMessage = "Invalid Incident ID.";
-            console.error(error);
-        }
-    },
-    computed: {
-        // Generate OpenStreetMap URL
-        mapUrl: function () {
-            var coordinates = this.incident.openGpsLocation;
-            if (!coordinates || coordinates === "--") {   return "";}               
-         var parts = coordinates.split(",");
-            if (parts.length !== 2) {   return "";}
-            // API coordinates are longitude,latitude
-            var longitude = parseFloat(parts[0]);
-            var latitude = parseFloat(parts[1]);
-            if (
-                !Number.isFinite(latitude) ||
-                !Number.isFinite(longitude)
-            ) {
+            this.errorMessage = "";
+            this.showLoader("Loading Incident Details...", "Please wait while the incident information is loading.");
+            try {
+                await this.waitForPaint();
+                var response = await axios.get(this.get_incident_api_url, {
+                    params: { IncidentId: this.incidentId }
+                });
+                var result = response.data && response.data.data != null
+                    ? response.data.data
+                    : response.data;
+
+                if (!result || typeof result !== "object" || Array.isArray(result)) {
+                    throw new Error("No incident data returned.");
+                }
+                this.mapIncidentData(result);
+            }
+            catch (error) {
+                console.error("Failed to load incident details:", error);
+                this.errorMessage = error.response
+                    ? "Failed to load incident. HTTP Status: " + error.response.status
+                    : (error.message || "Unable to load incident details.");
+            }
+            finally {
+                this.hideLoader(); 
+            }
+        },
+        normalizeImages: function (list) {
+            return (Array.isArray(list) ? list : [])
+                .map(function (item) {
+                    var url = typeof item === "string" ? item : (item && item.url);
+                    return url ? { url: url, base64: "" } : null;
+                })
+                .filter(Boolean);
+        },
+
+        imgSrc: function (image) {
+            return this.isGeneratingPdf && image.base64 ? image.base64 : image.url;
+        },
+
+        getAllImages: function () {
+            var all = [].concat(this.incident.openImages, this.incident.closedImages);
+            this.formControls.forEach(function (c) {
+                if (c.images && c.images.length) all = all.concat(c.images);
+            });
+            return all;
+        },
+
+        loadImagesAsBase64: async function () {
+            var images = this.getAllImages();
+            if (!images.length) return;
+            var response = await axios.post(this.image_base64_api_url,
+                images.map(function (i) { return i.url; }));
+            var results = response.data || [];
+            images.forEach(function (img, idx) { img.base64 = results[idx] || ""; });
+        },
+
+        clearImagesBase64: function () {
+            this.getAllImages().forEach(function (img) { img.base64 = ""; });
+        },
+        // API response -> view model     
+        mapIncidentData: function (result) {
+            
+            var inc = this.incident;
+            var dash = function (value) {
+                return value === null || value === undefined || value === "" ? "--" : value;
+            };
+            // Basic
+            inc.reportTitle = result.incidentType || "";
+            inc.id = result.id != null ? "#" + result.id : "--";
+            inc.status = dash(result.incidentStatus);
+            // Customer
+            inc.client = dash(result.customerName);
+            inc.region = dash(result.regionName);
+            inc.branch = dash(result.branchName);
+            inc.raisedBy = dash(result.raisedByName);
+            inc.employeeNo = result.raisedBy != null ? String(result.raisedBy) : "--";
+            // Dates
+            inc.dateTime = this.formatDate(result.date);
+            inc.conductedOn = inc.dateTime;
+            // Location
+            inc.siteName = dash(result.siteName);
+            inc.locationName = dash(result.dutyPostName);
+            inc.openGpsLocation = dash(result.repotedLocation);
+            inc.closedGpsLocation = dash(result.closedLocation);
+            inc.mapImageBase64 = result.mapImageBase64 || "";
+            inc.locationCapturedOn = this.formatCapturedOn(result.raisedOn || result.date);
+            inc.locationCoordinates = this.toLatLng(inc.openGpsLocation);
+            // Classification
+            inc.type = dash(result.incidentType);
+            inc.category = dash(result.category);
+            inc.subcategory = dash(result.subCategory);
+            // Assignment
+            inc.assignedTo = dash(result.assignedToNameNo || result.assignedToName);
+            inc.role = dash(result.role);
+            inc.guardPost = dash(result.guardPostName);
+            inc.assignedManagers = dash(result.assignedMangersName);
+            inc.opsPost = dash(result.opsPostName);
+            inc.emails = dash(result.toEmailIds);
+            // Closing
+            inc.closedDateTime = this.formatDate(result.closedDateTime);
+            inc.closedBy = dash(result.closedByName);
+            // Remarks and narratives
+            inc.otherLocationRemarks = dash(result.dutyPostRemarks);
+            inc.openNarrative = dash(result.description);
+            inc.closedNarrative = dash(result.resolutionComments);
+            // Images (Base64 from controller)
+            // inc.openImages = Array.isArray(result.openImagesBase64) ? result.openImagesBase64.filter(function (img) { return img && img.src; }) : [];
+            // inc.closedImages = Array.isArray(result.closedImagesBase64) ? result.closedImagesBase64.filter(function (img) { return img && img.src; }) : [];
+            inc.openImages = this.normalizeImages(result.openImageUrls);
+            inc.closedImages = this.normalizeImages(result.closedImageUrls);
+         // Attendance
+            var attendeeName = result.attendName || "Not Applicable";
+            inc.attendees.forEach(function (attendee) {
+                attendee.checked = attendee.name === attendeeName;
+            });
+            // Heading
+            inc.reportReference = "Incident_" + result.id + "_" + (result.siteName || "");
+            inc.reportDate = inc.dateTime;
+            // Summary
+            inc.summary.who = inc.raisedBy;
+            inc.summary.what = inc.openNarrative;
+            inc.summary.when = inc.dateTime;
+            inc.summary.where = inc.siteName;
+            inc.summary.why = inc.otherLocationRemarks;
+            // Dynamic form (the API property is spelled "respoense")
+            this.formControls = this.parseFormControls(result.respoense || result.response);
+            // Run after the DOM has rendered the new data
+            this.$nextTick(function () {
+                this.initializeAzureMap();
+                this.initializeImageMagnify();
+            }.bind(this));
+        },      
+        // Dynamic form
+        // JSON string -> flat list of render-ready controls
+        // Dynamic form
+        // JSON string -> flat list of render-ready controls
+        parseFormControls: function (json) {
+            if (!json) {
+                return [];
+            }
+            var sections;
+            try {
+                sections = typeof json === "string" ? JSON.parse(json) : json;
+            }
+            catch (error) {
+                console.error("Invalid form response JSON:", error);
+                return [];
+            }
+            if (!Array.isArray(sections)) {
+                return [];
+            }
+            var self = this;
+            return Enumerable.asEnumerable(sections)
+                .SelectMany(function (section) {
+                    return section.Controls || [];
+                })
+                .Select(function (control, index) {
+                    return self.normalizeControl(control, index);
+                })
+                .ToArray();
+        },
+        // One raw control -> { key, type, title, response, options, images, html }
+        normalizeControl: function (control, index) {
+            var data = control.data || {};
+            var type = String(control.contentType || "").toUpperCase();
+            var response = control.Response == null ? "" : String(control.Response).trim();
+            var item = {
+                key: "ctrl-" + index,
+                type: type,
+                title: String(data.title || "").trim(),
+                response: "",
+                options: [],
+                images: [],
+                html: ""
+            };
+            switch (type) {
+                case "LABEL":
+                    break;
+                case "PARAGRAPH":
+                    item.html = this.sanitizeHtml(data.placeholder);
+                    break;
+                case "PICTURE":
+                    // The controller adds ResponseImageUrls: [{ url: SAS URL }]
+                    item.images = this.normalizeImages(control.ResponseImageUrls);
+                    break;
+                case "STATICSPINNER":
+                    item.options = Enumerable.from(data.datavalue || [])
+                        .select(function (option) {
+                            var label = String(option).trim();
+
+                            return {
+                                label: label,
+                                checked: label.toLowerCase() === response.toLowerCase()
+                            };
+                        })
+                        .toArray();
+                    break;
+                case "DATETIMEPICKER":
+                    item.response = this.formatFormDate(response);
+                    break;
+                default: // TEXT and any other type
+                    item.response = response || "--";
+            }
+            return item;
+        },
+        // dd-MM-yyyy HH:mm
+        formatFormDate: function (value) {
+            if (!value) {
+                return "--";
+            }
+            var date = moment(value);
+            if (!date.isValid()) {
+                return value || "--";
+            }
+            return date.format("DD-MM-YYYY HH:mm");
+        },
+        // "20th Nov 2026 08:05 pm"
+        formatCapturedOn: function (value) {
+            if (!value || String(value).startsWith("0001-01-01")) {
+                return "--";
+            }
+            var date = moment(value);
+            if (!date.isValid()) {
+                return "--";
+            }
+            return date.format("Do MMM YYYY hh:mm a");
+        },
+        // API gives "longitude,latitude"; the report shows "latitude,longitude"
+        toLatLng: function (gps) {
+            var parts = String(gps || "").split(",");
+            if (parts.length !== 2 || !Number.isFinite(parseFloat(parts[0])) || !Number.isFinite(parseFloat(parts[1]))) {
                 return "";
             }
-            var box = [
-                longitude - 0.015,
-                latitude - 0.01,
-                longitude + 0.015,
-                latitude + 0.01
-            ].join(",");
-            return "https://www.openstreetmap.org/export/embed.html" +
-                "?bbox=" + encodeURIComponent(bbox) +
-                "&layer=mapnik" +
-                "&marker=" + latitude + "," + longitude;
+            return parts[1].trim() + "," + parts[0].trim();
         },
-        // Check whether incident data is available
-        hasIncidentData: function () {
-            return this.incident.id !== "--";
-        }
-    },   
-    methods: {
-        initializeAzureMap: function () {
-          // Get GPS coordinates from incident data
+        // Allow-list sanitizer for admin-defined HTML (used with v-html)
+        sanitizeHtml: function (html) {
+            if (!html) {
+                return "";
+            }
+            var allowed = ["P", "BR", "STRONG", "B", "EM", "I", "U", "UL", "OL", "LI", "SPAN", "DIV"];
+            var dropped = ["SCRIPT", "STYLE", "IFRAME", "OBJECT", "EMBED"];
+            var doc = new DOMParser().parseFromString(String(html), "text/html");
+            (function clean(parent) {
+                Array.from(parent.childNodes).forEach(function (node) {
+                    if (node.nodeType === 3) {
+                        return; // text
+                    }
+                    if (node.nodeType !== 1 || dropped.indexOf(node.tagName) !== -1) {
+                        parent.removeChild(node);
+                        return;
+                    }
+                    clean(node);
+                    if (allowed.indexOf(node.tagName) === -1) {
+                        node.replaceWith.apply(node, Array.from(node.childNodes)); // unwrap
+                    } else {
+                        Array.from(node.attributes).forEach(function (attr) {
+                            node.removeAttribute(attr.name);
+                        });
+                    }
+                });
+            })(doc.body);
+            return doc.body.innerHTML;
+        },
+        // Azure Map
+        escapeHtml: function (value) {
+            if (value === null || value === undefined || value === "") {
+                return "--";
+            }
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        },
+        buildPopupContent
+            : function () {
+            var inc = this.incident;
+            var e = this.escapeHtml;
+            var rows = [
+                ["Type of Incident:", inc.type],
+                ["Category:", inc.category],
+                ["Subcategory:", inc.subcategory],
+                ["Created By:", inc.raisedBy],
+                ["Reported Date:", inc.dateTime],
+                ["Location:", inc.openGpsLocation]
+            ].map(function (row) {
+                return '<div class="incident-map-popup-row"><span>' + row[0] +
+                    "</span><span>" + e(row[1]) + "</span></div>";
+            }).join("");
+            return '<div class="incident-map-popup">' +
+                '<div class="incident-map-popup-header"><strong>' + e(inc.siteName) + "</strong>" +
+                '<span class="incident-map-popup-id">' + e(inc.id) + "</span></div>" +
+                '<div class="incident-map-popup-body">' + rows + "</div></div>";
+        },
+        getAzureMapsKey: function () {
+            return axios.get(this.azure_map_api_url)
+                .then(function (response) {
+                    return response.data.key;
+                });
+        },
+        initializeAzureMap: async function () {
             var coordinates = this.incident.openGpsLocation;
             if (!coordinates || coordinates === "--") {
-                console.log("GPS coordinates not available.");
                 return;
             }
-            // Split longitude and latitude
+            // API coordinates are "longitude,latitude"
             var parts = coordinates.split(",");
-            if (parts.length !== 2) {
-                console.log("Invalid GPS coordinates.");
-                return;
-            }
             var longitude = parseFloat(parts[0]);
             var latitude = parseFloat(parts[1]);
-            if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) {
-                console.log("Invalid latitude or longitude.");
+            if (parts.length !== 2 || !Number.isFinite(longitude) || !Number.isFinite(latitude)) {
+                console.warn("Invalid GPS coordinates:", coordinates);
                 return;
             }
-            // Dispose previous map instance if one exists
-            if (this.azureMap) {
-                this.azureMap.dispose();
-                this.azureMap = null;
+            if (this._azureMap) {
+                this._azureMap.dispose();
+                this._azureMap = null;
             }
-            // Create Azure Map
-            this.azureMap = new atlas.Map("azureIncidentMap", {
+            var key = await this.getAzureMapsKey();
+            var map = new atlas.Map("azureIncidentMap", {
                 center: [longitude, latitude],
-                zoom: 15,
+            zoom: 15,
                 authOptions: {
                     authType: "subscriptionKey",
-                    subscriptionKey: this.azureMapsKey
+                    subscriptionKey: key
                 }
             });
-            // Add incident location marker after map loads
-            this.azureMap.events.add("ready", () => {
-                var marker = new atlas.HtmlMarker({
-                    position: [longitude, latitude],
-                    text: "I",
-                    color: "red"
+            this._azureMap = map;
+            var self = this;
+            var position = [longitude, latitude];
+            map.events.add("ready", function () {
+                var marker = new atlas.HtmlMarker({ position: position, text: "I", color: "red" });
+                map.markers.add(marker);
+                var popup = new atlas.Popup({
+                    position: position,
+                    pixelOffset: [0, -35],
+                    closeButton: true,
+                    maxWidth: "340px"
                 });
-                this.azureMap.markers.add(marker);
+                map.events.add("click", marker, function () {
+                    popup.setOptions({
+                        content: self.buildPopupContent(),
+                        position: position,
+                        pixelOffset: [0, -35]
+                    });
+                    popup.open(map);
+                    // Shift the map so the popup fits above the marker
+                    map.setCamera({
+                        center: position,
+                        centerOffset: [0, 120],
+                        type: "ease",
+                        duration: 300
+                    });
+                });
+                setTimeout(function () { map.resize(); }, 500);
             });
         },
-       // Get Incident Details API
-     getIncident: async function () {
-    console.log("getIncident() called");
-    if (!this.incidentId) {
-        this.errorMessage = "Incident ID is missing.";
-        return;
-    }
-    this.loading = true;
-    this.errorMessage = "";
-    try {
-       // Show loading popup
-        if (typeof Swal !== "undefined") {
-            Swal.fire({
-                title: "Loading Incident Details...",
-                text: "Please wait while the incident information is loading.",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                didOpen: function () {
-                    Swal.showLoading();
-                }
-            });
-        }
-        // Allow browser to render the popup
-        await new Promise(resolve => {
-            requestAnimationFrame(() => {
-                requestAnimationFrame(resolve);
-            });
-        });
-        // Call API
-        const response = await axios.get("/Incident/GetIncidents", {
-            params: {
-                IncidentId: this.incidentId
-            }
-        });
-        console.log("Complete API Response:", response.data);
-        // Extract actual incident object
-        var result =
-            response.data && response.data.data != null
-                ? response.data.data
-                : response.data;
-        if (
-            !result ||
-            typeof result !== "object" ||
-            Array.isArray(result)
-        ) {
-            throw new Error("No incident data returned.");
-        }
-        console.log("Incident Object:", result);
-        // Map incident data
-        this.mapIncidentData(result);
-        console.log("Mapped Incident:", this.incident);
-    }
-    catch (error) {
-        console.error("Failed to load incident details:", error);
-        if (error.response) {
-            this.errorMessage =
-                "Failed to load incident. HTTP Status: " +
-                error.response.status;
-        } else {
-            this.errorMessage =
-                error.message || "Unable to load incident details.";
-        }
-    }
-    finally {
-        this.loading = false;
-        if (typeof Swal !== "undefined") {
-            Swal.close();
-        }
 
-        console.log("Incident loading completed.");
-
-    }
-},
-               // Map API Response to Vue Data
-     mapIncidentData: function (result) {
-                   // Basic incident details
-            this.incident.id =
-                result.id != null
-                    ? "#" + result.id
-                    : "--";
-            this.incident.status =
-                result.incidentStatus || "--";
-            // Customer details
-           this.incident.client =  result.customerName || "--";      
-            this.incident.region = result.regionName || "--";
-             this.incident.branch = result.branchName || "--";
-            this.incident.raisedBy = result.raisedByName || "--";            
-            this.incident.employeeNo = result.raisedBy != null? String(result.raisedBy): "--";                                 
-            // Date details
-            this.incident.dateTime = this.formatDate(result.date);
-            this.incident.conductedOn =this.incident.dateTime;
-            // Site and location details
-            this.incident.siteName = result.siteName || "--";
-            this.incident.locationName = result.dutyPostName || "--";
-            this.incident.openGpsLocation = result.repotedLocation || "--";
-            this.incident.closedGpsLocation = result.closedLocation || "--";
-            this.incident.mapImageBase64 = result.mapImageBase64 || "";
-            this.$nextTick(() => {
-                this.initializeAzureMap();
-            });
-            // Incident classification
-            this.incident.type = result.incidentType || "--";           
-            this.incident.category =result.category || "--";
-            this.incident.subcategory =  result.subCategory || "--";     
-            // Assignment details
-            this.incident.assignedTo =result.assignedToNameNo || result.assignedToName ||"--";              
-            this.incident.role = result.role || "--";
-            this.incident.guardPost =result.guardPostName || "--";
-            this.incident.assignedManagers =result.assignedMangersName || "--";
-            this.incident.opsPost =result.opsPostName || "--";
-            this.incident.emails = result.toEmailIds || "--";           
-         // Closing details
-            this.incident.closedDateTime =this.formatDate(result.closedDateTime);
-            this.incident.closedBy = result.closedByName || "--";
-            // Remarks
-            this.incident.otherLocationRemarks = result.dutyPostRemarks || "--";
-            // Narratives
-            this.incident.openNarrative =result.description || "--";
-            this.incident.closedNarrative =result.resolutionComments || "--";
-            // Images - receive Base64 images from the controller
-            this.incident.openImages =Array.isArray(result.openImagesBase64) ? result.openImagesBase64.filter(Boolean): [];
-             this.incident.closedImages = Array.isArray(result.closedImagesBase64) ? result.closedImagesBase64.filter(Boolean) : [];
-             this.$nextTick(() => { this.initializeImageMagnify(); });
-            // Attendance
-            var attendeeName =
-                result.attendName || "Not Applicable";
-            this.incident.attendees.forEach(function (attendee) {
-            attendee.checked = attendee.name === attendeeName;
-            });
-            // Report heading
-            this.incident.reportTitle =  "Security (ST) Report";
-            this.incident.reportReference = "Incident_" + result.id +"_" + (result.siteName || "");
-            this.incident.reportDate =this.formatDate(result.date);
-            // Incident summary
-            this.incident.summary.who = result.raisedByName || "--";   
-            this.incident.summary.what =result.description || "--";
-            this.incident.summary.when =this.incident.dateTime;
-            this.incident.summary.where = result.siteName || "--";
-            this.incident.summary.why = result.dutyPostRemarks || "--";
-        },
+  // Formatting       
         formatDate: function (dateValue) {
-            if (
-                !dateValue ||
-                dateValue.startsWith("0001-01-01")
-            ) {
+            if (!dateValue || String(dateValue).startsWith("0001-01-01")) {
                 return "--";
             }
-            var date = new Date(dateValue);
-            if (isNaN(date.getTime())) {
-                return "--";
-            }
-            return date.toLocaleString();
-        },
+            var date = moment(dateValue);
+            return date.isValid() ? date.format("DD-MM-YYYY HH:mm:ss") : "--";
+        }, 
+        // HTML -> plain text (entities decoded). Render with {{ }} and white-space: pre-line.
         formatNarrative: function (value) {
             if (!value || value === "--") {
                 return "--";
             }
-            return value .replace(/<\/?p[^>]*>/gi, "\n").trim();
-        },
-        splitImageUrls: function (imageUrls) {
-            if (!imageUrls) {
-                return [];
-            } 
-            return imageUrls
-                .split(",")
-                .map(function (url) {
-                    return url.trim();
-                })
-                .filter(function (url) {
-                    return url !== "";
-                });
-        },
+            var html = String(value)
+                .replace(/<br\s*\/?>/gi, "\n")
+                .replace(/<\/p>/gi, "\n");
+            var text = new DOMParser().parseFromString(html, "text/html").body.textContent;
+            return text.trim() || "--";
+        },    
+        // Image zoom (all images tagged data-magnify="gallery")   
         initializeImageMagnify: function () {
-            this.$nextTick(() => {
-                $('[data-magnify="gallery"]').magnify({
-                    draggable: true,
-                    resizable: true,
-                    movable: true,
-                    keyboard: true,
-                    title: true,
-                    initEvent: 'click',
-                    initMaximized: false,
-                    fixedModalSize: true,
-                    fixedModalPos: true,
-                    modalWidth: 800,
-                    modalHeight: 600,
-                    headerToolbar: ['close', 'maximize'],
-                    footerToolbar: [
-                        'zoomIn',
-                        'zoomOut',
-                        'prev',
-                        'next',
-                        'fullscreen',
-                        'actualSize'
-                    ]
-                });
-
+            $('[data-magnify="gallery"]').magnify({
+                draggable: true,
+                resizable: true,
+                movable: true,
+                keyboard: true,
+                title: true,
+                initEvent: "click",
+                initMaximized: false,
+                fixedModalSize: true,
+                fixedModalPos: true,
+                modalWidth: 800,
+                modalHeight: 600,
+                headerToolbar: ["maximize", "close"],
+                footerToolbar: ["zoomIn", "zoomOut", "prev", "next", "fullscreen", "actualSize"] 
             });
-        },
+        },     
+        // PDF        
         downloadPdf: async function () {
             var element = document.getElementById("incidentPdfContent");
-            if (!element) {
-                alert("Incident report content not found.");
-                return;
-            }
-            if (typeof Swal === "undefined") {
-                alert("SweetAlert2 is not loaded.");
-                return;
-            }
-            this.isGeneratingPdf = true;
-            // Show loading spinner
-            Swal.fire({
-                title: "Generating PDF...",
-                text: "Please wait while your incident report is being generated.",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-            // Allow the browser to render the loading popup
-            await new Promise(resolve => {
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(resolve);
-                });
-            });
-            try {
-                // Enable PDF export mode
-                element.classList.add("pdf-export-mode");
-                // Wait for Vue updates
-                await this.$nextTick();
-                // Get the static map image generated by the controller
-                var mapImage = element.querySelector(".pdf-map-image");
-                if (!mapImage || !mapImage.src) {
-                    throw new Error("Static map image not found. Check the .pdf-map-image element.");
-                }
-                // Make the static map visible in the original page
-                mapImage.style.display = "block";
-                mapImage.style.visibility = "visible";
-                // Wait until the static map image is fully loaded
-                if (typeof mapImage.decode === "function") { await mapImage.decode();}
-               else if (!mapImage.complete) {
-                    await new Promise(function (resolve, reject) {
-                        mapImage.onload = resolve;
-                        mapImage.onerror = function () {
-                            reject(new Error("Static map image failed to load."));
-                        };
-                    });
-                }
+            if (!element) { alert("Incident report content not found."); return; }
 
-                if (!mapImage.complete || mapImage.naturalWidth === 0) {throw new Error("Static map image failed to load.");}
-                console.log(
-                    "Map ready for PDF:",
-                    mapImage.naturalWidth,
-                    mapImage.naturalHeight
-                );
-                // Wait for all report images to finish loading
-                var images = Array.from(element.querySelectorAll("img"));
-                await Promise.all(
-                    images.map(function (img) {
-                        if (img.complete && img.naturalWidth > 0) {
-                            return Promise.resolve();
-                        }
-                        return new Promise(function (resolve, reject) {
-                            img.onload = resolve;
-                            img.onerror = function () {
-                                reject(new Error("Report image failed to load."));
-                            };
-                        });
-                    })
-                );
-                // PDF configuration
+            this.isGeneratingPdf = true;
+            this.showLoader("Generating PDF...", "Please wait while your incident report is being generated.");
+            try {
+                await this.waitForPaint();
+                await this.loadImagesAsBase64();
+                element.classList.add("pdf-export-mode");
+                await this.$nextTick();
+                await this.waitForImages(element);
+
                 var options = {
                     margin: 4,
-                    filename: "Incident_Report_" +
-                        this.incident.id + ".pdf",
-                    image: {
-                        type: "jpeg",
-                        quality: 0.98
-                    },
-                    html2canvas: {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: false,
-                        logging: true,
-                        backgroundColor: "#ffffff",
-                        onclone: function (clonedDocument) {
-                            // Find the interactive Azure map in the cloned page
-                            var clonedAzureMap = clonedDocument.getElementById("azureIncidentMap");                               
-                            // Find the static PNG map in the cloned page
-                            var clonedStaticMap =clonedDocument.querySelector(".pdf-map-image");
-                            // Replace the interactive WebGL map with the static image
-                            if (clonedAzureMap) {
-                                var pdfMapImage = clonedDocument.createElement("img");
-                                pdfMapImage.src = mapImage.src;
-                                pdfMapImage.alt = "Incident Location Map";
-                                pdfMapImage.style.display = "block";
-                                pdfMapImage.style.visibility = "visible";
-                                pdfMapImage.style.width = "100%";
-                                pdfMapImage.style.height = "350px";
-                                pdfMapImage.style.maxWidth = "100%";
-                                pdfMapImage.style.objectFit = "contain";
-                                clonedAzureMap.parentNode.replaceChild(
-                                    pdfMapImage,
-                                    clonedAzureMap
-                                );
-                            } else if (clonedStaticMap) {
-                                // Fallback if the interactive map element is not present
-                                clonedStaticMap.src = mapImage.src;
-                                clonedStaticMap.style.display = "block";
-                                clonedStaticMap.style.visibility = "visible";
-                                clonedStaticMap.style.width = "100%";
-                                clonedStaticMap.style.height = "350px";
-                                clonedStaticMap.style.maxWidth = "100%";
-                                clonedStaticMap.style.objectFit = "contain";
-                            }                  
-                        }
-                    },
-                    jsPDF: {
-                        unit: "mm",
-                        format: "a4",
-                        orientation: "portrait"
-                    },
+                    filename: "Incident_Report_" + this.incident.id + ".pdf",
+                    image: { type: "jpeg", quality: 0.98 },
+                    enableLinks: true,
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: false, backgroundColor: "#ffffff" },
+                    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
                     pagebreak: {
                         mode: ["css", "legacy"],
-                        avoid: [".incident-grid-row", ".section-heading"]
-           }
+                        avoid: [".incident-grid-row", ".pdf-keep", ".section-heading", ".form-section-header", ".form-control-block"]
+                    }
                 };
-                // Generate and download PDF
-                await html2pdf()
-                    .set(options)
-                    .from(element)
-                    .save();          
+                await html2pdf().set(options).from(element).save();
             }
             catch (error) {
+                console.error("PDF generation failed:", error);
                 alert("Unable to generate PDF: " + error.message);
             }
             finally {
-                // Restore original page
                 element.classList.remove("pdf-export-mode");
                 this.isGeneratingPdf = false;
-                // Close loading spinner
+                this.clearImagesBase64();
+                this.hideLoader();
+            }
+        },
+        wrapImagesWithLinks: function (container) {
+            var wrapped = [];
+            var images = container.querySelectorAll("img");
+            images.forEach(function (img) {
+                var src = img.currentSrc || img.src;
+                // data:/blob: URLs can't be opened from a PDF, so skip them
+                if (!src || src.indexOf("data:") === 0 || src.indexOf("blob:") === 0) return;
+                // already inside a link
+                if (img.closest("a")) return;
+                var a = document.createElement("a");
+                a.href = new URL(src, window.location.href).href; // must be absolute
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+                a.style.display = "inline-block";
+                a.style.textDecoration = "none";
+                img.parentNode.insertBefore(a, img);
+                a.appendChild(img);
+                wrapped.push({ anchor: a, img: img });
+            });
+            return wrapped;
+        },
+        unwrapImageLinks: function (wrapped) {
+            (wrapped || []).forEach(function (item) {
+                if (item.anchor.parentNode) {
+                    item.anchor.parentNode.insertBefore(item.img, item.anchor);
+                    item.anchor.parentNode.removeChild(item.anchor);
+                }
+            });
+        },
+        waitForImages: function (container) {
+            return Promise.all(Array.from(container.querySelectorAll("img")).map(function (img) {
+                if (img.complete) {
+                    return Promise.resolve();
+                }
+                return new Promise(function (resolve) {
+                    img.onload = resolve;
+                    img.onerror = resolve; // one broken image should not block the PDF
+                });
+            }));
+        },
+        // Helpers
+        showLoader: function (title, text) {
+            if (typeof Swal === "undefined") {
+                return;
+            }
+            Swal.fire({
+                title: title,
+                text: text,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: function () { Swal.showLoading(); }
+            });
+        },
+        hideLoader: function () {
+            if (typeof Swal !== "undefined") {
                 Swal.close();
             }
         },
-        // Retry API Request 
-        reloadIncident: function () {
-            this.getIncident();
+        // Lets the browser paint the loader before heavy work starts
+        waitForPaint: function () {
+            return new Promise(function (resolve) {
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(resolve);
+                });
+            });
         }
     }
-
 });

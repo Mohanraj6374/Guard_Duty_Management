@@ -4,57 +4,47 @@
 
 <html>
 <head>
-    
     <link href="~/css/jquery.magnify.css" rel="stylesheet" />
-    
-    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
-    <link rel="stylesheet" href="~/css_/header.css" />
-   @* Azure Maps *@
-  <link rel="stylesheet"
-      href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css">
+    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css_/header.css" rel="stylesheet" />
 
-   <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
-    
+    @* Azure Maps *@
+    <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css">
+    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
+
     <style>
-            /* =====================================
-                   GENERAL PAGE DESIGN
-                ===================================== */
-
+            /* ===== PAGE ===== */
             [v-cloak] {
                 display: none;
             }
 
-            html,
-            body {
+            html, body {
                 margin: 0;
                 padding: 0;
                 width: 100%;
                 min-height: 100%;
                 background-color: #e9edf1;
-                color: #333333;
-                font-family: Arial, sans-serif;
+                font-family: Arial, Helvetica, sans-serif;
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
             }
-
-            /* =====================================
-                   PAGE BACKGROUND
-                ===================================== */
 
             .incident-page {
                 width: 100%;
                 min-height: 100vh;
-                background-color: #e9edf1;
                 padding: 25px 0;
                 box-sizing: border-box;
+                background-color: #e9edf1;
             }
 
-            /* =====================================
-                   PDF BUTTON
-                ===================================== */
-
+            .page-alert,
             .pdf-button-container {
                 width: 90%;
                 max-width: 1200px;
                 margin: 0 auto 20px;
+            }
+
+            .pdf-button-container {
                 display: flex;
                 justify-content: flex-end;
             }
@@ -65,86 +55,99 @@
                     padding: 10px 18px;
                 }
 
-            /* =====================================
-                   INCIDENT REPORT CARD
-                ===================================== */
-
+            /* ===== REPORT CARD (all sizes/colours come from these variables) ===== */
             .incident-details-page {
+                --fs: 16px; /* body text */
+                --fs-heading: 20px; /* report title / section headings */
+                --fs-bar: 19px; /* red form section bars */
+                --fs-location: 24px; /* "Location" title in the PDF */
+                --text: #1f2328;
+                --tick: #0d6efd; /* tick colour (change to #008000 for green) */
+
                 width: 90%;
                 max-width: 1200px;
                 margin: 0 auto;
                 padding: 25px;
                 box-sizing: border-box;
-                background-color: #ffffff;
+                background-color: #fff;
                 border-radius: 5px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+                font-size: var(--fs);
+                color: var(--text);
             }
 
-            /* =====================================
-                   REPORT HEADING
-                ===================================== */
+            /* Compact sizes while exporting to PDF (ID selector beats the rule above) */
+            #incidentPdfContent.pdf-export-mode {
+                --fs: 13px;
+                --fs-heading: 16px;
+                --fs-bar: 14px;
+                --fs-location: 18px;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 8px !important;
+                box-sizing: border-box !important;
+            }
 
             .report-heading {
                 text-align: center;
-                border-bottom: 1px solid #eeeeee;
+                border-bottom: 1px solid #eee;
                 margin-bottom: 15px;
                 padding-bottom: 8px;
             }
 
                 .report-heading h3 {
-                    margin: 0 0 5px;
-                    font-size: 18px;
-                    font-weight: 600;
+                    margin: 0 0 6px;
+                    font-size: var(--fs-heading);
+                    font-weight: 700;
                     text-decoration: underline;
                 }
 
                 .report-heading p {
                     margin: 3px 0;
-                    font-size: 13px;
+                    font-size: var(--fs);
+                    font-weight: 500;
                 }
 
-            /* =====================================
-                   MAP
-                ===================================== */
-
-            .incident-map {
-                width: 100%;
-                height: 280px;
-                margin-bottom: 15px;
-            }
-
-                .incident-map iframe {
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                }
-
-            /* Hide static map during normal viewing */
+            /* Static map is only used for the PDF */
             .pdf-map-image {
                 display: none;
             }
 
-            /* =====================================
-                   SECTION HEADING
-                ===================================== */
-
-            .section-heading {
-                margin: 15px 0 10px;
-                font-size: 15px;
-                font-weight: 600;
+            /* Location captured (PDF only) */
+            .location-block {
+                margin: 10px 0 5px;
+                color: #000;
             }
 
-            /* =====================================
-                   INCIDENT DETAILS GRID
-                ===================================== */
+            .location-title {
+                margin: 0 0 4px;
+                font-size: var(--fs-location);
+                font-weight: 800;
+            }
 
+            .location-captured,
+            .location-coords {
+                margin: 2px 0;
+                font-size: var(--fs);
+                font-weight: 700;
+            }
+
+            .location-captured {
+                font-style: italic;
+            }
+
+            .section-heading {
+                margin: 18px 0 10px;
+                font-size: var(--fs-heading);
+                font-weight: 700;
+            }
+
+            /* ===== DETAILS GRID ===== */
             .incident-grid {
-                display: block;
                 width: 100%;
-                border-top: 1px solid #e5e7eb;
-                border-left: 1px solid #e5e7eb;
-                margin: 0;
-                padding: 0;
+                border-top: 1px solid #dfe3e8;
+                border-left: 1px solid #dfe3e8;
             }
 
             .incident-grid-row {
@@ -154,68 +157,63 @@
                 align-items: stretch;
             }
 
-                .incident-grid-row > .grid-label,
-                .incident-grid-row > .grid-value {
-                    min-width: 0;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-right: 1px solid #e5e7eb;
-                    border-bottom: 1px solid #e5e7eb;
-                    font-size: 13px;
-                    line-height: 1.5;
-                    overflow-wrap: anywhere;
-                }
-
-                .incident-grid-row > .grid-label {
-                    display: flex;
-                    align-items: center;
-                    background-color: #f5f5f5;
-                    font-weight: 600;
-                }
-
-                .incident-grid-row > .grid-value {
-                    background-color: #ffffff;
-                    font-weight: 400;
-                }
-
-                /* Closed By row */
-
-                .incident-grid-row.two-cell-row {
-                    grid-template-columns: 15% 35% 15% 35%;
-                }
-
-                /* Full-width rows */
-
                 .incident-grid-row.full-row {
                     grid-template-columns: 15% 85%;
                 }
 
-            /* =====================================
-                   ATTENDANCE CHECKBOXES
-                ===================================== */
+            .grid-label,
+            .grid-value {
+                min-width: 0;
+                padding: 14px 16px;
+                box-sizing: border-box;
+                border-right: 1px solid #dfe3e8;
+                border-bottom: 1px solid #dfe3e8;
+                font-size: var(--fs);
+                line-height: 1.5;
+                overflow-wrap: anywhere;
+            }
+
+            .grid-label {
+                display: flex;
+                align-items: center;
+                background-color: #f8f9fa;
+                font-weight: 700;
+                color: #111;
+            }
+
+            .grid-value {
+                background-color: #fff;
+                font-weight: 500;
+                color: var(--text);
+            }
+
+            /* Plain-text narratives keep their line breaks */
+            .pre-line {
+                white-space: pre-line;
+            }
 
             .checkbox-list {
                 display: flex;
                 flex-direction: column;
-                gap: 5px;
+                gap: 6px;
             }
 
                 .checkbox-list label {
                     display: flex;
                     align-items: center;
-                    gap: 6px;
-                    font-size: 13px;
-                    font-weight: 400;
+                    gap: 8px;
+                    font-size: var(--fs);
+                    font-weight: 500;
                 }
 
                 .checkbox-list input {
                     margin: 0;
+                    width: 16px;
+                    height: 16px;
+                    accent-color: var(--tick);
                 }
 
-            /* =====================================
-                   INCIDENT IMAGES
-                ===================================== */
-
+            /* ===== IMAGES (zoomable) ===== */
             .incident-images {
                 display: flex;
                 align-items: flex-start;
@@ -229,20 +227,100 @@
                     width: 90px;
                     height: 90px;
                     object-fit: cover;
-                    border: 1px solid #e5e7eb;
+                    border: 1px solid #dfe3e8;
                     border-radius: 5px;
+                    cursor: zoom-in;
                 }
 
-            /* =====================================
-                   WHO / WHAT / WHEN / WHERE / WHY
-                ===================================== */
+            /* ===== DYNAMIC FORM ===== */
+            .dynamic-form {
+                margin-top: 20px;
+            }
 
+            .form-section-header {
+                margin: 20px 0 14px;
+                padding: 14px 10px;
+                background-color: #d2202f;
+                color: #fff;
+                font-size: var(--fs-bar);
+                font-weight: 700;
+                text-align: center;
+                border-radius: 4px;
+            }
+
+            .form-control-block {
+                margin: 0 0 16px;
+                padding: 0 10px;
+                font-size: var(--fs);
+            }
+
+            .form-question {
+                margin-bottom: 8px;
+                font-size: var(--fs);
+                font-weight: 700;
+                color: #111;
+            }
+
+            .form-answer {
+                font-weight: 500;
+                white-space: pre-line;
+                overflow-wrap: anywhere;
+            }
+
+            .form-html {
+                line-height: 1.5;
+                font-weight: 500;
+            }
+
+                .form-html p {
+                    margin: 0 0 4px;
+                }
+
+                .form-html ul, .form-html ol {
+                    margin: 4px 0;
+                    padding-left: 22px;
+                }
+
+            /* Options: fixed tick column so every label lines up */
+            .form-options {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+                .form-options li {
+                    display: flex;
+                    align-items: center;
+                    padding: 5px 0;
+                    font-weight: 500;
+                }
+
+            .form-check {
+                position: relative;
+                flex: 0 0 30px;
+                width: 30px;
+                height: 20px;
+            }
+
+                .form-check.checked::after {
+                    content: "";
+                    position: absolute;
+                    left: 10px;
+                    top: 1px;
+                    width: 6px;
+                    height: 12px;
+                    border: solid var(--tick);
+                    border-width: 0 3px 3px 0;
+                    transform: rotate(45deg);
+                }
+
+            /* ===== WHO / WHAT / WHEN / WHERE / WHY ===== */
             .incident-summary {
                 width: 100%;
                 margin-top: 30px;
                 padding: 15px 20px;
                 box-sizing: border-box;
-                border-top: 1px solid #555555;
+                border-top: 1px solid #555;
             }
 
             .summary-item {
@@ -252,42 +330,33 @@
                 .summary-item strong {
                     display: block;
                     margin-bottom: 5px;
-                    font-size: 14px;
+                    font-size: var(--fs);
+                    font-weight: 700;
+                    color: #111;
                 }
 
                 .summary-item p {
                     margin: 0;
-                    font-size: 14px;
+                    font-size: var(--fs);
+                    font-weight: 500;
                     line-height: 1.6;
+                    white-space: pre-line;
                     overflow-wrap: anywhere;
                 }
 
-            /* =====================================
-                   PDF EXPORT MODE
-                ===================================== */
-
-            /* Compact report container only during PDF */
-            #incidentPdfContent.pdf-export-mode {
-                padding: 10px !important;
-                margin: 0 !important;
+            /* ===== PDF EXPORT MODE ===== */
+            .pdf-export-mode #azureIncidentMap {
+                display: none !important;
             }
 
-                /* Hide interactive Azure map in PDF */
-                #incidentPdfContent.pdf-export-mode #azureIncidentMap {
-                    display: none !important;
-                }
+            .pdf-export-mode .pdf-map-image {
+                display: block !important;
+                width: 100% !important;
+                height: 300px !important;
+                object-fit: contain !important;
+                margin: 0 0 6px !important;
+            }
 
-                /* Show static map in PDF */
-                #incidentPdfContent.pdf-export-mode .pdf-map-image {
-                    display: block !important;
-                    width: 100% !important;
-                    height: 300px !important;
-                    object-fit: contain !important;
-                    margin: 0 0 6px !important;
-                    padding: 0 !important;
-                }
-
-            /* Compact report heading */
             .pdf-export-mode .report-heading {
                 margin-bottom: 8px !important;
                 padding-bottom: 5px !important;
@@ -301,30 +370,30 @@
                     margin: 2px 0 !important;
                 }
 
-            /* Compact section heading */
+            .pdf-export-mode .location-block {
+                margin: 6px 0 4px !important;
+                break-inside: avoid !important;
+            }
+
             .pdf-export-mode .section-heading {
                 margin: 8px 0 6px !important;
             }
 
-            /* Keep each logical grid row together */
             .pdf-export-mode .incident-grid-row {
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
             }
 
-                /* Reduce grid cell padding only in PDF */
-                .pdf-export-mode .incident-grid-row > .grid-label,
-                .pdf-export-mode .incident-grid-row > .grid-value {
-                    padding: 4px 6px !important;
-                    line-height: 1.3 !important;
-                }
+            .pdf-export-mode .grid-label,
+            .pdf-export-mode .grid-value {
+                padding: 4px 6px !important;
+                line-height: 1.3 !important;
+            }
 
-            /* Compact checkbox spacing in PDF */
             .pdf-export-mode .checkbox-list {
                 gap: 3px !important;
             }
 
-            /* Compact images in PDF */
             .pdf-export-mode .incident-images {
                 gap: 6px !important;
             }
@@ -334,7 +403,25 @@
                     height: 80px;
                 }
 
-            /* Compact summary in PDF */
+            .pdf-export-mode .dynamic-form {
+                margin-top: 10px !important;
+            }
+
+            .pdf-export-mode .form-section-header {
+                margin: 8px 0 6px !important;
+                padding: 6px !important;
+            }
+
+            .pdf-export-mode .form-control-block {
+                margin-bottom: 6px !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
+            .pdf-export-mode .form-options li {
+                padding: 1px 0 !important;
+            }
+
             .pdf-export-mode .incident-summary {
                 margin-top: 10px !important;
                 padding: 8px 10px !important;
@@ -352,21 +439,73 @@
                     line-height: 1.3 !important;
                 }
 
-            /* =====================================
-                   RESPONSIVE DESIGN
-                ===================================== */
+            /* ===== MAP POPUP ===== */
+            .incident-map-popup {
+                width: 320px;
+                max-width: 320px;
+                box-sizing: border-box;
+                background: #fff;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                color: #333;
+                overflow: hidden;
+                border-radius: 4px;
+            }
 
+            .incident-map-popup-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 10px;
+                background: #f1f1f1;
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .incident-map-popup-id {
+                color: #e66b16;
+                border: 1px solid #e66b16;
+                border-radius: 12px;
+                padding: 2px 6px;
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
+            .incident-map-popup-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 6px 10px;
+                border-bottom: 1px solid #e5e5e5;
+                box-sizing: border-box;
+            }
+
+                .incident-map-popup-row span:first-child {
+                    flex: 0 0 42%;
+                    color: #666;
+                    text-align: left;
+                }
+
+                .incident-map-popup-row span:last-child {
+                    flex: 1;
+                    min-width: 0;
+                    color: #111;
+                    text-align: right;
+                    overflow-wrap: anywhere;
+                }
+
+            /* ===== RESPONSIVE ===== */
             @@media screen and (max-width: 768px) {
-
                 .incident-details-page {
+                    --fs: 14px;
+                    --fs-heading: 18px;
+                    --fs-bar: 16px;
                     width: 100%;
                     margin: 0;
                     padding: 12px;
                     border-radius: 0;
-                }
-
-                .incident-map {
-                    height: 220px;
                 }
 
                 .incident-grid-row {
@@ -377,11 +516,9 @@
                         grid-template-columns: 25% 75%;
                     }
 
-                    .incident-grid-row > .grid-label,
-                    .incident-grid-row > .grid-value {
-                        padding: 8px;
-                        font-size: 12px;
-                    }
+                .grid-label, .grid-value {
+                    padding: 10px;
+                }
 
                 .incident-images img {
                     width: 75px;
@@ -392,371 +529,330 @@
                     padding: 12px;
                 }
             }
-            /* FIX UNEVEN LEFT AND RIGHT PDF SPACING */
 
-            #incidentPdfContent.pdf-export-mode {
-                width: 100% !important;
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 8px !important;
-                box-sizing: border-box !important;
+            @@media screen and (max-width: 480px) {
+                .incident-map-popup {
+                    width: 280px;
+                    max-width: 85vw;
+                    font-size: 11px;
+                }
+                .incident-map-popup-header {
+                    font-size: 13px;
+                    padding: 7px 8px;
+                }
+
+                .incident-map-popup-id {
+                    font-size: 10px;
+                }
+
+                .incident-map-popup-row {
+                    font-size: 11px;
+                    padding: 5px 7px;
+                    gap: 6px;
+                }
+                    .incident-map-popup-row span:first-child {
+                        flex-basis: 40%;
+                    }
+                
+            }
+            .pdf-img-link {
+                display: inline-block;
+                text-decoration: none;
+                color: inherit;
             }
 
-                /* Make all report content use the available width */
-                #incidentPdfContent.pdf-export-mode .report-heading,
-                #incidentPdfContent.pdf-export-mode .incident-grid,
-                #incidentPdfContent.pdf-export-mode .incident-map,
-                #incidentPdfContent.pdf-export-mode .pdf-map-image,
-                #incidentPdfContent.pdf-export-mode .incident-summary {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                }
+            .pdf-keep {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            /* PDF: borders on cells, not on the container */
+            .pdf-export-mode .incident-grid {
+                border: 0 !important;
+            }
 
-                /* Keep grid columns aligned */
-                #incidentPdfContent.pdf-export-mode .incident-grid-row {
-                    width: 100% !important;
-                    box-sizing: border-box !important;
-                }
+            .pdf-export-mode .grid-label {
+                border-left: 1px solid #dfe3e8 !important;
+            }
 
-                /* Remove unwanted horizontal margins */
-                #incidentPdfContent.pdf-export-mode .section-heading {
-                    margin-left: 0 !important;
-                    margin-right: 0 !important;
-                }
+            .pdf-export-mode .incident-grid > .incident-grid-row:first-child .grid-label,
+            .pdf-export-mode .incident-grid > .incident-grid-row:first-child .grid-value {
+                border-top: 1px solid #dfe3e8 !important;
+            }
 
+            .pdf-export-mode .location-block {
+                margin: 6px 0 0 !important;
+                padding-bottom: 24px !important;
+                break-inside: avoid !important;
+            }
+
+            .pdf-export-mode .section-heading {
+                margin: 0 0 6px !important;
+            }
     </style>
-
 </head>
 
 <body>
-    <!-- MAIN VUE APPLICATION -->
     <div id="IncidentDetailsApp" v-cloak>
 
-        <!-- APPLICATION HEADER -->
         <app-header></app-header>
 
-        <!-- INCIDENT PAGE BACKGROUND -->
         <div class="incident-page">
 
-            <!-- PDF BUTTON -->
+            <div v-if="errorMessage" class="alert alert-danger page-alert">{{ errorMessage }}</div>
+
             <div class="pdf-button-container">
-                <button type="button"
-                        class="btn btn-secondary"
-                    @@click="downloadPdf"
-                        :disabled="isGeneratingPdf">
-
+                <button type="button" class="btn btn-secondary" @@click="downloadPdf" :disabled="isGeneratingPdf">
                     {{ isGeneratingPdf ? 'Generating PDF...' : 'Generate PDF' }}
-
                 </button>
             </div>
 
-            <!-- INCIDENT REPORT CARD -->
-            <div id="incidentPdfContent"
-                 class="incident-details-page">
+            <!-- REPORT (exported to PDF) -->
+            <div id="incidentPdfContent" class="incident-details-page">
 
-                <!-- REPORT HEADING -->
                 <div class="report-heading">
-                    <h3>{{ incident.reportTitle }}</h3>
+                    <h3 v-if="incident.reportTitle">{{ incident.reportTitle }} Report</h3>
                     <p>{{ incident.reportReference }}</p>
                     <p>{{ incident.reportDate }}</p>
                 </div>
 
-                <!-- INTERACTIVE AZURE MAP -->
-                <div id="azureIncidentMap"
-                     v-show="!isGeneratingPdf"
-                     style="height: 350px; width: 100%;">
-                </div>
+                <!-- Interactive map (screen) -->
+                <div id="azureIncidentMap" v-show="!isGeneratingPdf" style="height: 400px; width: 100%;"></div>
 
-                <!-- STATIC MAP FOR PDF -->
+                <!-- Static map (PDF only) -->
                 <img v-if="incident.mapImageBase64 && isGeneratingPdf"
                      class="pdf-map-image"
                      :src="incident.mapImageBase64"
-                     alt="Incident Location Map"
-                     style="width: 100%; height: 350px; object-fit: cover;" />
+                     alt="Incident Location Map" />
+
+                <!-- Location captured (PDF only) -->
+                <div v-if="isGeneratingPdf && incident.locationCoordinates" class="location-block">
+                    <h4 class="location-title">Location</h4>
+                    <p class="location-captured">This location has been captured on {{ incident.locationCapturedOn }}</p>
+                    <p class="location-coords">({{ incident.locationCoordinates }})</p>
+                </div>
 
                 <h4 class="section-heading">Incident Details</h4>
 
-                <!-- INCIDENT DETAILS GRID -->
                 <div class="incident-grid">
 
-                    <!-- ID AND STATUS -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Id</div>
                         <div class="grid-value">{{ incident.id }}</div>
-
                         <div class="grid-label">Status</div>
                         <div class="grid-value">{{ incident.status }}</div>
                     </div>
 
-                    <!-- CLIENT AND REGION -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Client</div>
                         <div class="grid-value">{{ incident.client }}</div>
-
                         <div class="grid-label">Region</div>
                         <div class="grid-value">{{ incident.region }}</div>
                     </div>
 
-                    <!-- BRANCH AND RAISED BY -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Branch</div>
                         <div class="grid-value">{{ incident.branch }}</div>
-
                         <div class="grid-label">Raised By</div>
                         <div class="grid-value">{{ incident.raisedBy }}</div>
                     </div>
 
-                    <!-- EMPLOYEE AND DATE -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Employee No</div>
                         <div class="grid-value">{{ incident.employeeNo }}</div>
-
                         <div class="grid-label">Date and Time</div>
                         <div class="grid-value">{{ incident.dateTime }}</div>
                     </div>
 
-                    <!-- GPS AND SITE -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Open GPS Location</div>
                         <div class="grid-value">{{ incident.openGpsLocation }}</div>
-
                         <div class="grid-label">Site Name</div>
                         <div class="grid-value">{{ incident.siteName }}</div>
                     </div>
 
-                    <!-- LOCATION AND TYPE -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Location Name</div>
                         <div class="grid-value">{{ incident.locationName }}</div>
-
                         <div class="grid-label">Type</div>
                         <div class="grid-value">{{ incident.type }}</div>
                     </div>
 
-                    <!-- CATEGORY AND SUBCATEGORY -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Category</div>
                         <div class="grid-value">{{ incident.category }}</div>
-
                         <div class="grid-label">Subcategory</div>
                         <div class="grid-value">{{ incident.subcategory }}</div>
                     </div>
 
-                    <!-- CONDUCTED ON AND ASSIGNED TO -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Conducted On</div>
                         <div class="grid-value">{{ incident.conductedOn }}</div>
-
                         <div class="grid-label">Assigned To</div>
                         <div class="grid-value">{{ incident.assignedTo }}</div>
                     </div>
 
-                    <!-- ATTENDANCE AND ROLE -->
                     <div class="incident-grid-row">
-                        <div class="grid-label">
-                            Did the following attend the site?
-                        </div>
-
+                        <div class="grid-label">Did the following attend the site?</div>
                         <div class="grid-value">
                             <div class="checkbox-list">
-                                <label v-for="attendee in incident.attendees"
-                                       :key="attendee.name">
-
-                                    <input type="checkbox"
-                                           :checked="attendee.checked"
-                                           disabled />
-
+                                <label v-for="attendee in incident.attendees" :key="attendee.name">
+                                    <input type="checkbox" :checked="attendee.checked" tabindex="-1" @@click.prevent />
                                     {{ attendee.name }}
-
                                 </label>
                             </div>
                         </div>
-
                         <div class="grid-label">Role</div>
                         <div class="grid-value">{{ incident.role }}</div>
                     </div>
 
-                    <!-- GUARD POST AND ASSIGNED MANAGERS -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Guard Post</div>
                         <div class="grid-value">{{ incident.guardPost }}</div>
-
                         <div class="grid-label">Assigned Managers</div>
                         <div class="grid-value">{{ incident.assignedManagers }}</div>
                     </div>
 
-                    <!-- OPS POST AND EMAILS -->
                     <div class="incident-grid-row">
                         <div class="grid-label">OPS Post</div>
                         <div class="grid-value">{{ incident.opsPost }}</div>
-
                         <div class="grid-label">Emails</div>
                         <div class="grid-value">{{ incident.emails }}</div>
                     </div>
 
-                    <!-- CLOSED GPS AND CLOSED DATE -->
                     <div class="incident-grid-row">
                         <div class="grid-label">Closed GPS Location</div>
                         <div class="grid-value">{{ incident.closedGpsLocation }}</div>
-
                         <div class="grid-label">Closed Date and Time</div>
                         <div class="grid-value">{{ incident.closedDateTime }}</div>
                     </div>
 
-                    <!-- CLOSED BY -->
-                    <div class="incident-grid-row two-cell-row">
+                    <div class="incident-grid-row full-row">
                         <div class="grid-label">Closed By</div>
                         <div class="grid-value">{{ incident.closedBy }}</div>
                     </div>
 
-                    <!-- OTHER LOCATION REMARKS -->
                     <div class="incident-grid-row full-row">
                         <div class="grid-label">Other Location Remarks</div>
-
-                        <div class="grid-value">
-                            {{ formatNarrative(incident.otherLocationRemarks) }}
-                        </div>
+                        <div class="grid-value pre-line">{{ formatNarrative(incident.otherLocationRemarks) }}</div>
                     </div>
 
-                    <!-- OPEN NARRATIVE -->
                     <div class="incident-grid-row full-row">
                         <div class="grid-label">Open Narrative</div>
-
-                        <div class="grid-value"
-                             v-html="formatNarrative(incident.openNarrative)">
-                        </div>
+                        <div class="grid-value pre-line">{{ formatNarrative(incident.openNarrative) }}</div>
                     </div>
 
-                    <!-- CLOSED NARRATIVE -->
                     <div class="incident-grid-row full-row">
                         <div class="grid-label">Closed Narrative</div>
-
-                        <div class="grid-value"
-                             v-html="formatNarrative(incident.closedNarrative)">
-                        </div>
+                        <div class="grid-value pre-line">{{ formatNarrative(incident.closedNarrative) }}</div>
                     </div>
 
-                    <!-- OPEN IMAGES -->
-                    <div class="incident-grid-row full-row">
-                        <div class="grid-label">Open Images</div>
-
-                        <div class="grid-value">
-                            <div class="incident-images">
-
-                                <img v-for="(image, index) in incident.openImages"
-                                     :key="'open-' + index"
-                                     :src="image"
-                                     data-magnify="gallery"
-                                     data-group="incident-gallery"
-                                     :data-src="image"
-                                     :alt="'Incident image ' + (index + 1)" />
-
+                    <div class="pdf-keep">
+                        <div class="incident-grid-row full-row">
+                            <div class="grid-label">Open Images</div>
+                            <div class="grid-value">
+                                <div class="incident-images">
+                                    <a v-for="(image, index) in incident.openImages"
+                                       :key="'open-' + index"
+                                       :href="isGeneratingPdf ? image.url : null"
+                                       target="_blank" rel="noopener noreferrer" class="pdf-img-link">
+                                        <img :src="imgSrc(image)"
+                                             :data-src="image.url"
+                                             data-magnify="gallery"
+                                             data-group="incident-gallery"
+                                             :alt="'Incident image ' + (index + 1)" />
+                                    </a>
+                                </div>
+                                <span v-if="!incident.openImages.length">--</span>
                             </div>
-
-                            <span v-if="incident.openImages.length === 0">
-                                --
-                            </span>
                         </div>
                     </div>
-
-                    <!-- CLOSED IMAGES -->
-                    <div class="incident-grid-row full-row">
-                        <div class="grid-label">Closed Images</div>
-
-                        <div class="grid-value">
-                            <div class="incident-images">
-
-                                <img v-for="(image, index) in incident.closedImages"
-                                     :key="'closed-' + index"
-                                     :src="image"
-                                     data-magnify="gallery"
-                                     data-group="incident-gallery"
-                                     :data-src="image"
-                                     :alt="'Closed incident image ' + (index + 1)" />
-
+                    <div class="pdf-keep">
+                        <div class="incident-grid-row full-row">
+                            <div class="grid-label">Closed Images</div>
+                            <div class="grid-value">
+                                <div class="incident-images">
+                                    <a v-for="(image, index) in incident.closedImages"
+                                       :key="'closed-' + index"
+                                       :href="isGeneratingPdf ? image.url : null"
+                                       target="_blank" rel="noopener noreferrer" class="pdf-img-link">
+                                        <img :src="imgSrc(image)"
+                                             :data-src="image.url"
+                                             data-magnify="gallery"
+                                             data-group="incident-gallery"
+                                             :alt="'Closed incident image ' + (index + 1)" />
+                                    </a>
+                                </div>
+                                <span v-if="!incident.closedImages.length">--</span>
                             </div>
-
-                            <span v-if="incident.closedImages.length === 0">
-                                --
-                            </span>
                         </div>
                     </div>
-
-                </div>
                 <!-- END INCIDENT DETAILS GRID -->
-                <!-- WHO / WHAT / WHEN / WHERE / WHY -->
-                <div class="incident-summary">
+                <!-- DYNAMIC FORM (rendered from the "respoense" JSON) -->
+                <div v-if="formControls.length" class="dynamic-form">
 
-                    <div class="summary-item">
-                        <strong>Who:</strong>
-                        <p v-html="formatNarrative(incident.summary.who)"></p>
+                    <div v-for="ctrl in formControls"
+                         :key="ctrl.key"
+                         :class="ctrl.type === 'LABEL' ? 'form-section-header' : 'form-control-block'">
+
+                        <!-- Section header -->
+                        <template v-if="ctrl.type === 'LABEL'">{{ ctrl.title }}</template>
+
+                        <template v-else>
+                            <div v-if="ctrl.title" class="form-question">
+                                {{ ctrl.type === 'STATICSPINNER' ? 'Question : ' : '' }}{{ ctrl.title }}
+                            </div>
+
+                            <!-- Options with the selected answer ticked -->
+                            <ul v-if="ctrl.type === 'STATICSPINNER'" class="form-options">
+                                <li v-for="(option, i) in ctrl.options" :key="i">
+                                    <span class="form-check" :class="{ checked: option.checked }"></span>
+                                    <span>{{ option.label }}</span>
+                                </li>
+                            </ul>
+                            <!-- Instructions (sanitized HTML) -->
+                            <div v-else-if="ctrl.type === 'PARAGRAPH'" class="form-html" v-html="ctrl.html"></div>
+                            <!-- Photos (zoomable) -->
+                            <div v-else-if="ctrl.type === 'PICTURE'" class="incident-images">
+                                <a v-for="(img, i) in ctrl.images"
+                                   :key="ctrl.key + '-' + i"
+                                   :href="isGeneratingPdf ? img.url : null"
+                                   target="_blank" rel="noopener noreferrer" class="pdf-img-link">
+                                    <img :src="imgSrc(img)"
+                                         :data-src="img.url"
+                                         data-magnify="gallery"
+                                         data-group="form-gallery"
+                                         :alt="ctrl.title + ' ' + (i + 1)" />
+                                </a>
+                                <span v-if="!ctrl.images.length">--</span>
+                            </div>
+                            <!-- Text, date/time and any other type -->
+                            <div v-else class="form-answer">{{ ctrl.response }}</div>
+                        </template>
                     </div>
-
-                    <div class="summary-item">
-                        <strong>What:</strong>
-                        <p v-html="formatNarrative(incident.summary.what)"></p>
-                    </div>
-
-                    <div class="summary-item">
-                        <strong>When:</strong>
-                        <p>{{ incident.summary.when }}</p>
-                    </div>
-
-                    <div class="summary-item">
-                        <strong>Where:</strong>
-                        <p>{{ incident.summary.where }}</p>
-                    </div>
-
-                    <div class="summary-item">
-                        <strong>Why:</strong>
-                        <p>{{ incident.summary.why }}</p>
-                    </div>
-
                 </div>
-                <!-- END INCIDENT SUMMARY -->
-
-            </div>
-            <!-- END INCIDENT PDF CONTENT -->
+                <!-- END DYNAMIC FORM -->
+               
+            
+            <!-- END REPORT -->
 
         </div>
-        <!-- END INCIDENT PAGE -->
-
     </div>
-    <!-- END VUE APPLICATION -->
-   
-    <!-- END VUE APPLICATION -->
-    <!-- VUE 2 CDN -->
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
-
-    <!-- AXIOS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <!-- JQUERY CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-    <!-- MOMENT JS -->
+    
+    @* header.js depends on moment - must load before it *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
-
-    <!-- HEADER COMPONENT -->
     <script src="~/js/header.js"></script>
-
-    <!-- PDF GENERATION LIBRARY -->
+    @* html2pdf bundle already includes html2canvas and jsPDF *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <!-- MAGNIFY JS -->
-    
     <script src="~/lib/magnify.js/jquery.magnify.js"></script>
-
-
-    <script>
-    window.azureMapsKey = '@ViewBag.AzureMapsKey';
-</script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- INCIDENT DETAILS JAVASCRIPT -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/linq-es2015/dist/linq.min.js"></script>
+    <script>
+            window.azureMapsKey = '@ViewBag.AzureMapsKey';
+    </script>
     <script src="~/js/Incident-Components/IncidentView.js"></script>
-    
-    
 </body>
 </html>

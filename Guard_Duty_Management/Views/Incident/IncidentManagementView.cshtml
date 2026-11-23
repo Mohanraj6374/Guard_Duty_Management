@@ -4,33 +4,18 @@
 
 <html>
 <head>
-    @* <link rel="stylesheet" href="~/css/Incident.css" />
-    <link rel="stylesheet" href="~/css/IncidentPagination.css" />
-    <link rel="stylesheet" href="~/css/IncidentTableDesign.css" />
-    <link rel="stylesheet" href="~/css/IncidentDashboard.css?v=3" /> *@
-
-    <!-- Select2 CSS -->
+    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
+  <!-- Select2 CSS -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-
     <!-- Date Range Picker CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
-    <link href="~/lib/bootstrap/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet " />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet " href="~/css_/header.css" />
-   
-    
-    <style>
-
-            /* =========================================
-               INCIDENT DASHBOARD - FILTER DESIGN
-            ========================================= */
-
-
-            html,
+   <style>
+       /* INCIDENT DASHBOARD - FILTER DESIGN */
+     html,
             body {
                 width: 100%;
                 min-height: 100%;
@@ -51,7 +36,6 @@
                 border: 1px solid #e2e8f0;
                 border-radius: 10px;
             }
-
             #IncidentApp .filter-group {
                 display: flex;
                 flex-direction: column;
@@ -60,14 +44,12 @@
                 margin: 0;
                 box-sizing: border-box;
             }
-
             #IncidentApp .filter-group label {
                 margin-bottom: 7px;
                 font-size: 14px;
                 font-weight: 600;
                 color: #475569;
             }
-
             #IncidentApp .filter-group input,
             #IncidentApp .filter-group select {
                 width: 100% !important;
@@ -81,41 +63,32 @@
                 font-size: 14px;
                 box-sizing: border-box;
             }
-
             /* Select2 */
-
             #IncidentApp .dashboard-filters .select2-container {
                 width: 100% !important;
             }
-
             #IncidentApp .dashboard-filters .select2-selection {
                 min-height: 39px;
                 border: 1px solid #cbd5e1;
                 border-radius: 6px;
             }
-
             #IncidentApp .dashboard-filters .select2-selection__rendered {
                 line-height: 37px;
             }
-
             #IncidentApp .dashboard-filters .select2-selection__arrow {
                 height: 37px;
             }
-
             #IncidentApp .subcategory-filter {
                 grid-column: auto !important;
                 grid-row: auto !important;
             }
-
             /* Add Incident Button */
-
             #IncidentApp .add-incident-group {
                 grid-column: 1 / -1 !important;
                 grid-row: auto !important;
                 justify-self: end;
                 align-items: flex-end;
             }
-
             #IncidentApp .add-incident-group .add-button {
                 height: 39px;
                 padding: 0 18px;
@@ -126,16 +99,12 @@
                 font-size: 14px;
                 cursor: pointer;
             }
-
             #IncidentApp .add-incident-group .add-button:hover {
                 background: #4c8586;
             }
-
-
             /* =========================================
                CHART SECTION
             ========================================= */
-
              #IncidentApp .charts-container {
                 display: grid;
                 grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -143,7 +112,6 @@
                 width: 100%;
                 margin: 8px 0 12px;
             }
-
             #IncidentApp .chart-panel {
                 display: flex;
                 flex-direction: column;
@@ -155,7 +123,6 @@
                 border-radius: 10px;
                 box-sizing: border-box;
             }
-
             #IncidentApp .chart-panel h3 {
                 margin: 0 0 12px;
                 text-align: left;
@@ -163,31 +130,23 @@
                 font-weight: 600;
                 color: #334155;
             }
-
-            #IncidentApp .chart-content {
+           #IncidentApp .chart-content {
                 position: relative;
                 width: 100%;
                 height: 290px;
                 min-width: 0;
             }
-
             #IncidentApp .chart-canvas {
                 position: relative;
                 width: 100%;
                 height: 100%;
                 min-width: 0;
             }
-
             #IncidentApp .chart-canvas canvas {
                 width: 100% !important;
                 height: 100% !important;
             }
-
-
-            /* =========================================
-               EMPTY CHART MESSAGE
-            ========================================= */
-
+            /* EMPTY CHART MESSAGE  */
             #IncidentApp .chart-empty-state {
                 display: flex;
                 justify-content: center;
@@ -198,17 +157,11 @@
                 font-size: 18px;
                 text-align: center;
             }
-
-
-            /* =========================================
-               TABLE AND TOOLBAR SPACING
-            ========================================= */
-
+            /* TABLE AND TOOLBAR SPACING */ 
             #IncidentApp .incident-toolbar {
                 margin-top: 15px;
                 margin-bottom: 10px;
             }
-
             #IncidentApp .table-container {
                 width: 100%;
                 overflow-x: auto;
@@ -216,9 +169,7 @@
                 border-radius: 7px;
                 background: #ffffff;
             }
-
             /* Loader */
-
             .grid-loader {
                 display: flex;
                 flex-direction: column;
@@ -227,7 +178,6 @@
                 min-height: 200px;
                 background: rgba(255, 255, 255, 0.9);
             }
-
             .spinner {
                 width: 40px;
                 height: 40px;
@@ -236,65 +186,47 @@
                 border-radius: 50%;
                 animation: spin 0.8s linear infinite;
             }
-
             @@keyframes spin {
                 to {
                     transform: rotate(360deg);
                 }
             }
-
             .grid-loader p {
                 margin-top: 12px;
                 color: #444;
                 font-size: 14px;
             }
-
-            /* =========================================
-               RESPONSIVE DESIGN
-            ========================================= */
-
-            @@media screen and (max-width: 900px) {
-
+            /*  RESPONSIVE DESIGN  */
+   @@media screen and (max-width: 900px)
+   {
                 #IncidentApp .dashboard-filters {
                     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
                 }
-
                 #IncidentApp .charts-container {
                     grid-template-columns: repeat(2, minmax(0, 1fr));
                 }
             }
-
             @@media screen and (max-width: 600px) {
-
                 #IncidentApp .dashboard-filters {
                     grid-template-columns: 1fr !important;
                 }
-
                 #IncidentApp .charts-container {
                     grid-template-columns: 1fr;
                 }
-
                 #IncidentApp .chart-panel {
                     height: 320px;
                 }
-
                 #IncidentApp .add-incident-group {
                     grid-column: 1 !important;
                 }
-            }
-
-            
-            /* =========================================
-               HEADER AND INCIDENT MANAGEMENT ALIGNMENT
-            ========================================= */
-
+            }       
+            /*  HEADER AND INCIDENT MANAGEMENT ALIGNMENT */
             /* Main dashboard container */
             #IncidentApp {
                 width: 100%;
                 min-height: 100vh;
                 box-sizing: border-box;
             }
-
             /* Header component */
             #IncidentApp app-header {
                 display: block;
@@ -302,7 +234,6 @@
                 margin: 0 0 10px 0;
                 padding: 0;
             }
-
             /* Incident Management heading */
             #IncidentApp .dashboard-heading {
                 width: 100%;
@@ -310,7 +241,6 @@
                 padding: 0;
                 box-sizing: border-box;
             }
-
             #IncidentApp .dashboard-heading h3 {
                 margin: 0;
                 padding: 0;
@@ -320,17 +250,12 @@
                 color: #343a40;
                 text-align: left;
             }
-
             /* Filter card alignment */
             #IncidentApp .dashboard-filters {
                 margin-top: 0;
                 margin-bottom: 20px;
                 padding:10px 20px;
-            }
-
-            /* Incident Pagination  */
-
-            
+            }         
                 /* Pagination Footer */
                 #IncidentApp .incident-pagination {
                     display: flex !important;
@@ -347,7 +272,6 @@
                     font-family: Arial, sans-serif;
                     font-size: 14px;
                 }
-
                 /* Total Records - Left */
                 #IncidentApp .total-records {
                     flex: 0 0 auto;
@@ -355,7 +279,6 @@
                     color: #788ba7;
                     font-size: 18px;
                 }
-
                 /* Dropdown and Page Number - Right */
                 #IncidentApp .pagination-controls {
                     display: flex !important;
@@ -368,7 +291,6 @@
                     color: #788ba7;
                     font-size: 14px;
                 }
-
                     /* Page Size Dropdown */
                     #IncidentApp .pagination-controls select {
                         width: 58px;
@@ -382,31 +304,21 @@
                         font-size: 13px;
                         cursor: pointer;
                     }
-
             /* Responsive Layout */
             @@media screen and (max-width: 600px) {
                 #IncidentApp .incident-pagination {
                     flex-wrap: wrap;
                     gap: 8px;
                 }
-
                 #IncidentApp .total-records,
                 #IncidentApp .pagination-controls {
                     font-size: 13px;
                 }
-
                 #IncidentApp .pagination-controls {
                     gap: 8px;
                 }
-            }
-
-
-
-            
-            /* ==========================================
-               INCIDENT TABLE PAGE
-            ========================================== */
-
+            }   
+            /* INCIDENT TABLE PAGE  */
             .incident-app {
                 width: 100%;
                 min-height: 100vh;
@@ -416,11 +328,7 @@
                 color: #444;
                 overflow-x: hidden;
             }
-
-            /* ==========================================
-               TOP TOOLBAR
-            ========================================== */
-
+            /* TOP TOOLBAR  */
             .incident-toolbar {
                 display: flex;
                 align-items: center;
@@ -431,14 +339,12 @@
                 padding: 0 8px;
                 box-sizing: border-box;
             }
-
             .toolbar-right {
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
                 gap: 20px;
             }
-
             .toolbar-button {
                 display: inline-flex;
                 align-items: center;
@@ -452,32 +358,25 @@
                 cursor: pointer;
                 white-space: nowrap;
             }
-
                 .toolbar-button:hover {
                     color: #365f9d;
                 }
-
             .search-icon {
                 color: #ff9800;
                 font-size: 21px;
             }
-
             .download-icon {
                 font-size: 17px;
             }
-
             .fullscreen-button {
                 font-size: 21px;
             }
-
             /* Search input */
-
             .incident-search {
                 display: flex;
                 align-items: center;
                 gap: 5px;
             }
-
                 .incident-search input {
                     width: 220px;
                     padding: 7px 10px;
@@ -485,11 +384,9 @@
                     border-radius: 3px;
                     outline: none;
                 }
-
                     .incident-search input:focus {
                         border-color: #829cc2;
                     }
-
             .clear-search {
                 border: none;
                 background: transparent;
@@ -497,12 +394,8 @@
                 font-size: 20px;
                 cursor: pointer;
             }
-
-            /* ==========================================
-               TABLE CONTAINER AND HORIZONTAL SCROLL
-            ========================================== */
-
-            .table-container {
+            /* TABLE CONTAINER AND HORIZONTAL SCROLL   */
+    .table-container {
                 display: block;
                 width: 100%;
                 max-width: 100%;
@@ -513,9 +406,7 @@
                 border-radius: 6px 6px 0 0;
                 box-sizing: border-box;
             }
-
                 /* Always make the table wider than the container */
-
                 .table-container .incident-table {
                     width: 1900px !important;
                     min-width: 1900px !important;
@@ -525,41 +416,30 @@
                     background: #fff;
                     font-size: 12px;
                 }
-
                 /* Horizontal scrollbar - Chrome and Edge */
-
                 .table-container::-webkit-scrollbar {
                     height: 13px;
                     width: 13px;
                 }
-
                 .table-container::-webkit-scrollbar-track {
                     background: #e5e5e5;
                     border-radius: 8px;
                 }
-
                 .table-container::-webkit-scrollbar-thumb {
                     background: #505050;
                     border: 1px solid #d0d0d0;
                     border-radius: 8px;
                 }
-
                     .table-container::-webkit-scrollbar-thumb:hover {
                         background: #404040;
                     }
-
             /* Firefox scrollbar */
-
             .table-container {
                 scrollbar-width: auto;
                 scrollbar-color: #505050 #e5e5e5;
             }
-
-            /* ==========================================
-               TABLE HEADERS
-            ========================================== */
-
-            .incident-table thead th {
+            /* TABLE HEADERS */
+       .incident-table thead th {
                 height: 36px;
                 padding: 8px;
                 border-right: 1px solid #e2e6ed;
@@ -571,35 +451,26 @@
                 font-weight: 400;
                 white-space: nowrap;
             }
-
             .incident-table th.sortable {
                 cursor: pointer;
                 user-select: none;
             }
-
                 .incident-table th.sortable:hover {
                     background: #e6eaf2;
                 }
-
             .sort-icon {
                 margin-left: 2px;
                 color: #788ba7;
                 font-size: 11px;
             }
-
             .incident-table .type-incident-column {
                 white-space: nowrap;
             }
-
             .incident-table .header-text {
                 display: inline;
             }
-
-            /* ==========================================
-               TABLE BODY
-            ========================================== */
-
-            .incident-table tbody td {
+            /* TABLE BODY   */
+        .incident-table tbody td {
                 height: 54px;
                 padding: 9px 8px;
                 border-right: 1px solid #e2e6ed;
@@ -611,43 +482,31 @@
                 overflow-wrap: anywhere;
                 word-break: normal;
             }
-
             .incident-table th:last-child,
             .incident-table td:last-child {
                 border-right: none;
             }
-
             /* Alternate row colors */
-
             .incident-table tbody tr:nth-child(even) {
                 background: #f7f9fc;
             }
-
             .incident-table tbody tr:nth-child(odd) {
                 background: #fff;
             }
-
             .incident-table tbody tr:hover {
                 background: #eef3f9;
             }
-
             /* No records */
-
             .incident-table .no-records {
                 padding: 24px;
                 text-align: center;
                 color: #788ba7;
             }
-
-            /* ==========================================
-               ACTION BUTTON
-            ========================================== */
-
-            .incident-table .action-cell {
+            /* ACTION BUTTON  */
+        .incident-table .action-cell {
                 text-align: center;
                 vertical-align: middle;
             }
-
             .view-button {
                 display: inline-flex;
                 align-items: center;
@@ -661,11 +520,9 @@
                 font-size: 20px;
                 cursor: pointer;
             }
-
                 .view-button:hover {
                     color: #174fbd;
                 }
-
             /* ==========================================
                PAGINATION FOOTER
             ========================================== */
@@ -1015,34 +872,6 @@
     }
 }
 
-/* Make the loading cell occupy the full table width */
-/* .incident-table tbody .grid-loader-cell {
-    width: 100%;
-    height: 250px;
-    padding: 0 !important;
-    text-align: center !important;
-    vertical-align: middle !important;
-} */
-
-/* Center spinner horizontally and vertically */
-/* .incident-table tbody .grid-loader {
-    width: 100%;
-    min-height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    gap: 12px;
-    box-sizing: border-box;
-} */
-/* Loading cell */
-.incident-table tbody td.grid-loader-cell {
-    height: 250px !important;
-    padding: 0 !important;
-    vertical-align: middle !important;
-}
-
 /* Center spinner in the visible table area */
 .incident-table tbody .grid-loader {
     position: sticky;
@@ -1093,26 +922,16 @@
         <app-header></app-header>
         <div style="padding:15px 25px">
             <!-- ================= INCIDENT DASHBOARD ================= -->
-
             <div class="dashboard-heading">
                 <h3>Incident Management</h3>
             </div>
-
-
             <!-- ================= FILTERS ================= -->
-
             <div class="dashboard-filters">
-
                 <!-- Date Range -->
-
                 <div class="filter-group">
-
                     <label for="incidentDateRange">Date Picker</label>
-
                     <div class="date-picker-wrapper">
-
                         <i class="bi bi-calendar"></i>
-
                         <input type="text"
                                id="incidentDateRange"
                                class="form-control"
@@ -1129,13 +948,10 @@
                 <div class="filter-group">
 
                     <label for="siteFilter">Site</label>
-
                     <select id="siteFilter"
                             class="form-control"
                             v-model="filters.site">
-
                         <option value="">All</option>
-
                         <option v-for="item in filterOptions.sites"
                                 :key="item"
                                 :value="item">
@@ -1145,14 +961,9 @@
                     </select>
 
                 </div>
-
-
-                <!-- Location -->
-
+  <!-- Location -->
                 <div class="filter-group">
-
                     <label for="locationFilter">Location</label>
-
                     <select id="locationFilter"
                             class="form-control"
                             v-model="filters.location">
@@ -1751,7 +1562,8 @@
 
    
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="~/lib/jquery/jquery-4.0.0.min.js"></script>
+    @* <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> *@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 
@@ -1759,34 +1571,45 @@
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <!-- Select2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> 
+    @* <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/lib/select2/js/select2.js"></script>*@
     <!-- Vue 2 -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
-
+    <script src="~/lib/vue-js/vue@2.7.16.js"></script>
     <!-- Axios -->
     <script src="~/lib/axios/axios@1.12.2.js"></script>
-
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- PDFMake -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js"></script>
-
     <!-- Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
     <!-- Bootstrap -->
     <script src="~/lib/bootstrap/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- Header JS -->
     <script src="~/js/header.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module">
 
-    <!-- Incident Management JS -->
-    <script src="~/js/incident-components/incidentmanagement.js"></script>
+            // Import your locally installed Linq.js library
+            import Enumerable from '@Url.Content("~/lib/linq-js/linq.js4.0.3.js")';
+
+            // Make it accessible globally
+            window.Enumerable = Enumerable;
+
+            console.log("Linq.js loaded:", typeof window.Enumerable);
+
+            // Load your existing Vue application after Linq.js
+            var script = document.createElement('script');
+
+            script.src = '@Url.Content("~/js/incident-components/incidentmanagement.js")';
+
+            document.body.appendChild(script);
+
+    </script>
 
 
 </body>
