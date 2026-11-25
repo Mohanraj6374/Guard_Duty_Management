@@ -176,8 +176,14 @@ var vm = new Vue({
                     id: site.siteId,
                     code: site.siteCode,
                     text: site.siteName,
-                    address: site.siteAddress
                 })).toArray();
+
+                console.table(this.siteOptions.map(site => ({
+                    siteId: site.id,
+                    siteCode: site.code,
+                    siteName: site.text,
+                })));
+
                 const taskListResponse = await axios.get("/Dashboard/GetTaskList", {
                     params: {
                         date: this.selectedDate
@@ -282,24 +288,26 @@ var vm = new Vue({
                 })
                 const taskListData = taskListResponse.data;
                 this.availableTaskOptions = taskListData.data;
-                console.table(this.availableTaskOptions.map(task => ({
-                    taskId: task.id,
-                    siteId: task.siteId,
-                    taskName: task.taskTypeName
-                })));
-                console.log("Selected Site ID:", siteId);
-                console.log("API Task Response:", taskListData.data);
-                console.log("Add Task Site ID:", this.addTask.siteId);
+                // console.table(this.availableTaskOptions.map(task => ({
+                //     taskId: task.id,
+                //     siteId: task.siteId,
+                //     taskName: task.taskTypeName
+                // })));
+                // console.log("Selected Site ID:", siteId);
+                // console.log("API Task Response:", taskListData.data);
+                // console.log("Add Task Site ID:", this.addTask.siteId);
                 this.taskOptions = Enumerable.from(this.availableTaskOptions).where(task => Number(task.siteId) === Number(siteId)).select(task => ({
                     id: task.id,
-                    text: task.taskTypeName
+                    text: task.taskTypeName,
+                    siteAddress: task.siteAddress,
+                    taskTypeId: task.taskTypeId
                 })).toArray();
-                console.log("Filtered Task Options:", this.taskOptions);
-                console.table(this.taskOptions.map(task => ({
-                    taskId: task.id,
-                    siteId: task.siteId,
-                    taskName: task.taskTypeName
-                })));
+                // console.log("Filtered Task Options:", this.taskOptions);
+                // console.table(this.taskOptions.map(task => ({
+                //     taskId: task.id,
+                //     siteId: task.siteId,
+                //     taskName: task.taskTypeName
+                // })));
             } catch (error) {
                 console.error("Error loading task list.");
                 ToastService.error("Error: Something went wrong. Please try again");
@@ -328,10 +336,12 @@ var vm = new Vue({
                 const task = {
                     assignmentId: Date.now(),
                     siteId: this.addTask.siteId,
+                    siteCode: this.selectedSite.code,
                     siteName: this.selectedSite.text,
-                    siteAddress: this.selectedSite.address,
+                    siteAddress: this.selectedTask.siteAddress,
 
                     taskId: this.addTask.taskId,
+                    taskTypeId: this.selectedTask.taskTypeId,
                     taskName:this.selectedTask.text,
 
                     date: window.moment(this.addTask.date).format("DD-MM-YYYY"),
@@ -342,6 +352,7 @@ var vm = new Vue({
                     guardTaskEndTime: null,
                     totalDuration: 0
                 }
+                
                 this.assignedTaskList.push(task);
                 // console.log("Task Assigned");
 
@@ -366,6 +377,12 @@ var vm = new Vue({
         //storing the selected task from task list
         selectExecutionTask(task) {
             this.selectedExecutionTask = task;
+        },
+
+
+        //submit task after execution
+        async submitTask() {
+            
         },
 
         //updating the data if user is successfully clocked in

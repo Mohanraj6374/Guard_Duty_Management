@@ -18,7 +18,7 @@ namespace Guard_Duty_Management.Controllers
         public DashboardController(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("GuardAPI");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJSUzI1NiIsImtpZCI6ImlOT1ctWko5QWJuNG84ZG5zWXAyVVEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE3OTQ1NzA3NDgsImV4cCI6MTc5NDU3NDM0OCwiaXNzIjoiaHR0cHM6Ly9hbnppb3BzaWRlbnRpdHkuYXp1cmV3ZWJzaXRlcy5uZXQiLCJhdWQiOiJpT3BzMkFwaXMiLCJjbGllbnRfaWQiOiJBbnppT3BzUk9DQ1dlYkFwcCIsInN1YiI6IjEwMjc0IiwiYXV0aF90aW1lIjoxNzk0NTUzNDc3LCJpZHAiOiJsb2NhbCIsIkNvbnRhY3RObyI6IjEyNTQ0MzU0NjM2IiwiQnJhbmNoSWQiOiIyODIiLCJSYW5rSWQiOiIiLCJBcHBUeXBlSWQiOiIxIiwiRnVsbE5hbWUiOiJNb2hhbnJhaiIsIkNvbXBhbnlJZCI6IjMiLCJDb21wYW55TmFtZSI6Ik1TUyBTZWN1cml0eSIsIklzQ3VzdG9tZXJBZG1pbiI6Ik5vIiwiSXNDRUNDbGllbnRVc2VyIjoiTiIsImlPcHNST0NDV2ViQXBwIjoiQkgiLCJJc0Rlc2t0b3BHdWFyZFVzZXIiOiJZZXMiLCJMYW5ndWFnZUlkIjoiMSIsIkVtcGxveWVlTm8iOiJLRi1Nb2hhbnJhaiIsIkVtcGxveWVlSWQiOiIxODM3IiwiVXNlclR5cGUiOiJlbXBsb3llZSIsIkNsdXN0ZXJzIjoiMSwyIiwiQnJhbmNoZXMiOiIyODIiLCJSZWdpb24iOiIzMCIsIlpvbmUiOiI1IiwiZW1haWwiOiJtb2hhbnJhai5tQGtub3dsZWRnZWZsZXguY29tIiwiSXNTaXRlVXNlciI6Ik5vIiwibmFtZSI6Ik1vaGFucmFqIiwiVG9rZW5UeXBlIjoiSldUIiwiVG9rZW5JZCI6IjZlZjA4MWQzN2U3MDRmZTlhYWNjYjMzZGU0N2E2Yzc1Iiwic2NvcGUiOlsicHJvZmlsZSIsIm9wZW5pZCIsImlPcHMyQXBpcyIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJwd2QiXX0.bMiAESRUbkClXVJ3gLFakPg0WrGgsrOjTzalmkAhOt9frkle-iLIHjrbkP0wSsjrRFXvDEFrp4yStJleBJo7pKcTo2T-ilr4J-tEYnK8w0Re9TxzRBPtmQRTw1xonpS8JuFktBN0AD1XpfA9zQR9NNnsLhZN99aW1dYAtDNC4F2nyO7KVowkIdV9C7JknsOOH0QgRgPISZLbrhNExPDWFNfa4Jllbl081l4iHgSwDTfx0aG2MfGl2mMTuSph9cx_CvHmsfost2dtl4SkmZTjRzvZ4ug2fUlS4ABg2sIWlHjROWJSjFH-JefUFKJzVgw0nY8LRKroMtyIoIDspHqLng");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJSUzI1NiIsImtpZCI6ImlOT1ctWko5QWJuNG84ZG5zWXAyVVEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE3OTU1ODUyMjAsImV4cCI6MTc5NTU4ODgyMCwiaXNzIjoiaHR0cHM6Ly9hbnppb3BzaWRlbnRpdHkuYXp1cmV3ZWJzaXRlcy5uZXQiLCJhdWQiOiJpT3BzMkFwaXMiLCJjbGllbnRfaWQiOiJBbnppT3BzUk9DQ1dlYkFwcCIsInN1YiI6IjEwMjc0IiwiYXV0aF90aW1lIjoxNzk1NTg1MjAwLCJpZHAiOiJsb2NhbCIsIkNvbnRhY3RObyI6IjEyNTQ0MzU0NjM2IiwiQnJhbmNoSWQiOiIyODIiLCJSYW5rSWQiOiIiLCJBcHBUeXBlSWQiOiIxIiwiRnVsbE5hbWUiOiJNb2hhbnJhaiIsIkNvbXBhbnlJZCI6IjMiLCJDb21wYW55TmFtZSI6Ik1TUyBTZWN1cml0eSIsIklzQ3VzdG9tZXJBZG1pbiI6Ik5vIiwiSXNDRUNDbGllbnRVc2VyIjoiTiIsImlPcHNST0NDV2ViQXBwIjoiQkgiLCJJc0Rlc2t0b3BHdWFyZFVzZXIiOiJZZXMiLCJMYW5ndWFnZUlkIjoiMSIsIkVtcGxveWVlTm8iOiJLRi1Nb2hhbnJhaiIsIkVtcGxveWVlSWQiOiIxODM3IiwiVXNlclR5cGUiOiJlbXBsb3llZSIsIkNsdXN0ZXJzIjoiMSwyIiwiQnJhbmNoZXMiOiIyODIiLCJSZWdpb24iOiIzMCIsIlpvbmUiOiI1IiwiZW1haWwiOiJtb2hhbnJhai5tQGtub3dsZWRnZWZsZXguY29tIiwiSXNTaXRlVXNlciI6Ik5vIiwibmFtZSI6Ik1vaGFucmFqIiwiVG9rZW5UeXBlIjoiSldUIiwiVG9rZW5JZCI6ImQ4NTU1MWUzMDY1YzQwZWE4ZGNhOTFmZTNhOTBkZDA2Iiwic2NvcGUiOlsicHJvZmlsZSIsIm9wZW5pZCIsImlPcHMyQXBpcyIsIm9mZmxpbmVfYWNjZXNzIl0sImFtciI6WyJwd2QiXX0.eOCtrh8bXmJfaZ3EstPvhcMwazHWEEYA1XoJusod_nQ1Yu9ZiYGH5hcnMJCjHsC1OhFLlWtnGLkWhrSGs7YLI9KP2ebgyuDh9hMPHk1geOfBm7ZLtda1F8dSGbS80qDajZjHzSq7YBTQk2T4khslK6CkmhRxIp0nkAjYpvc4s44Ah7RU8TbJfkAMfl_jftZGLuR65kAZlFTpa_hQjSoaKq_o4vK5U3Pw3TD-Zly5q35Y4Q2x7teOQHva2yDANuqfdJcEkCgmqBmaTYPHNbK1acaqJktoAmijhqpzr5e2Xj1--K0ludcNQPj9AoA9D4xBegOOB8Zdbxr5SlXV6ca8lw");
         }
 
 
@@ -87,29 +87,46 @@ namespace Guard_Duty_Management.Controllers
                     message = "Unable to communicate with server!"
                 });
             }
-
         }
 
         public async Task<IActionResult> AddTask([FromBody] TaskData taskData)
         {
 
-
-            return new ContentResult
+            try
             {
-                Content = "Task added successfully",
-                ContentType = "application/json",
-                StatusCode = 200
-            };
+                if (taskData == null)
+                {
+                    return BadRequest(new
+                    {
+                        status = false,
+                        message="Invalid Task Data"
+                    });
+                }
+                var response = await _httpClient.PostAsJsonAsync(AddTaskUrl, taskData);
+                var result = await response.Content.ReadAsStringAsync();
+
+                return new ContentResult
+                {
+                    Content = result,
+                    ContentType = "application/json",
+                    StatusCode = (int)response.StatusCode
+                };
+            }catch(HttpRequestException ex)
+            {
+                Console.WriteLine("Server communication failed", ex.Message);
+                return StatusCode(502, new
+                {
+                    status = false,
+                    message = "Server Communcation failed"
+                });
+            }
         }
 
-
-
-
         public class TaskData{
-            public long SelectedTaskId { get; set; }
+            public long Id { get; set; }
             public long ServerId { get; set; }
             public int SiteId { get; set; }
-            public Guid localId { get; set; } = Guid.NewGuid();
+            public Guid LocalId { get; set; } = Guid.NewGuid();
             public int TaskTypeId { get; set; }
             public int TaskStatus { get; set; }
             public DateTime EstimatedTaskExecutionStartDateTime { get; set; }

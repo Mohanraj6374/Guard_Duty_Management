@@ -213,7 +213,13 @@
                                         </select2>
                                     </div>
                                     <div class="mb-2">
-                                        <label class="form-label">Task<span class="text-danger">*</span></label>
+                                        <label class="form-label">
+                                            Task<span class="text-danger">*</span>
+                                            <span v-if="isLoadingTaskList" class="ms-2">
+                                                <span class="spinner-border spinner-border-sm border-1"></span>
+                                                <span class="visually-hidden">Loading...</span>
+                                            </span>
+                                        </label>
 
                                         <select2 v-model="addTask.taskId"
                                                  :options="taskOptions"
@@ -225,14 +231,7 @@
                                         <label class="form-label">Date<span class="text-danger">*</span></label>
                                         <input type="date" v-model="addTask.date" class="form-control date-picker" required />
                                     </div>
-                                    @* <div class="mb-2">
-                                        <label class="form-label">Start Time<span class="text-danger">*</span></label>
-                                        <input type="time" v-model="addTask.startTime" class="form-control" required/>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">End Time<span class="text-danger">*</span></label>
-                                        <input type="time" v-model="addTask.endTime" class="form-control" required />
-                                    </div> *@
+                                    
                                     <div class="mb-2 row row-cols-2 align-items-center">
                                         <div class="col d-flex flex-column align-items-start">                                            
                                             <label class="form-label">Start Time<span class="text-danger">*</span></label>
@@ -522,8 +521,7 @@
                                         </div>
                                         <div class="col">
                                             <p class="text-muted font-size-8 mb-0">ESTIMATED END TIME:</p>
-                                            <p class="fw-semibold mb-0">{{selectedExecutionTask.endTime}}</p>
-                                            
+                                            <p class="fw-semibold mb-0">{{selectedExecutionTask.endTime}}</p>                                            
                                         </div>
                                     </div>
                                     <div class="mt-2">
